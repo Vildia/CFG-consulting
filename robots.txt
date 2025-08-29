@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cfg-consulting.vercel.app/sitemap.xml
