@@ -3,25 +3,17 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>C|F|G consulting — аудит, рост, запуски</title>
-  <meta name="description" content="Аудит, стратегия, продажи, команды, аналитика. Запуски подразделений под ключ за 30–60 дней.">
-  <link rel="icon" type="image/png" href="assets/favicon-512.png">
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/favicon-512.png">
 </head>
 <body data-email="C.F.G.consulting@bk.ru">
   <nav><div class="container row">
-    <div class="brand"><svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 256 256' aria-hidden='true' style='vertical-align:middle'>
-  <defs><linearGradient id='g2' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='#0F172A'/><stop offset='100%' stop-color='#4F46E5'/></linearGradient></defs>
-  <rect rx='36' ry='36' width='256' height='256' fill='url(#g2)'/>
-  <text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, Helvetica, sans-serif' font-size='112' font-weight='700' fill='#FFFFFF'>CFG</text>
-</svg><span>C|F|G consulting</span></div>
+    <div class="brand"><svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 256 256' aria-hidden='true' style='vertical-align:middle'><defs><linearGradient id='g2' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='#0F172A'/><stop offset='100%' stop-color='#4F46E5'/></linearGradient></defs><rect rx='36' ry='36' width='256' height='256' fill='url(#g2)'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, Helvetica, sans-serif' font-size='112' font-weight='700' fill='#FFFFFF'>CFG</text></svg><span>C|F|G consulting</span></div>
     <div>
       <a href="#services" class="badge">Услуги</a>
       <a href="#cases" class="badge">Кейсы</a>
       <a href="#process" class="badge">Процесс</a>
-      <span class="lang-toggle" role="group" aria-label="Language">
-        <a href="/" class="active">RU</a>
-        <a href="en.html" class="">EN</a>
-      </span>
+      <span class="lang-toggle"><a href="/" class="active">RU</a><a href="en.html" class="">EN</a></span>
       <a href="#contacts" class="btn btn-primary">Связаться</a>
     </div>
   </div></nav>
@@ -29,7 +21,7 @@
   <header class="hero"><div class="container content">
     <div>
       <h1>Помогаем компаниям расти и запускаться быстрее</h1>
-      <p class="lead">Аудит, стратегия, продажи, команды, аналитика. Запуски подразделений под ключ за 30–60 дней. Международный уровень — локальная скорость.</p>
+      <p class="lead">Аудит, стратегия, продажи, команды, аналитика. Запуски подразделений под ключ за 30–60 дней.</p>
       <div class="row" style="margin-top:10px">
         <a href="#contacts" class="btn btn-primary">Обсудить проект</a>
         <a href="mailto:C.F.G.consulting@bk.ru?subject=Оценить%20проект%20за%2024%20часа" class="btn btn-secondary" data-mailto data-subject="Оценить проект за 24 часа">Оценить проект за 24 часа</a>
@@ -37,10 +29,20 @@
       </div>
       <div style="margin-top:14px"><span class="badge">Основано в Иркутске</span><span class="badge">Работаем по РФ и СНГ</span><span class="badge">Expert network</span></div>
     </div>
-    <div>
-      <img src="assets/hero-1200.jpg" srcset="assets/hero-800.jpg 800w, assets/hero-1200.jpg 1200w, assets/hero.jpg 1600w" sizes="(max-width: 980px) 100vw, 520px" alt="Evgeniy Chapurin — C|F|G consulting" style="width:100%;border-radius:16px;border:1px solid #1f2937;box-shadow:0 20px 40px rgba(2,6,23,.4)" fetchpriority="high" onerror="this.onerror=null;this.src='hero.jpg'">
-    </div>
+    <div><img src="assets/hero-1200.jpg" srcset="assets/hero-800.jpg 800w, assets/hero-1200.jpg 1200w, assets/hero.jpg 1600w" style="width:100%;border-radius:16px;border:1px solid #1f2937"></div>
   </div></header>
+
+  <section id="services"><div class="container">
+    <h2 class="section-title">Услуги</h2>
+    <div class="cards">
+      <div class="card"><h3>Аудит и диагностика</h3><p>Интервью, цифры, карта рисков, приоритеты роста.</p></div>
+      <div class="card"><h3>Стратегия и план 30/60/90</h3><p>Дорожная карта, KPI, бюджет, ролевые модели.</p></div>
+      <div class="card"><h3>Продажи и партнёры</h3><p>Скрипты, CRM, воронка, партнёрская сеть.</p></div>
+      <div class="card"><h3>Команда и найм</h3><p>Профили ролей, найм, обучение, мотивация.</p></div>
+      <div class="card"><h3>Аналитика и отчётность</h3><p>Автоотчёты, дашборды, юнит-экономика.</p></div>
+      <div class="card"><h3>Запуск подразделений</h3><p>Под ключ за 30–60 дней: процессы, SLA, контроль.</p></div>
+    </div>
+  </div></section>
 
   <section id="process"><div class="container">
     <h2 class="section-title">Как работаем</h2>
@@ -53,6 +55,16 @@
     </div>
   </div></section>
 
+  <section id="cases"><div class="container">
+    <h2 class="section-title">Кейсы</h2>
+    <div class="cards">
+      <div class="card"><h3>Альфа-Банк</h3><p>Рост доли рынка до 33% (против Сбера).</p></div>
+      <div class="card"><h3>Леруа Мерлен</h3><p>Запуск B2B по всей России.</p></div>
+      <div class="card"><h3>Tachki.pro</h3><p>Рост конверсии с 8% до 26%.</p></div>
+    </div>
+    <p class="small" style="margin-top:10px">Логотипы и товарные знаки принадлежат их владельцам.</p>
+  </div></section>
+
   <section id="contacts"><div class="container">
     <div class="row">
       <div class="form" style="flex:1 1 420px">
@@ -62,6 +74,7 @@
             <input class="input" name="name" placeholder="Ваше имя" required style="flex:1 1 200px">
             <input class="input" name="contact" placeholder="Email или Telegram" required style="flex:1 1 200px">
           </div>
+          <input class="input" name="inn" placeholder="ИНН компании (если есть)" inputmode="numeric" pattern="\d{10,12}" style="margin-top:10px">
           <textarea class="input" name="message" placeholder="Коротко опишите задачу" rows="5" style="margin-top:10px"></textarea>
           <div class="row" style="margin-top:10px">
             <button class="btn btn-primary" type="submit">Отправить заявку</button>
@@ -82,39 +95,15 @@
     </div>
   </div></section>
 
-  <section id="partner"><div class="container">
-    <h2 class="section-title">Партнёрская программа</h2>
-    <div class="card">
-      <p>Вы — аутсорсер (бухгалтерия, юристы, HR, маркетинг)? Передавайте клиентов и получайте вознаграждение за каждый оплаченный проект.</p>
-      <ul class="tick"><li>Прозрачные правила и отчётность</li><li>Материалы и скрипты</li><li>Долгосрочное сотрудничество</li></ul>
-      <p class="row">
-        <a class="btn btn-secondary" href="mailto:C.F.G.consulting@bk.ru?subject=Партнёрство%20с%20CFG%20consulting" data-mailto data-subject="Партнёрство с CFG consulting">Стать партнёром (Email)</a>
-        <a class="btn btn-primary" href="https://t.me/Evgeniy_Chapurin" target="_blank" rel="noopener">Стать партнёром (Telegram)</a>
-      </p>
-    </div>
-  </div></section>
-
   <footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-    <div style="display:flex;align-items:center;gap:10px"><svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 256 256' aria-hidden='true' style='vertical-align:middle'>
-  <defs><linearGradient id='g2' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='#0F172A'/><stop offset='100%' stop-color='#4F46E5'/></linearGradient></defs>
-  <rect rx='36' ry='36' width='256' height='256' fill='url(#g2)'/>
-  <text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, Helvetica, sans-serif' font-size='112' font-weight='700' fill='#FFFFFF'>CFG</text>
-</svg><strong>C|F|G consulting</strong></div>
-    <div style="opacity:.9">Tel./WhatsApp: +7 902 568 35 29 • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru</div>
-    <div class="small">Build v3.5</div>
-  </div>
-  <div style="border-top:1px solid #1f2937;margin-top:12px"></div>
-  <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:10px">
-    <div class="small">Иркутск. © C|F|G consulting — <a href="https://cfg-consulting.vercel.app" target="_blank" rel="noopener" style="color:#e2e8f0">https://cfg-consulting.vercel.app</a></div>
-    <div class="small"><a href="privacy.html">Политика / Privacy</a> • <a href="terms.html">Условия / Terms</a></div>
+    <div style="display:flex;align-items:center;gap:10px"><strong>C|F|G consulting</strong></div>
+    <div class="small">https://cfg-consulting.vercel.app • C.F.G.consulting@bk.ru • Telegram: @Evgeniy_Chapurin • WhatsApp: +79025683529</div>
   </div></footer>
 
-  <!-- Email fallback modal -->
   <div id="mailModal" class="modal" aria-hidden="true">
     <div class="box">
       <h3 style="margin-top:0">Если почтовая программа не открылась</h3>
-      <p>Вы можете скопировать email или открыть Gmail.</p>
-      <input class="input subject" placeholder="Тема письма" value="">
+      <input class="input subject" placeholder="Тема письма">
       <div class="row">
         <button class="btn btn-secondary" id="copyEmail" type="button">Скопировать адрес</button>
         <button class="btn btn-primary" id="gmailOpen" type="button">Открыть Gmail</button>
@@ -125,5 +114,4 @@
   </div>
   <div class="toast"></div>
   <script src="script.js"></script>
-</body>
-</html>
+</body></html>
