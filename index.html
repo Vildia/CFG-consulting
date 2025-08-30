@@ -57,7 +57,7 @@ label{font-weight:600;display:block;margin:8px 0 6px}
     <p class="lead">Аудит, стратегия, продажи, команды, аналитика. <b>Под ключ</b> за 30–60 дней.</p>
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
       <a href="#contacts" class="btn btn-primary" data-ev="cta_email">Обсудить проект</a>
-      <a href="mailto:C.F.G.consulting@bk.ru?subject=Оценить%20проект%20за%2024%20часа" class="btn btn-secondary" data-mailto data-subject="Оценить проект за 24 часа" data-ev="estimate_24h">Оценить проект за 24 часа</a>
+      <a href="#estimate" class="btn btn-secondary" data-scroll="#estimate">Оценить проект за 24 часа</a>
       <button class="btn btn-secondary" type="button" data-gcal>Предложить слот (GCal)</button>
     </div>
   </div>
@@ -77,9 +77,21 @@ label{font-weight:600;display:block;margin:8px 0 6px}
     <div class="kpi"><div style="font-size:28px;font-weight:800">+18 п.п.</div><div>Рост конверсии (8→26%)</div></div>
     <div class="kpi"><div style="font-size:28px;font-weight:800">1000+</div><div>Нанятых сотрудников</div></div>
   </div>
+</div>
+</section>
+
+<section id="why"><div class="container">
+  <h2 class="section-title">Почему с нами</h2>
+  <div class="cards">
+    <div class="card"><b>Прозрачная отчётность</b><br>Еженедельные отчёты, созвоны и понятные метрики.</div>
+    <div class="card"><b>Прирост KPI</b><br>Считаем экономику и фиксируем целевые показатели.</div>
+    <div class="card"><b>Выходим в срок</b><br>Сроки работ закрепляем в ТЗ и договоре (SLA).</div>
+    <div class="card"><b>Команда победителей</b><br>Найм, обучение, нефинансовая мотивация.</div>
+  </div>
 </div></section>
 
-<section id="services"><div class="container">
+<section id="services"
+><div class="container">
   <h2 class="section-title">Услуги</h2>
   <div class="cards">
     <div class="card"><h3>Аудит и стратегия</h3><ul class="tick"><li>Быстрые победы (2–3 недели)</li><li>KPI и гипотезы роста</li><li>Дорожная карта 30/60/90</li></ul></div>
@@ -258,4 +270,15 @@ label{font-weight:600;display:block;margin:8px 0 6px}
       track('gcal_open');
     });
   });
+
+  // Smooth scroll to estimate + focus
+  document.querySelectorAll('[data-scroll="#estimate"]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      var el = document.getElementById('estimate');
+      if(el){ el.scrollIntoView({behavior:'smooth'}); }
+      try{ setTimeout(function(){ var i=document.querySelector('#estimate input[name="name"]'); if(i){ i.focus(); } }, 450); }catch(_){}
+    });
+  });
+
 })();</script></body></html>
