@@ -1,7 +1,7 @@
 
 (function(){"use strict";
-  const EMAIL=document.body.getAttribute('data-email')||"C.F.G.consulting@bk.ru";
-  function openGmail(subject, body){
+  const EMAIL="C.F.G.consulting@bk.ru";
+  function openGmail(subject, body){ 
     const url='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(EMAIL)
       +'&su='+encodeURIComponent(subject||'')
       +'&body='+encodeURIComponent(body||'');
@@ -11,11 +11,11 @@
 
   // Email fallback modal
   const modal=document.querySelector('#mailModal');
-  document.querySelectorAll('[data-mailto]').forEach(a=>{
-    a.addEventListener('click', function(e){
-      const href=this.getAttribute('href');
+  document.querySelectorAll('[data-mailto]').forEach(a=>{ 
+    a.addEventListener('click', function(e){ 
+      const href=this.getAttribute('href'); 
       const s=this.getAttribute('data-subject')||'';
-      try{ window.location.href=href; }catch(_){}
+      try{ window.location.href=href; }catch(_ ){}
       if(modal){ modal.querySelector('.subject').value=s; modal.classList.add('open'); }
       e.preventDefault();
     });
@@ -28,8 +28,8 @@
 
   // Simple form -> email or gmail
   const form=document.querySelector('#leadForm');
-  if(form){
-    form.addEventListener('submit', function(e){
+  if(form){ 
+    form.addEventListener('submit', function(e){ 
       e.preventDefault();
       const fd=new FormData(form);
       const name=fd.get('name')||'';
@@ -38,7 +38,7 @@
       const subject='Заявка с сайта — '+(name||'без имени');
       const body='Имя: '+name+'%0AКонтакт: '+contact+'%0A%0AСообщение:%0A'+encodeURIComponent(msg);
       // try mailto
-      window.location.href='mailto:'+EMAIL+'?subject='+encodeURIComponent(subject)+'&body='+body;
+      window.location.href='mailto:C.F.G.consulting@bk.ru?subject='+encodeURIComponent(subject)+'&body='+body;
       // fallback gmail
       setTimeout(()=>openGmail(subject, decodeURIComponent(body)),800);
       toast('Спасибо! Открыли письмо — отправьте его.');
