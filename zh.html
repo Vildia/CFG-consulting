@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html><html lang='zh'><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>C|F|G consulting — 审核、增长与一站式落地</title><meta name="description" content="业务审核、战略、销售、团队与分析。30–60天一站式落地。"><link rel="icon" type="image/png" href="assets/favicon-512.png">
 <style>
 :root{--navy:#0A1F44;--indigo:#4F46E5;--slate:#0F172A;--accent:#22C55E;--ring:#3B82F6;}
@@ -11,6 +11,7 @@
 nav{position:sticky;top:0;background:#ffffffd6;backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid #e5e7eb;z-index:10}
 nav .row{display:flex;align-items:center;justify-content:space-between;min-height:64px}
 nav .brand{display:flex;align-items:center;gap:12px;font-weight:800;color:var(--navy)}
+nav .brand svg{border-radius:10px}
 .hero{background:linear-gradient(135deg,var(--slate),var(--indigo));color:#fff;padding:28px 0 24px;position:relative;overflow:hidden}
 .hero .content{display:grid;grid-template-columns:1.15fr 1fr;gap:28px;align-items:center}
 .hero h1{font-size:44px;line-height:1.15;margin:6px 0 12px}
@@ -45,19 +46,19 @@ label{font-weight:600;display:block;margin:8px 0 6px}
 .input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#f8fafc}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:60}
 .toast.show{display:block}
+.industry{display:flex;align-items:center;gap:10px;border:1px dashed #e5e7eb;border-radius:12px;padding:10px 12px;background:#fff}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"C|F|G consulting","url":"https://cfg-consulting.vercel.app","logo":"https://cfg-consulting.vercel.app/assets/favicon-512.png","email":"C.F.G.consulting@bk.ru","telephone":"+7 902 568 35 29","sameAs":["https://t.me/Evgeniy_Chapurin"]}
-</script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());</script></head><body><nav><div class='container row'><div class='brand'><strong>C|F|G consulting</strong></div><div><a href="#services" class="badge">服务</a><a href="#cases" class="badge">案例</a><a href="#process" class="badge">流程</a><span class="lang-toggle" role="group" aria-label="语言切换"><a href="/">RU</a><a href="en.html">EN</a><a href="zh.html" class="active" aria-current="page">中文</a></span><a href="#contacts" class="btn btn-primary" aria-label="联系">联系</a></div></div></nav>
+</script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());</script></head><body><nav><div class='container row'><div class='brand'><svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 256 256' aria-hidden='true'><rect rx='36' ry='36' width='256' height='256' fill='#0F172A'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, Helvetica, sans-serif' font-size='112' font-weight='700' fill='#FFFFFF'>CFG</text></svg><span>C|F|G consulting</span></div><div><a href="#services" class="badge">服务</a><a href="#industries" class="badge">Сферы</a><a href="#cases" class="badge">案例</a><a href="#process" class="badge">Процесс</a><a href="#partner" class="badge">Партнёрам</a><span class="lang-toggle" role="group" aria-label="Язык"><a href="/" class="active" aria-current="page">RU</a><a href="en.html">EN</a><a href="zh.html">中文</a></span><a href="#contacts" class="btn btn-primary">Связаться</a></div></div></nav>
 <header class="hero"><div class="container content">
   <div>
     <h1>帮助企业更快增长与落地</h1>
     <p class="lead">审核、战略、销售、团队与分析。<b>30–60天一站式交付</b>。</p>
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
       <a href="#contacts" class="btn btn-primary" data-ev="cta_email">讨论项目</a>
-      <a href="mailto:C.F.G.consulting@bk.ru?subject=24%E5%B0%8F%E6%97%B6%E5%86%85%E9%A1%B9%E7%9B%AE%E8%AF%84%E4%BC%B0" class="btn btn-secondary" data-mailto data-subject="24小时内项目评估" data-ev="estimate_24h">24小时评估</a>
-      <button class="btn btn-secondary" type="button" data-gcal aria-label="通过 Google 日历提供时间">建议时间（GCal）</button>
+      <a href="mailto:C.F.G.consulting@bk.ru?subject=Оценить%20проект%20за%2024%20часа" class="btn btn-secondary" data-mailto data-subject="24小时评估" data-ev="estimate_24h">24小时评估</a>
+      <button class="btn btn-secondary" type="button" data-gcal>建议时间（GCal）</button>
     </div>
   </div>
   <div><img src="assets/hero-1200.jpg"
@@ -69,30 +70,103 @@ label{font-weight:600;display:block;margin:8px 0 6px}
     ></div>
 </div></header>
 
+<section id="kpis"><div class="container">
+  <div class="kpis">
+    <div class="kpi"><div style="font-size:28px;font-weight:800">33%</div><div>市场份额（对标27%）</div></div>
+    <div class="kpi"><div style="font-size:28px;font-weight:800">×4</div><div>销售团队扩张</div></div>
+    <div class="kpi"><div style="font-size:28px;font-weight:800">+18 п.п.</div><div>转化率提升（8→26%）</div></div>
+    <div class="kpi"><div style="font-size:28px;font-weight:800">1000+</div><div>招聘人数</div></div>
+  </div>
+</div></section>
+
+<section id="services"><div class="container">
+  <h2 class="section-title">服务</h2>
+  <div class="cards">
+    <div class="card"><h3>审核与战略</h3><ul class="tick"><li>快速成效（2–3周）</li><li>KPI и гипотезы роста</li><li>30/60/90 路线图</li></ul></div>
+    <div class="card"><h3>销售与营销</h3><ul class="tick"><li>话术、报价、单元经济</li><li>CRM/отчётность под ключ</li><li>Партнёрский канал</li></ul></div>
+    <div class="card"><h3>团队与流程</h3><ul class="tick"><li>招聘、培训、激励</li><li>Регламенты и SLA</li><li>BI-дашборды</li></ul></div>
+  </div>
+</div></section>
+
+<section id="industries"><div class="container">
+  <h2 class="section-title">涉及行业</h2>
+  <div class="cards">
+    <div class="industry">银行与金融</div>
+    <div class="industry">家居建材零售</div>
+    <div class="industry">汽车行业</div>
+    <div class="industry">房地产</div>
+    <div class="industry">医疗健康</div>
+    <div class="industry">电商平台（Wildberries）</div>
+  </div>
+</div></section>
+
+<section id="cases"><div class="container">
+  <h2 class="section-title">案例</h2>
+  <div class="cards">
+    <div class="card"><b>Альфа-Банк</b><br>Рост доли рынка до 33%, победа над Сбером на территории. Построены партнёрские каналы и сообщество аутсорсеров.</div>
+    <div class="card"><b>Леруа Мерлен</b><br>落地 федерального B2B-направления: анализ спроса, стандарты, команда, логистика и ассортименты.</div>
+    <div class="card"><b>Tachki.pro</b><br>Рост конверсии продаж 8%→26%, аналитика всех процессов, новая воронка и обучение команды.</div>
+  </div>
+  <p class="small" style="margin-top:10px">* Примеры из опыта работы/проектов. Названия приведены описательно, без использования товарных знаков.</p>
+</div></section>
+
+<section id="process"><div class="container">
+  <h2 class="section-title">流程</h2>
+  <div class="process">
+    <div class="step"><b>01. 调研</b><br>Интервью, цифры, быстрые победы.</div>
+    <div class="step"><b>02. 规划</b><br>Дорожная карта и KPI 30/60/90.</div>
+    <div class="step"><b>03. 团队</b><br>Подбор, роли, обучение, мотивация.</div>
+    <div class="step"><b>04. 落地</b><br>Процессы, регламенты, контроль.</div>
+    <div class="step"><b>05. 扩张</b><br>Аналитика, автоматизация, рост.</div>
+  </div>
+</div></section>
+
+<section id="guarantee"><div class="container">
+  <h2 class="section-title">方法与保障</h2>
+  <div class="card">
+    <ul class="tick">
+      <li>透明汇报：每周更新与会议。</li>
+      <li>里程碑：30/60/90 与KPI。</li>
+      <li>期限：按时交付，写入合同。</li>
+    </ul>
+  </div>
+</div></section>
+
 <section id="estimate"><div class="container">
   <h2 class="section-title">24小时评估</h2>
-  <form data-estimate data-locale="zh" aria-label="24小时评估表单">
+  <form data-estimate data-locale="ru" aria-label="Форма оценки">
     <div class="form-grid">
       <div><label>姓名</label><input name="name" required></div>
       <div><label>公司</label><input name="company"></div>
       <div><label>税号</label><input name="inn"></div>
-      <div><label>邮箱</label><input type="email" name="email" required></div>
+      <div><label>Email</label><input type="email" name="email" required></div>
       <div><label>电话</label><input name="phone"></div>
-      <div style="grid-column:1/-1"><label>需求</label><textarea name="desc" rows="4"></textarea></div>
+      <div style="grid-column:1/-1"><label>需求说明</label><textarea name="desc" rows="4"></textarea></div>
     </div>
     <div class="form-actions">
       <button class="btn btn-primary" type="submit">发送</button>
       <button class="btn btn-secondary" type="button" data-gcal>建议时间（GCal）</button>
     </div>
-    <p class="small">点击“发送”即表示同意我们的 <a href="privacy.html">隐私政策</a> 与 <a href="terms.html">使用条款</a>。</p>
+    <p class="small">提交即表示同意 <a href="privacy.html">隐私政策</a> и <a href="terms.html">使用条款</a>.</p>
   </form>
+</div></section>
+
+<section id="partner"><div class="container">
+  <h2 class="section-title">合作伙伴计划</h2>
+  <div class="card">
+    <p><b>Вы — аутсорсер</b> (бухгалтерия, юристы, HR, маркетинг)? Передавайте клиентов и получайте вознаграждение за оплаченные проекты.</p>
+    <p style="display:flex;gap:12px;flex-wrap:wrap">
+      <a class="btn btn-secondary" href="mailto:C.F.G.consulting@bk.ru?subject=Партнёрство%20с%20CFG%20consulting" data-mailto data-subject="Партнёрство с CFG consulting" data-ev="partner_email">合作（Email）</a>
+      <a class="btn btn-primary" href="https://t.me/Evgeniy_Chapurin" target="_blank" rel="noopener">合作（Telegram）</a>
+    </p>
+  </div>
 </div></section>
 
 <section id="contacts"><div class="container">
   <div class="cta">
     <h2 style="margin:0 0 10px">联系我们</h2>
     <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
-      <a class="btn btn-primary" href="mailto:C.F.G.consulting@bk.ru?subject=%E9%A1%B9%E7%9B%AE%20%E2%80%94%20CFG%20consulting" data-mailto data-subject="项目 — CFG consulting" data-ev="cta_email">发送邮件</a>
+      <a class="btn btn-primary" href="mailto:C.F.G.consulting@bk.ru?subject=Проект%20для%20CFG%20consulting" data-mailto data-subject="Проект для CFG consulting" data-ev="cta_email">发送邮件</a>
       <a class="btn btn-secondary" href="https://t.me/Evgeniy_Chapurin" target="_blank" rel="noopener">Telegram</a>
       <a class="btn btn-secondary" href="https://wa.me/79025683529" target="_blank" rel="noopener">WhatsApp</a>
     </div>
@@ -101,22 +175,23 @@ label{font-weight:600;display:block;margin:8px 0 6px}
 
 <footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
     <div style="display:flex;align-items:center;gap:10px"><strong>C|F|G consulting</strong></div>
-    <div style="opacity:.9">Tel./WhatsApp: +7 902 568 35 29 • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a> • Build v3.4.3</div>
+    <div style="opacity:.9">Tel./WhatsApp: +7 902 568 35 29 • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a> • Build v3.5</div>
   </div></footer>
 
 <div id="mailModal" class="modal" aria-hidden="true">
   <div class="box">
-    <h3 style="margin-top:0">若未唤起邮箱</h3>
-    <input class="input subject" placeholder="主题" value="">
-    <textarea class="input body" rows="6" placeholder="邮件内容"></textarea>
+    <h3 style="margin-top:0">Если почтовая программа не открылась</h3>
+    <input class="input subject" placeholder="Тема письма" value="">
+    <textarea class="input body" rows="6" placeholder="Текст письма"></textarea>
     <div class="row">
-      <button class="btn btn-secondary" id="copyEmail" type="button">复制邮箱</button>
-      <button class="btn btn-primary" id="gmailOpen" type="button">打开 Gmail</button>
-      <button class="btn btn-secondary" data-modal-close type="button">关闭</button>
+      <button class="btn btn-secondary" id="copyEmail" type="button">Скопировать адрес</button>
+      <button class="btn btn-primary" id="gmailOpen" type="button">Открыть Gmail</button>
+      <button class="btn btn-secondary" data-modal-close type="button">Закрыть</button>
     </div>
     <p class="small">C.F.G.consulting@bk.ru</p>
   </div>
-</div><div class='toast'></div><script>
+</div>
+<div class='toast'></div><script>
 (function(){
   'use strict';
   var EMAIL='C.F.G.consulting@bk.ru', TG='@Evgeniy_Chapurin', WA='79025683529';
@@ -154,7 +229,7 @@ label{font-weight:600;display:block;margin:8px 0 6px}
     var body = modal.querySelector('.body').value||'';
     openGmail(subj, body);
   });
-  if(btnCopy) btnCopy.addEventListener('click', function(){ navigator.clipboard.writeText(EMAIL).then(function(){toast('Copied')}); track('copy_email'); });
+  if(btnCopy) btnCopy.addEventListener('click', function(){ navigator.clipboard.writeText(EMAIL).then(function(){toast('Скопировано');}); track('copy_email'); });
   document.querySelectorAll('form[data-estimate]').forEach(function(f){
     f.addEventListener('submit', function(e){
       e.preventDefault();

@@ -9,6 +9,7 @@
 nav{position:sticky;top:0;background:#ffffffd6;backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid #e5e7eb;z-index:10}
 nav .row{display:flex;align-items:center;justify-content:space-between;min-height:64px}
 nav .brand{display:flex;align-items:center;gap:12px;font-weight:800;color:var(--navy)}
+nav .brand svg{border-radius:10px}
 .hero{background:linear-gradient(135deg,var(--slate),var(--indigo));color:#fff;padding:28px 0 24px;position:relative;overflow:hidden}
 .hero .content{display:grid;grid-template-columns:1.15fr 1fr;gap:28px;align-items:center}
 .hero h1{font-size:44px;line-height:1.15;margin:6px 0 12px}
@@ -43,9 +44,10 @@ label{font-weight:600;display:block;margin:8px 0 6px}
 .input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#f8fafc}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:60}
 .toast.show{display:block}
-</style></head><body><nav><div class='container row'><div class='brand'><strong>C|F|G consulting</strong></div><div><a href="#services" class="badge">Услуги</a><a href="#cases" class="badge">Кейсы</a><a href="#process" class="badge">Процесс</a><span class="lang-toggle" role="group" aria-label="Выбор языка"><a href="/" class="active" aria-current="page">RU</a><a href="en.html">EN</a><a href="zh.html">中文</a></span><a href="#contacts" class="btn btn-primary" aria-label="Связаться">Связаться</a></div></div></nav><div class='container' style='padding:28px 0'><h1>Политика конфиденциальности</h1><p>Обрабатываем ваши контактные данные для связи по проекту: имя, компания, ИНН, email, телефон и описание задачи.</p><p>Передача третьим лицам — только по закону. Для аналитики может использоваться Google Analytics (GA4). Вы можете отключить cookies в браузере.</p><p>Контакты по данным: <b>C.F.G.consulting@bk.ru</b>.</p></div><footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+.industry{display:flex;align-items:center;gap:10px;border:1px dashed #e5e7eb;border-radius:12px;padding:10px 12px;background:#fff}
+</style></head><body><nav><div class='container row'><div class='brand'><svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 256 256' aria-hidden='true'><rect rx='36' ry='36' width='256' height='256' fill='#0F172A'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, Helvetica, sans-serif' font-size='112' font-weight='700' fill='#FFFFFF'>CFG</text></svg><span>C|F|G consulting</span></div><div><a href="#services" class="badge">Услуги</a><a href="#industries" class="badge">Сферы</a><a href="#cases" class="badge">Кейсы</a><a href="#process" class="badge">Процесс</a><a href="#partner" class="badge">Партнёрам</a><span class="lang-toggle" role="group" aria-label="Язык"><a href="/" class="active" aria-current="page">RU</a><a href="en.html">EN</a><a href="zh.html">中文</a></span><a href="#contacts" class="btn btn-primary">Связаться</a></div></div></nav><div class='container' style='padding:28px 0'><h1>Политика конфиденциальности</h1><p>Мы обрабатываем ваши контактные данные для связи по проекту: имя, компания, ИНН, email, телефон и описание задачи.</p><p>Передача данных третьим лицам — только по закону. Для аналитики может использоваться Google Analytics (GA4). Вы можете отключить cookies в браузере.</p><p>Контакты по данным: <b>C.F.G.consulting@bk.ru</b>.</p></div><footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
     <div style="display:flex;align-items:center;gap:10px"><strong>C|F|G consulting</strong></div>
-    <div style="opacity:.9">Tel./WhatsApp: +7 902 568 35 29 • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a> • Build v3.4.3</div>
+    <div style="opacity:.9">Tel./WhatsApp: +7 902 568 35 29 • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a> • Build v3.5</div>
   </div></footer><div class='toast'></div><script>
 (function(){
   'use strict';
@@ -84,7 +86,7 @@ label{font-weight:600;display:block;margin:8px 0 6px}
     var body = modal.querySelector('.body').value||'';
     openGmail(subj, body);
   });
-  if(btnCopy) btnCopy.addEventListener('click', function(){ navigator.clipboard.writeText(EMAIL).then(function(){toast('Copied')}); track('copy_email'); });
+  if(btnCopy) btnCopy.addEventListener('click', function(){ navigator.clipboard.writeText(EMAIL).then(function(){toast('Скопировано');}); track('copy_email'); });
   document.querySelectorAll('form[data-estimate]').forEach(function(f){
     f.addEventListener('submit', function(e){
       e.preventDefault();

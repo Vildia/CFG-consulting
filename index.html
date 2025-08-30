@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html><html lang='ru'><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>C|F|G consulting — аудит, рост, запуски под ключ</title><meta name="description" content="Аудит, стратегия, продажи, команды, аналитика. Запуски подразделений под ключ за 30–60 дней."><link rel="icon" type="image/png" href="assets/favicon-512.png">
 <style>
 :root{--navy:#0A1F44;--indigo:#4F46E5;--slate:#0F172A;--accent:#22C55E;--ring:#3B82F6;}
@@ -11,6 +11,7 @@
 nav{position:sticky;top:0;background:#ffffffd6;backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid #e5e7eb;z-index:10}
 nav .row{display:flex;align-items:center;justify-content:space-between;min-height:64px}
 nav .brand{display:flex;align-items:center;gap:12px;font-weight:800;color:var(--navy)}
+nav .brand svg{border-radius:10px}
 .hero{background:linear-gradient(135deg,var(--slate),var(--indigo));color:#fff;padding:28px 0 24px;position:relative;overflow:hidden}
 .hero .content{display:grid;grid-template-columns:1.15fr 1fr;gap:28px;align-items:center}
 .hero h1{font-size:44px;line-height:1.15;margin:6px 0 12px}
@@ -45,11 +46,11 @@ label{font-weight:600;display:block;margin:8px 0 6px}
 .input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#f8fafc}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:60}
 .toast.show{display:block}
+.industry{display:flex;align-items:center;gap:10px;border:1px dashed #e5e7eb;border-radius:12px;padding:10px 12px;background:#fff}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"C|F|G consulting","url":"https://cfg-consulting.vercel.app","logo":"https://cfg-consulting.vercel.app/assets/favicon-512.png","email":"C.F.G.consulting@bk.ru","telephone":"+7 902 568 35 29","sameAs":["https://t.me/Evgeniy_Chapurin"]}
-</script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());</script></head><body><nav><div class='container row'><div class='brand'><strong>C|F|G consulting</strong></div><div><a href="#services" class="badge">Услуги</a><a href="#cases" class="badge">Кейсы</a><a href="#process" class="badge">Процесс</a><span class="lang-toggle" role="group" aria-label="Выбор языка"><a href="/" class="active" aria-current="page">RU</a><a href="en.html">EN</a><a href="zh.html">中文</a></span><a href="#contacts" class="btn btn-primary" aria-label="Связаться">Связаться</a></div></div></nav>
+</script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());</script></head><body><nav><div class='container row'><div class='brand'><svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 256 256' aria-hidden='true'><rect rx='36' ry='36' width='256' height='256' fill='#0F172A'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='Arial, Helvetica, sans-serif' font-size='112' font-weight='700' fill='#FFFFFF'>CFG</text></svg><span>C|F|G consulting</span></div><div><a href="#services" class="badge">Услуги</a><a href="#industries" class="badge">Сферы</a><a href="#cases" class="badge">Кейсы</a><a href="#process" class="badge">Процесс</a><a href="#partner" class="badge">Партнёрам</a><span class="lang-toggle" role="group" aria-label="Язык"><a href="/" class="active" aria-current="page">RU</a><a href="en.html">EN</a><a href="zh.html">中文</a></span><a href="#contacts" class="btn btn-primary">Связаться</a></div></div></nav>
 <header class="hero"><div class="container content">
   <div>
     <h1>Помогаем компаниям расти и запускаться быстрее</h1>
@@ -57,7 +58,7 @@ label{font-weight:600;display:block;margin:8px 0 6px}
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
       <a href="#contacts" class="btn btn-primary" data-ev="cta_email">Обсудить проект</a>
       <a href="mailto:C.F.G.consulting@bk.ru?subject=Оценить%20проект%20за%2024%20часа" class="btn btn-secondary" data-mailto data-subject="Оценить проект за 24 часа" data-ev="estimate_24h">Оценить проект за 24 часа</a>
-      <button class="btn btn-secondary" type="button" data-gcal aria-label="Предложить слот через Google Calendar">Предложить слот (GCal)</button>
+      <button class="btn btn-secondary" type="button" data-gcal>Предложить слот (GCal)</button>
     </div>
   </div>
   <div><img src="assets/hero-1200.jpg"
@@ -68,6 +69,68 @@ label{font-weight:600;display:block;margin:8px 0 6px}
     style="width:100%;border-radius:16px;border:1px solid #1f2937;box-shadow:0 20px 40px rgba(2,6,23,.4)"
     ></div>
 </div></header>
+
+<section id="kpis"><div class="container">
+  <div class="kpis">
+    <div class="kpi"><div style="font-size:28px;font-weight:800">33%</div><div>Доля рынка против 27% у конкурента</div></div>
+    <div class="kpi"><div style="font-size:28px;font-weight:800">×4</div><div>Масштаб команды продаж</div></div>
+    <div class="kpi"><div style="font-size:28px;font-weight:800">+18 п.п.</div><div>Рост конверсии (8→26%)</div></div>
+    <div class="kpi"><div style="font-size:28px;font-weight:800">1000+</div><div>Нанятых сотрудников</div></div>
+  </div>
+</div></section>
+
+<section id="services"><div class="container">
+  <h2 class="section-title">Услуги</h2>
+  <div class="cards">
+    <div class="card"><h3>Аудит и стратегия</h3><ul class="tick"><li>Быстрые победы (2–3 недели)</li><li>KPI и гипотезы роста</li><li>Дорожная карта 30/60/90</li></ul></div>
+    <div class="card"><h3>Продажи и маркетинг</h3><ul class="tick"><li>Скрипты, офферы, юнит-экономика</li><li>CRM/отчётность под ключ</li><li>Партнёрский канал</li></ul></div>
+    <div class="card"><h3>Команда и процессы</h3><ul class="tick"><li>Найм, обучение, мотивация</li><li>Регламенты и SLA</li><li>BI-дашборды</li></ul></div>
+  </div>
+</div></section>
+
+<section id="industries"><div class="container">
+  <h2 class="section-title">Сферы, в которых работали</h2>
+  <div class="cards">
+    <div class="industry">Банки и финсервисы</div>
+    <div class="industry">DIY/строительные сети</div>
+    <div class="industry">Автобизнес</div>
+    <div class="industry">Недвижимость</div>
+    <div class="industry">Медицина</div>
+    <div class="industry">Маркетплейсы (Wildberries)</div>
+  </div>
+</div></section>
+
+<section id="cases"><div class="container">
+  <h2 class="section-title">Кейсы</h2>
+  <div class="cards">
+    <div class="card"><b>Альфа-Банк</b><br>Рост доли рынка до 33%, победа над Сбером на территории. Построены партнёрские каналы и сообщество аутсорсеров.</div>
+    <div class="card"><b>Леруа Мерлен</b><br>Запуск федерального B2B-направления: анализ спроса, стандарты, команда, логистика и ассортименты.</div>
+    <div class="card"><b>Tachki.pro</b><br>Рост конверсии продаж 8%→26%, аналитика всех процессов, новая воронка и обучение команды.</div>
+  </div>
+  <p class="small" style="margin-top:10px">* Примеры из опыта работы/проектов. Названия приведены описательно, без использования товарных знаков.</p>
+</div></section>
+
+<section id="process"><div class="container">
+  <h2 class="section-title">Как работаем</h2>
+  <div class="process">
+    <div class="step"><b>01. Диагностика</b><br>Интервью, цифры, быстрые победы.</div>
+    <div class="step"><b>02. План</b><br>Дорожная карта и KPI 30/60/90.</div>
+    <div class="step"><b>03. Команда</b><br>Подбор, роли, обучение, мотивация.</div>
+    <div class="step"><b>04. Запуск</b><br>Процессы, регламенты, контроль.</div>
+    <div class="step"><b>05. Масштаб</b><br>Аналитика, автоматизация, рост.</div>
+  </div>
+</div></section>
+
+<section id="guarantee"><div class="container">
+  <h2 class="section-title">Подход и гарантии</h2>
+  <div class="card">
+    <ul class="tick">
+      <li>Прозрачная отчётность: еженедельные отчёты и созвоны.</li>
+      <li>Контрольные точки: 30/60/90 с KPI.</li>
+      <li>Сроки: «выходим в срок» — фиксируем в ТЗ и договоре.</li>
+    </ul>
+  </div>
+</div></section>
 
 <section id="estimate"><div class="container">
   <h2 class="section-title">Оценка за 24 часа</h2>
@@ -88,6 +151,17 @@ label{font-weight:600;display:block;margin:8px 0 6px}
   </form>
 </div></section>
 
+<section id="partner"><div class="container">
+  <h2 class="section-title">Партнёрская программа</h2>
+  <div class="card">
+    <p><b>Вы — аутсорсер</b> (бухгалтерия, юристы, HR, маркетинг)? Передавайте клиентов и получайте вознаграждение за оплаченные проекты.</p>
+    <p style="display:flex;gap:12px;flex-wrap:wrap">
+      <a class="btn btn-secondary" href="mailto:C.F.G.consulting@bk.ru?subject=Партнёрство%20с%20CFG%20consulting" data-mailto data-subject="Партнёрство с CFG consulting" data-ev="partner_email">Стать партнёром (Email)</a>
+      <a class="btn btn-primary" href="https://t.me/Evgeniy_Chapurin" target="_blank" rel="noopener">Стать партнёром (Telegram)</a>
+    </p>
+  </div>
+</div></section>
+
 <section id="contacts"><div class="container">
   <div class="cta">
     <h2 style="margin:0 0 10px">Обсудим вашу задачу</h2>
@@ -101,7 +175,7 @@ label{font-weight:600;display:block;margin:8px 0 6px}
 
 <footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
     <div style="display:flex;align-items:center;gap:10px"><strong>C|F|G consulting</strong></div>
-    <div style="opacity:.9">Tel./WhatsApp: +7 902 568 35 29 • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a> • Build v3.4.3</div>
+    <div style="opacity:.9">Tel./WhatsApp: +7 902 568 35 29 • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a> • Build v3.5</div>
   </div></footer>
 
 <div id="mailModal" class="modal" aria-hidden="true">
@@ -116,7 +190,8 @@ label{font-weight:600;display:block;margin:8px 0 6px}
     </div>
     <p class="small">C.F.G.consulting@bk.ru</p>
   </div>
-</div><div class='toast'></div><script>
+</div>
+<div class='toast'></div><script>
 (function(){
   'use strict';
   var EMAIL='C.F.G.consulting@bk.ru', TG='@Evgeniy_Chapurin', WA='79025683529';
@@ -154,7 +229,7 @@ label{font-weight:600;display:block;margin:8px 0 6px}
     var body = modal.querySelector('.body').value||'';
     openGmail(subj, body);
   });
-  if(btnCopy) btnCopy.addEventListener('click', function(){ navigator.clipboard.writeText(EMAIL).then(function(){toast('Copied')}); track('copy_email'); });
+  if(btnCopy) btnCopy.addEventListener('click', function(){ navigator.clipboard.writeText(EMAIL).then(function(){toast('Скопировано');}); track('copy_email'); });
   document.querySelectorAll('form[data-estimate]').forEach(function(f){
     f.addEventListener('submit', function(e){
       e.preventDefault();
