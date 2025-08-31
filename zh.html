@@ -1,29 +1,148 @@
-<!doctype html>
-<html lang='zh'>
-<head>
+<!doctype html><html lang="zh"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>C|F|G consulting — 审核、增长与一站式落地</title>
-<meta name="description" content="Аудит, стратегия, продажи, команды, аналитика. Запуски под ключ за 30–60 дней.">
-<link rel="icon" type="image/png" href="assets/favicon-512.png">
 <style>
-nav .brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;color:#0A1F44}
-nav .brand svg{display:block;vertical-align:middle}
-nav .brand .brand-name{margin-left:0;white-space:nowrap;letter-spacing:0}
-</style>
-</head>
-<body>
-<nav><div class='brand'>
-  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 256 256" aria-hidden="true">
-    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4338CA"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient></defs>
-    <rect rx="40" ry="40" width="256" height="256" fill="url(#g)"/>
-    <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle"
-          font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="800" fill="#FFFFFF">CFG</text>
-  </svg>
-  <strong class="brand-name">C|F|G consulting</strong>
-</div></nav>
-<main class="container">
-  <h1>徽标检查</h1>
-  <p>此测试页用于下载正确的页眉片段（徽标无多余间距）。</p>
-</main>
-</body>
-</html>
+    :root{--navy:#0A1F44;--indigo:#4F46E5;--slate:#0F172A;--accent:#22C55E;--ring:#3B82F6}
+    *{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Inter,system-ui,Arial,sans-serif;color:#0f172a}
+    nav{position:sticky;top:0;background:#fff;border-bottom:1px solid #e5e7eb;z-index:10}
+    nav .row{display:flex;align-items:center;justify-content:space-between;min-height:64px}
+    nav .brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;color:var(--navy)}
+    nav .brand svg{display:block;vertical-align:middle}
+    nav .brand .brand-name{margin-left:0;white-space:nowrap;letter-spacing:0}
+    .container{max-width:1160px;margin:0 auto;padding:0 20px}
+    .badge{display:inline-block;padding:6px 10px;border:1px solid #e5e7eb;border-radius:999px;background:#fff;color:#334155;margin-right:8px;margin-bottom:8px}
+    .btn{display:inline-block;padding:14px 20px;border-radius:12px;font-weight:600;text-decoration:none;cursor:pointer;border:none}
+    .btn-primary{background:linear-gradient(90deg,var(--slate),var(--indigo));color:#fff}
+    .btn-secondary{border:2px solid #e2e8f0;color:var(--slate);background:#fff}
+    .hero{background:linear-gradient(135deg,var(--slate),var(--indigo));color:#fff;padding:28px 0 24px}
+    .hero .content{display:grid;grid-template-columns:1.15fr 1fr;gap:28px;align-items:center}
+    section{padding:56px 0;border-top:1px solid #f1f5f9}
+    .section-title{font-size:28px;margin:0 0 18px;color:var(--navy)}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;box-shadow:0 10px 24px rgba(2,6,23,.06)}
+    ul{padding-left:18px}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .kpi{text-align:center;padding:14px;background:#fff;border:1px solid #e5e7eb;border-radius:14px}
+    .process{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+    .step{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+    .cta{background:#0b1220;color:#fff;text-align:center;padding:48px 18px;border-radius:16px}
+    footer{background:#0b1220;color:#cbd5e1;padding:26px 0}
+    input,textarea{font:inherit;border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;background:#fff;width:100%}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .form-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+    @media(max-width:980px){.hero .content{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.process{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}}
+    .lang-toggle{display:inline-flex;align-items:center;background:#f1f5f9;border:1px solid #e5e7eb;border-radius:999px;padding:2px;margin-left:10px}
+    .lang-toggle a{padding:6px 10px;border-radius:999px;text-decoration:none;color:#334155;font-weight:600;min-width:42px;text-align:center}
+    .lang-toggle a.active{background:linear-gradient(90deg,var(--slate),var(--indigo));color:#fff}
+    </style></head><body>
+<nav><div class="container row">
+    <div class="brand" aria-label="C|F|G consulting">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 256 256" aria-hidden="true">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4338CA"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient></defs>
+        <rect rx="40" ry="40" width="256" height="256" fill="url(#g)"/>
+        <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="800" fill="#FFFFFF">CFG</text>
+      </svg>
+      <strong class="brand-name">C|F|G consulting</strong>
+    </div>
+    <div>
+<a href="#services" class="badge">服务</a>
+<a href="#cases" class="badge">案例</a>
+<a href="#process" class="badge">流程</a>
+
+        <span class="lang-toggle">
+          <a href="/">RU</a>
+          <a href="en.html">EN</a>
+          <a href="zh.html" class="active">中文</a>
+        </span>
+        
+<a href="#contacts" class="btn btn-primary">联系</a>
+</div></div></nav>
+<header class="hero"><div class="container content">
+<div><h1>帮助企业更快增长与落地</h1>
+<p class="lead">审核、战略、销售、团队与分析。30–60天一站式交付。</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
+<a href="#contacts" class="btn btn-primary">讨论项目</a>
+<a href="#estimate" class="btn btn-secondary" data-scroll="#estimate">24小时评估</a>
+<button class="btn btn-secondary" type="button">建议时间（GCal）</button>
+</div>
+<div class='pills-row'><span class='pill pill-outline'>合作伙伴计划</span></div>
+<div class='pills-row'><span class='pill'>源自伊尔库茨克</span><span class='pill'>覆盖俄罗斯与独联体</span><span class='pill'>专家网络</span></div>
+</div>
+<div><img src="assets/hero-1200.jpg" onerror="this.onerror=null;this.src='hero.jpg';" alt="Portrait" style="width:100%;border-radius:16px;border:1px solid #1f2937;box-shadow:0 20px 40px rgba(2,6,23,.4)"></div>
+</div></header>
+<section id="kpis"><div class="container"><div class="kpis">
+  <div class="kpi"><div style="font-size:28px;font-weight:800">33%</div><div>市场份额</div></div>
+  <div class="kpi"><div style="font-size:28px;font-weight:800">×4</div><div>销售团队扩张</div></div>
+  <div class="kpi"><div style="font-size:28px;font-weight:800">+18 pp</div><div>转化率提升（8→26%）</div></div>
+  <div class="kpi"><div style="font-size:28px;font-weight:800">1000+</div><div>招聘人数</div></div>
+</div></div></section>
+<section id="why"><div class="container"><h2 class="section-title">为什么选择我们</h2>
+<div class="cards">
+  <div class="card"><b>透明汇报</b><br>每周更新、例会与清晰指标。</div>
+  <div class="card"><b>KPI保障</b><br>在30/60/90阶段锁定KPI，按数据验收。</div>
+  <div class="card"><b>准时交付</b><br>工期写入SOW与合同（SLA）。</div>
+</div></div></section>
+<section id="services"><div class="container"><h2 class="section-title">服务</h2>
+<div class="cards">
+  <div class="card"><h3>审核与战略</h3><ul>
+    <li>快速成效（2–3周）</li>
+    <li>KPI 与增长假设</li>
+    <li>30/60/90 路线图</li>
+  </ul></div>
+  <div class="card"><h3>一站式落地</h3><ul>
+    <li>分支/仓储/B2B方向</li>
+    <li>招聘与培训团队</li>
+    <li>流程/规范/质量控制</li>
+  </ul></div>
+  <div class="card"><h3>销售与渠道</h3><ul>
+    <li>细分/话术/漏斗/激励</li>
+    <li>合作渠道：启动/SLA</li>
+    <li>伙伴入驻与维护</li>
+  </ul></div>
+</div></div></section>
+<section id="industries"><div class="container"><h2 class="section-title">涉及行业</h2>
+<div class="cards">
+  <div class="card">Банки и финсервисы</div><div class="card">DIY/строительные сети</div><div class="card">Автобизнес</div>
+</div></div></section>
+<section id="cases"><div class="container"><h2 class="section-title">案例</h2>
+<div class="cards">
+  <div class="card"><h3>银行业</h3><p>市场份额33%（对标27%）。每日1000次会面，逐触点转化监控。</p></div>
+  <div class="card"><h3>家居建材零售</h3><p>全俄B2B启动：标准、团队、品类、物流与培训。</p></div>
+  <div class="card"><h3>汽车行业</h3><p>通过分析与旅程优化，转化率从8%→26%。</p></div>
+</div></div></section>
+<section id="process"><div class="container"><h2 class="section-title">流程</h2>
+<div class="process">
+  <div class="step"><b>01. 调研</b><br>访谈、数据、快速成效。</div>
+  <div class="step"><b>02. 规划</b><br>30/60/90 路线图与KPI。</div>
+  <div class="step"><b>03. 团队</b><br>招聘、角色、培训、激励。</div>
+  <div class="step"><b>04. 落地</b><br>流程、规范、控制。</div>
+  <div class="step"><b>05. 扩张</b><br>分析、自动化、增长。</div>
+</div></div></section>
+<section id="guarantee"><div class="container"><h2 class="section-title">方法与保障</h2>
+<div class="card"><ul>
+<li>每周更新与例会。</li>
+<li>里程碑：30/60/90 与 KPI。</li>
+<li>期限：按时交付，写入合同。</li>
+</ul></div></div></section>
+<section id="partner"><div class="container"><h2 class="section-title">合作伙伴计划</h2>
+<div class="card"><p>您是外包方（财税、法务、HR、营销）？转介绍付费项目即可获得佣金。</p>
+<p style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn-secondary" href="mailto:C.F.G.consulting@bk.ru">Email</a><a class="btn btn-primary" href="https://t.me/Evgeniy_Chapurin" target="_blank">Telegram</a></p></div>
+</div></section>
+<section id="estimate"><div class="container"><h2 class="section-title">24小时评估</h2>
+<form><div class="form-grid">
+<div><label>姓名</label><input></div><div><label>公司</label><input></div>
+<div><label>税号</label><input></div><div><label>Email</label><input></div>
+<div><label>电话</label><input></div><div style="grid-column:1/-1"><label>需求</label><textarea rows="4"></textarea></div>
+</div><div class="form-actions"><button class="btn btn-primary" type="button">发送</button></div></form>
+</div></section>
+<section id="contacts"><div class="container"><div class="cta">
+<h2 style="margin:0 0 10px">联系我们</h2>
+<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+<a class="btn btn-primary" href="mailto:C.F.G.consulting@bk.ru">Email</a>
+<a class="btn btn-secondary" href="https://t.me/Evgeniy_Chapurin" target="_blank">Telegram</a>
+<a class="btn btn-secondary" href="https://wa.me/79025683529" target="_blank">WhatsApp</a></div></div></div></section>
+<footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+  <div><strong>C|F|G consulting</strong></div>
+  <div style="opacity:.9">Tel./WhatsApp: +7 902 568 35 29 • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • Build v3.6.4</div>
+</div></footer>
+</body></html>

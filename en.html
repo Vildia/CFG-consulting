@@ -1,29 +1,148 @@
-<!doctype html>
-<html lang='en'>
-<head>
+<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>C|F|G consulting — audit, growth, turnkey launches</title>
-<meta name="description" content="Аудит, стратегия, продажи, команды, аналитика. Запуски под ключ за 30–60 дней.">
-<link rel="icon" type="image/png" href="assets/favicon-512.png">
 <style>
-nav .brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;color:#0A1F44}
-nav .brand svg{display:block;vertical-align:middle}
-nav .brand .brand-name{margin-left:0;white-space:nowrap;letter-spacing:0}
-</style>
-</head>
-<body>
-<nav><div class='brand'>
-  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 256 256" aria-hidden="true">
-    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4338CA"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient></defs>
-    <rect rx="40" ry="40" width="256" height="256" fill="url(#g)"/>
-    <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle"
-          font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="800" fill="#FFFFFF">CFG</text>
-  </svg>
-  <strong class="brand-name">C|F|G consulting</strong>
-</div></nav>
-<main class="container">
-  <h1>Logo check</h1>
-  <p>This test page is here so you can download a correct header snippet with the logo and no extra space.</p>
-</main>
-</body>
-</html>
+    :root{--navy:#0A1F44;--indigo:#4F46E5;--slate:#0F172A;--accent:#22C55E;--ring:#3B82F6}
+    *{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Inter,system-ui,Arial,sans-serif;color:#0f172a}
+    nav{position:sticky;top:0;background:#fff;border-bottom:1px solid #e5e7eb;z-index:10}
+    nav .row{display:flex;align-items:center;justify-content:space-between;min-height:64px}
+    nav .brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;color:var(--navy)}
+    nav .brand svg{display:block;vertical-align:middle}
+    nav .brand .brand-name{margin-left:0;white-space:nowrap;letter-spacing:0}
+    .container{max-width:1160px;margin:0 auto;padding:0 20px}
+    .badge{display:inline-block;padding:6px 10px;border:1px solid #e5e7eb;border-radius:999px;background:#fff;color:#334155;margin-right:8px;margin-bottom:8px}
+    .btn{display:inline-block;padding:14px 20px;border-radius:12px;font-weight:600;text-decoration:none;cursor:pointer;border:none}
+    .btn-primary{background:linear-gradient(90deg,var(--slate),var(--indigo));color:#fff}
+    .btn-secondary{border:2px solid #e2e8f0;color:var(--slate);background:#fff}
+    .hero{background:linear-gradient(135deg,var(--slate),var(--indigo));color:#fff;padding:28px 0 24px}
+    .hero .content{display:grid;grid-template-columns:1.15fr 1fr;gap:28px;align-items:center}
+    section{padding:56px 0;border-top:1px solid #f1f5f9}
+    .section-title{font-size:28px;margin:0 0 18px;color:var(--navy)}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;box-shadow:0 10px 24px rgba(2,6,23,.06)}
+    ul{padding-left:18px}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .kpi{text-align:center;padding:14px;background:#fff;border:1px solid #e5e7eb;border-radius:14px}
+    .process{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+    .step{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+    .cta{background:#0b1220;color:#fff;text-align:center;padding:48px 18px;border-radius:16px}
+    footer{background:#0b1220;color:#cbd5e1;padding:26px 0}
+    input,textarea{font:inherit;border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;background:#fff;width:100%}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .form-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+    @media(max-width:980px){.hero .content{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.process{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}}
+    .lang-toggle{display:inline-flex;align-items:center;background:#f1f5f9;border:1px solid #e5e7eb;border-radius:999px;padding:2px;margin-left:10px}
+    .lang-toggle a{padding:6px 10px;border-radius:999px;text-decoration:none;color:#334155;font-weight:600;min-width:42px;text-align:center}
+    .lang-toggle a.active{background:linear-gradient(90deg,var(--slate),var(--indigo));color:#fff}
+    </style></head><body>
+<nav><div class="container row">
+    <div class="brand" aria-label="C|F|G consulting">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 256 256" aria-hidden="true">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4338CA"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient></defs>
+        <rect rx="40" ry="40" width="256" height="256" fill="url(#g)"/>
+        <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="800" fill="#FFFFFF">CFG</text>
+      </svg>
+      <strong class="brand-name">C|F|G consulting</strong>
+    </div>
+    <div>
+<a href="#services" class="badge">Services</a>
+<a href="#cases" class="badge">Case studies</a>
+<a href="#process" class="badge">Process</a>
+
+        <span class="lang-toggle">
+          <a href="/">RU</a>
+          <a href="en.html" class="active">EN</a>
+          <a href="zh.html">中文</a>
+        </span>
+        
+<a href="#contacts" class="btn btn-primary">Contact</a>
+</div></div></nav>
+<header class="hero"><div class="container content">
+<div><h1>We help companies grow and launch faster</h1>
+<p class="lead">Audit, strategy, sales, teams, analytics. Turnkey in 30–60 days.</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
+<a href="#contacts" class="btn btn-primary">Discuss your project</a>
+<a href="#estimate" class="btn btn-secondary" data-scroll="#estimate">24‑hour project assessment</a>
+<button class="btn btn-secondary" type="button">Suggest a slot (GCal)</button>
+</div>
+<div class='pills-row'><span class='pill pill-outline'>Partner program</span></div>
+<div class='pills-row'><span class='pill'>Founded in Irkutsk</span><span class='pill'>Operating across Russia & CIS</span><span class='pill'>Expert network</span></div>
+</div>
+<div><img src="assets/hero-1200.jpg" onerror="this.onerror=null;this.src='hero.jpg';" alt="Portrait" style="width:100%;border-radius:16px;border:1px solid #1f2937;box-shadow:0 20px 40px rgba(2,6,23,.4)"></div>
+</div></header>
+<section id="kpis"><div class="container"><div class="kpis">
+  <div class="kpi"><div style="font-size:28px;font-weight:800">33%</div><div>Market share</div></div>
+  <div class="kpi"><div style="font-size:28px;font-weight:800">×4</div><div>Sales team scale‑up</div></div>
+  <div class="kpi"><div style="font-size:28px;font-weight:800">+18 pp</div><div>Conversion lift (8→26%)</div></div>
+  <div class="kpi"><div style="font-size:28px;font-weight:800">1000+</div><div>Hires</div></div>
+</div></div></section>
+<section id="why"><div class="container"><h2 class="section-title">Why work with us</h2>
+<div class="cards">
+  <div class="card"><b>Transparent reporting</b><br>Weekly updates, calls and clear metrics.</div>
+  <div class="card"><b>Guaranteed KPIs</b><br>KPIs locked in 30/60/90 plan. Acceptance by numbers.</div>
+  <div class="card"><b>On‑time delivery</b><br>Deadlines fixed in SOW and contract (SLA).</div>
+</div></div></section>
+<section id="services"><div class="container"><h2 class="section-title">Services</h2>
+<div class="cards">
+  <div class="card"><h3>Audit & Strategy</h3><ul>
+    <li>Quick wins (2–3 weeks)</li>
+    <li>KPIs and growth hypotheses</li>
+    <li>30/60/90 roadmap</li>
+  </ul></div>
+  <div class="card"><h3>Turnkey launches</h3><ul>
+    <li>Branches, warehouses, B2B lines</li>
+    <li>Team hiring and training</li>
+    <li>Processes, SOPs, QA</li>
+  </ul></div>
+  <div class="card"><h3>Sales & Partnerships</h3><ul>
+    <li>Segmentation, scripts, funnel, motivation</li>
+    <li>Partner networks: launch, SLA</li>
+    <li>Partner onboarding and care</li>
+  </ul></div>
+</div></div></section>
+<section id="industries"><div class="container"><h2 class="section-title">Industries we’ve worked in</h2>
+<div class="cards">
+  <div class="card">Банки и финсервисы</div><div class="card">DIY/строительные сети</div><div class="card">Автобизнес</div>
+</div></div></section>
+<section id="cases"><div class="container"><h2 class="section-title">Case studies</h2>
+<div class="cards">
+  <div class="card"><h3>Banking sector</h3><p>33% market share vs. 27%. 1,000 meetings/day, conversion control at each touchpoint.</p></div>
+  <div class="card"><h3>DIY retail</h3><p>Nationwide B2B rollout: standards, team, assortment, logistics, training.</p></div>
+  <div class="card"><h3>Automotive</h3><p>Conversion from 8% → 26% via analytics, scripts and CJM.</p></div>
+</div></div></section>
+<section id="process"><div class="container"><h2 class="section-title">Process</h2>
+<div class="process">
+  <div class="step"><b>01. Discovery</b><br>Interviews, numbers, quick wins.</div>
+  <div class="step"><b>02. Plan</b><br>30/60/90 roadmap and KPIs.</div>
+  <div class="step"><b>03. Team</b><br>Hiring, roles, training, motivation.</div>
+  <div class="step"><b>04. Launch</b><br>Processes, SOPs, control.</div>
+  <div class="step"><b>05. Scale</b><br>Analytics, automation, growth.</div>
+</div></div></section>
+<section id="guarantee"><div class="container"><h2 class="section-title">Approach & Guarantees</h2>
+<div class="card"><ul>
+<li>Weekly updates and calls.</li>
+<li>Checkpoints 30/60/90 with KPIs.</li>
+<li>Deadlines: on time — fixed in contract.</li>
+</ul></div></div></section>
+<section id="partner"><div class="container"><h2 class="section-title">Partner program</h2>
+<div class="card"><p>Are you an outsourcer (accounting, legal, HR, marketing)? Refer clients and get paid for paid projects.</p>
+<p style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn-secondary" href="mailto:C.F.G.consulting@bk.ru">Email</a><a class="btn btn-primary" href="https://t.me/Evgeniy_Chapurin" target="_blank">Telegram</a></p></div>
+</div></section>
+<section id="estimate"><div class="container"><h2 class="section-title">24‑hour estimate</h2>
+<form><div class="form-grid">
+<div><label>Name</label><input></div><div><label>Company</label><input></div>
+<div><label>Tax ID</label><input></div><div><label>Email</label><input></div>
+<div><label>Phone</label><input></div><div style="grid-column:1/-1"><label>Brief</label><textarea rows="4"></textarea></div>
+</div><div class="form-actions"><button class="btn btn-primary" type="button">Send</button></div></form>
+</div></section>
+<section id="contacts"><div class="container"><div class="cta">
+<h2 style="margin:0 0 10px">Contact us</h2>
+<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+<a class="btn btn-primary" href="mailto:C.F.G.consulting@bk.ru">Email</a>
+<a class="btn btn-secondary" href="https://t.me/Evgeniy_Chapurin" target="_blank">Telegram</a>
+<a class="btn btn-secondary" href="https://wa.me/79025683529" target="_blank">WhatsApp</a></div></div></div></section>
+<footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+  <div><strong>C|F|G consulting</strong></div>
+  <div style="opacity:.9">Tel./WhatsApp: +7 902 568 35 29 • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • Build v3.6.4</div>
+</div></footer>
+</body></html>
