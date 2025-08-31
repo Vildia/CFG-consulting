@@ -270,6 +270,28 @@ label{font-weight:600;display:block;margin:8px 0 6px}
       function val(n){ var x=f.querySelector('[name='+n+']'); return x?x.value.trim():''; }
       var name=val('name'), company=val('company'), inn=val('inn'), email=val('email'), phone=val('phone'), desc=val('desc');
       var subj = {ru:'Оценка проекта за 24 часа', en:'24h project assessment', zh:'24小时内项目评估'}[locale];
+      <script>
+(function () {
+  // Определяем текущий язык по адресу
+  var path = location.pathname.replace(/\/+$/, '');
+  var current = (path === '' || path === '/' || path.endsWith('/index.html')) ? 'ru'
+              : path.endsWith('/en.html') ? 'en'
+              : path.endsWith('/zh.html') ? 'zh'
+              : 'ru';
+
+  // Снимаем active у всех и ставим на текущем
+  document.querySelectorAll('.lang-toggle a').forEach(function(a){
+    a.classList.remove('active');
+    var href = (a.getAttribute('href') || '').toLowerCase();
+    var lang = (href === '/' || href === './' || href === 'index.html') ? 'ru'
+             : (href.indexOf('en.html') !== -1) ? 'en'
+             : (href.indexOf('zh.html') !== -1) ? 'zh'
+             : '';
+    if (lang === current) a.classList.add('active');
+  });
+})();
+</script>
+
       var body = (locale==='ru' ?
         ['Имя: '+name,'Компания: '+company,'ИНН: '+inn,'Email: '+email,'Телефон: '+phone,'Задача: '+desc].join('\n') :
         locale==='en' ?
