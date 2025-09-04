@@ -116,4 +116,30 @@ label{font-weight:600;display:block;margin:8px 0 6px}
       track('gcal_open');
     });
   });
-})();</script></body></html>
+})();</script><iframe name="hidden_iframe_submit" style="display:none"></iframe>
+
+<script>
+(function(){
+  var ENDPOINT = window.CFG_ENDPOINT || (function(){ 
+    var s = document.currentScript; 
+    var m = (document.body.innerHTML.match(/https:\/\/script\.google\.com\/macros\/s\/[^"']+\/exec/)||[])[0];
+    return m||'';
+  })();
+  function q(k){ try{ return new URLSearchParams(location.search).get(k)||''; }catch(e){ return ''; } }
+  function ready(fn){ document.readyState!=='loading'?fn():document.addEventListener('DOMContentLoaded',fn); }
+  ready(function(){
+    var form = document.querySelector('form'); if(!form) return;
+    if(ENDPOINT) form.action = ENDPOINT;
+    var set = function(name,val){ var el=form.querySelector('input[name="'+name+'"]'); if(el) el.value=val||''; };
+    set('utm_source', q('utm_source'));
+    set('utm_medium', q('utm_medium'));
+    set('utm_campaign', q('utm_campaign'));
+    set('utm_content', q('utm_content'));
+    set('utm_term', q('utm_term'));
+    set('page_url', location.href);
+    set('referrer', document.referrer||'');
+  });
+})();
+</script>
+
+</body></html>

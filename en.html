@@ -163,7 +163,18 @@ label{font-weight:600;display:block;margin:8px 0 6px}
 
 <section id="estimate"><div class="container">
   <h2 class="section-title">24‑hour estimate</h2>
-  <form data-estimate data-locale="ru" aria-label="Estimate form">
+  <form action="https://script.google.com/macros/s/[A-Za-z0-9_\-]+/exec" data-estimate data-locale="ru" aria-label="Estimate form" method="post" target="hidden_iframe_submit">
+
+<div class="hidden-utms" style="display:none">
+  <input type="hidden" name="utm_source">
+  <input type="hidden" name="utm_medium">
+  <input type="hidden" name="utm_campaign">
+  <input type="hidden" name="utm_content">
+  <input type="hidden" name="utm_term">
+  <input type="hidden" name="page_url">
+  <input type="hidden" name="referrer">
+</div>
+
     <div class="form-grid">
       <div><label>Name</label><input name="name" required></div>
       <div><label>Company</label><input name="company"></div>
@@ -368,6 +379,32 @@ label{font-weight:600;display:block;margin:8px 0 6px}
         alert('Не удалось отправить форму. Попробуйте ещё раз или свяжитесь с нами.');
       }
     });
+  });
+})();
+</script>
+
+<iframe name="hidden_iframe_submit" style="display:none"></iframe>
+
+<script>
+(function(){
+  var ENDPOINT = window.CFG_ENDPOINT || (function(){ 
+    var s = document.currentScript; 
+    var m = (document.body.innerHTML.match(/https:\/\/script\.google\.com\/macros\/s\/[^"']+\/exec/)||[])[0];
+    return m||'';
+  })();
+  function q(k){ try{ return new URLSearchParams(location.search).get(k)||''; }catch(e){ return ''; } }
+  function ready(fn){ document.readyState!=='loading'?fn():document.addEventListener('DOMContentLoaded',fn); }
+  ready(function(){
+    var form = document.querySelector('form'); if(!form) return;
+    if(ENDPOINT) form.action = ENDPOINT;
+    var set = function(name,val){ var el=form.querySelector('input[name="'+name+'"]'); if(el) el.value=val||''; };
+    set('utm_source', q('utm_source'));
+    set('utm_medium', q('utm_medium'));
+    set('utm_campaign', q('utm_campaign'));
+    set('utm_content', q('utm_content'));
+    set('utm_term', q('utm_term'));
+    set('page_url', location.href);
+    set('referrer', document.referrer||'');
   });
 })();
 </script>
