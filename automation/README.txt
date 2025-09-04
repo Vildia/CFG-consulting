@@ -1,1 +1,0 @@
-Google Apps Script helpers. DO NOT commit secrets (tokens).
