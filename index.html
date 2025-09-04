@@ -266,7 +266,7 @@ label{font-weight:600;display:block;margin:8px 0 6px}
   if(btnCopy) btnCopy.addEventListener('click', function(){ navigator.clipboard.writeText(EMAIL).then(function(){toast('Скопировано');}); track('copy_email'); });
   
   // === Variant B: submit to Google Apps Script Web App ===
-  var ENDPOINT = window.CFG_ENDPOINT || 'https://script.google.com/macros/s/AKfycbz2RipLzNJLSSFcuaU-YUWld5jP2xeK0imoA7TP3abnTPHJEG6n_j968O5PGPyU33n3Vg/exec'; // TODO: replace with your deployed Web App URL
+  var ENDPOINT = window.CFG_ENDPOINT || 'https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec'; // TODO: replace with your deployed Web App URL
   function pick(obj, keys){ var r={}; keys.forEach(function(k){ r[k]=obj[k]||''; }); return r; }
   function getUTM(){
     var p = new URLSearchParams(window.location.search);
@@ -327,7 +327,7 @@ label{font-weight:600;display:block;margin:8px 0 6px}
 })();</script>
 <script>
 (function(){ 
-  var ENDPOINT = window.CFG_ENDPOINT || 'https://script.google.com/macros/s/AKfycbz2RipLzNJLSSFcuaU-YUWld5jP2xeK0imoA7TP3abnTPHJEG6n_j968O5PGPyU33n3Vg/exec';
+  var ENDPOINT = window.CFG_ENDPOINT || 'https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec';
   function qs(p){ try{return new URLSearchParams(window.location.search).get(p)||'';}catch(e){return ''} }
   function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
   ready(function(){
