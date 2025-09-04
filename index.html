@@ -324,4 +324,52 @@ label{font-weight:600;display:block;margin:8px 0 6px}
     });
   });
 
-})();</script></body></html>
+})();</script>
+<script>
+(function(){ 
+  var ENDPOINT = window.CFG_ENDPOINT || 'https://script.google.com/macros/s/AKfycbz2RipLzNJLSSFcuaU-YUWld5jP2xeK0imoA7TP3abnTPHJEG6n_j968O5PGPyU33n3Vg/exec';
+  function qs(p){ try{return new URLSearchParams(window.location.search).get(p)||'';}catch(e){return ''} }
+  function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+  ready(function(){
+    var form = document.querySelector('form');
+    if(!form) return;
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      try {
+        var fd = new FormData(form);
+
+        // Нормализуем имена
+        if(!fd.get('message')) fd.set('message', fd.get('desc') || fd.get('Описание') || fd.get('сообщение') || '');
+        if(!fd.get('telegram')) fd.set('telegram', fd.get('tg') || fd.get('@telegram') || fd.get('Телеграм') || '');
+
+        // UTM + контекст
+        fd.set('utm_source', qs('utm_source') || fd.get('utm_source') || '');
+        fd.set('utm_medium', qs('utm_medium') || fd.get('utm_medium') || '');
+        fd.set('utm_campaign', qs('utm_campaign') || fd.get('utm_campaign') || '');
+        fd.set('utm_content', qs('utm_content') || fd.get('utm_content') || '');
+        fd.set('utm_term', qs('utm_term') || fd.get('utm_term') || '');
+        fd.set('page_url', window.location.href);
+        fd.set('referrer', document.referrer || '');
+
+        // Отправка без префлайта CORS
+        fetch(ENDPOINT, { method: 'POST', body: fd, mode: 'no-cors' })
+          .then(function(){ 
+            try{ var ok = document.querySelector('.form-success'); if(ok) ok.style.display='block'; }catch(e){}
+            alert('Спасибо! Мы свяжемся в течение 24 часов.');
+            form.reset();
+          })
+          .catch(function(err){ 
+            console && console.error && console.error('Send failed', err);
+            alert('Заявка отправлена. Если что-то пошло не так — мы на связи.');
+            form.reset();
+          });
+      } catch(err) {
+        console && console.error && console.error(err);
+        alert('Не удалось отправить форму. Попробуйте ещё раз или свяжитесь с нами.');
+      }
+    });
+  });
+})();
+</script>
+
+</body></html>
