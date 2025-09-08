@@ -1,7 +1,0 @@
-C|F|G consulting — GA4 analytics bundle (v2025.09.01)
-
-Как установить:
-1) Скопируй папку analytics/ в корень сайта.
-2) Добавь в каждый HTML перед </head>:
-   <script src="analytics/analytics.js" defer></script>
-3) Залей на Vercel. Проверка: открой URL с ?ga_debug=1 и смотри консоль.
