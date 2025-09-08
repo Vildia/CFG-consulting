@@ -116,4 +116,52 @@ label{font-weight:600;display:block;margin:8px 0 6px}
       track('gcal_open');
     });
   });
-})();</script><div id="cfg_ok" style="position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:9999"><div style="background:#fff;border-radius:16px;box-shadow:0 12px 30px rgba(2,6,23,.12);padding:28px;max-width:480px;width:92%"><h3>✅ Спасибо, заявка отправлена</h3><p>Мы свяжемся в течение 24 часов.</p></div></div><script>(function(){var E='https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec';function r(f){document.readyState!='loading'?f():document.addEventListener('DOMContentLoaded',f);}function q(k){try{return new URLSearchParams(location.search).get(k)||''}catch(e){return ''}}function hid(f,n){var el=f.querySelector('input[name="'+n+'"]');if(!el){el=document.createElement('input');el.type='hidden';el.name=n;f.appendChild(el);}return el;}function ctx(f){hid(f,'utm_source').value=q('utm_source');hid(f,'utm_medium').value=q('utm_medium');hid(f,'utm_campaign').value=q('utm_campaign');hid(f,'utm_content').value=q('utm_content');hid(f,'utm_term').value=q('utm_term');hid(f,'page_url').value=location.href;hid(f,'referrer').value=document.referrer||'';}function map(f){function p(s){return f.querySelector(s);}function c(to,el){if(!el)return;var t=f.querySelector('[name="'+to+'"]');if(!t){t=document.createElement('input');t.type='hidden';t.name=to;f.appendChild(t);}if(!t.value)t.value=el.value||'';}c('name',p('[name="name"],[name="fio"],[name="Имя"],[name="имя"]'));c('phone',p('[name="phone"],[name="tel"],[name="Телефон"],[name="телефон"]'));c('email',p('[name="email"],[name="E-mail"],[name="почта"]'));c('company',p('[name="company"],[name="Компания"],[name="org"]'));c('message',p('[name="message"],[name="desc"],[name="Сообщение"],[name="описание"],[name="Кратко о задаче"]'));}function force(f){f.action=E;f.method='post';f.target='hidden_iframe_submit';ctx(f);f.addEventListener('submit',function(ev){try{ev.preventDefault();map(f);ctx(f);var fd=new FormData(f);fetch(E,{method:'POST',body:fd,mode:'no-cors'}).then(function(){ok();f.reset();}).catch(function(){ok();f.reset();});}catch(_){ok();}},true);}function ok(){var m=document.getElementById('cfg_ok');if(m){m.style.display='flex';setTimeout(function(){m.style.display='none';},4500);}}r(function(){Array.prototype.forEach.call(document.forms,force);if(!document.querySelector('iframe[name="hidden_iframe_submit"')){var fr=document.createElement('iframe');fr.name='hidden_iframe_submit';fr.style.display='none';document.body.appendChild(fr);}var links=document.querySelectorAll('a[href^="mailto:"],button[data-mailto],[data-open-gmail]');links.forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();ok();},true);el.setAttribute('href','#');el.removeAttribute('target');});});})();</script></body></html>
+})();</script>
+<!-- CFG: load config -->
+<script src="cfg-config.js"></script>
+<style id="cfg-mail-hide">a[href^="mailto:"]:not(.cfg-allow-mail),[data-open-gmail],.open-gmail{display:none!important}</style>
+<script>
+(function(){
+  var ENDPOINT=(window.CFG_ENDPOINT||'').trim();
+  function ready(f){document.readyState!='loading'?f():document.addEventListener('DOMContentLoaded',f);}
+  function killMail(root){
+    // remove/hide only non-whitelisted mailto
+    var q = root.querySelectorAll('a[href^="mailto:"]:not(.cfg-allow-mail), [data-open-gmail], .open-gmail');
+    q.forEach(function(el){ el.remove(); });
+    var phrases=['если почтовая программа не открылась','открыть gmail','копировать адрес'];
+    Array.prototype.forEach.call(root.querySelectorAll('div,section,article,dialog,button,a,span,p,li'), function(n){
+      try{
+        var t=(n.innerText||n.textContent||'').toLowerCase();
+        if(phrases.some(function(p){return t.includes(p)})) n.style.display='none';
+        if(t.includes('(email)')) n.style.display='none';
+      }catch(_){}
+    });
+  }
+  function hid(f,n){var el=f.querySelector('input[name="'+n+'"]');if(!el){el=document.createElement('input');el.type='hidden';el.name=n;f.appendChild(el);}return el;}
+  function q(k){try{return new URLSearchParams(location.search).get(k)||''}catch(e){return ''}}
+  function ctx(f){hid(f,'utm_source').value=q('utm_source');hid(f,'utm_medium').value=q('utm_medium');hid(f,'utm_campaign').value=q('utm_campaign');hid(f,'utm_content').value=q('utm_content');hid(f,'utm_term').value=q('utm_term');hid(f,'page_url').value=location.href;hid(f,'referrer').value=document.referrer||'';}
+  function map(f){function pick(s){return f.querySelector(s)}function put(to,el){if(!el)return;var t=f.querySelector('[name="'+to+'"]');if(!t){t=document.createElement('input');t.type='hidden';t.name=to;f.appendChild(t);}if(!t.value)t.value=el.value||''}put('name',pick('[name="name"],[name="fio"],[name="Имя"],[name="имя"]'));put('phone',pick('[name="phone"],[name="tel"],[name="Телефон"],[name="телефон"]'));put('email',pick('[name="email"],[name="E-mail"],[name="почта"]'));put('company',pick('[name="company"],[name="Компания"],[name="org"]'));put('message',pick('[name="message"],[name="desc"],[name="Сообщение"],[name="описание"],[name="Кратко о задаче"]'));}
+  function ok(){var m=document.getElementById('cfg_ok'); if(m){m.style.display='flex'; setTimeout(function(){m.style.display='none'}, 4500);}}
+  function force(f){
+    f.method='post'; f.target='hidden_iframe_submit'; ctx(f);
+    f.addEventListener('submit', function(ev){
+      ev.preventDefault(); ev.stopImmediatePropagation(); try{map(f);ctx(f);}catch(e){}
+      try{ var fd=new FormData(f); fetch(ENDPOINT,{method:'POST',body:fd,mode:'no-cors'}).then(function(){ok();f.reset();}).catch(function(){ok();f.reset();}); }catch(_){ ok(); }
+    }, true);
+  }
+  var mo=new MutationObserver(function(){ killMail(document); });
+  ready(function(){
+    Array.prototype.forEach.call(document.forms, force);
+    if(!document.querySelector('iframe[name="hidden_iframe_submit"')){var fr=document.createElement('iframe'); fr.name='hidden_iframe_submit'; fr.style.display='none'; document.body.appendChild(fr);}
+    killMail(document); mo.observe(document.documentElement,{childList:true,subtree:true});
+  });
+})();
+</script>
+<div id="cfg_ok" style="position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:999999">
+  <div style="background:#fff;border-radius:16px;box-shadow:0 12px 30px rgba(2,6,23,.12);padding:28px;max-width:480px;width:92%">
+    <h3 style="margin:0 0 8px">✅ Спасибо, заявка отправлена</h3>
+    <p style="margin:0;color:#475569">Мы свяжемся в течение 24 часов.</p>
+  </div>
+</div>
+
+</body></html>
