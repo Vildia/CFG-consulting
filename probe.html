@@ -1,0 +1,38 @@
+<!doctype html><meta charset="utf-8"><title>probe</title>
+<form id=f action="https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec" method="post" target="hidden"><input name="name" value="Probe form"><input name="message" value="hello"><button>send</button></form>
+<iframe name=hidden style="display:none"></iframe><pre id=log></pre>
+<script>document.getElementById('f').addEventListener('submit',()=>document.getElementById('log').textContent='submitted');</script>
+
+<!-- CFG Final: webhooks + cleanup -->
+<style id="cfg-mail-hide">a[href^="mailto:"]:not(.cfg-allow-mail),[data-open-gmail],.open-gmail{display:none!important}</style>
+<script>(function(){'use strict';
+  var ENDPOINT='https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec';
+  function ready(fn){document.readyState!=='loading'?fn():document.addEventListener('DOMContentLoaded',fn);}
+  function hid(f,n){var e=f.querySelector('[name="'+n+'"]');if(!e){e=document.createElement('input');e.type='hidden';e.name=n;f.appendChild(e);}return e;}
+  function labelFor(el){try{if(!el.id)return'';var L=document.querySelector('label[for="'+el.id+'"]');return (L&&L.innerText)||'';}catch(_ ){return''}} 
+  function norm(s){return (s||'').toString().toLowerCase();}
+  function mapFields(f){var m={};var a=[].slice.call(f.querySelectorAll('input,textarea,select'));
+    function put(k,e){if(e&&!m[k])m[k]=e;}
+    a.forEach(function(el){var b=[el.name,el.id,el.placeholder,el.getAttribute('aria-label'),labelFor(el)].map(norm).join(' ');
+      if(/(^|\s)(name|fio|имя)($|\s)/.test(b))put('name',el);
+      if(/(^|\s)(email|e-mail|почта)($|\s)/.test(b))put('email',el);
+      if(/(^|\s)(phone|tel|телефон)($|\s)/.test(b))put('phone',el);
+      if(/(^|\s)(company|org|компан|организац)($|\s)/.test(b))put('company',el);
+      if(/(^|\s)(inn|инн)($|\s)/.test(b))put('inn',el);
+      if(/(^|\s)(message|msg|desc|сообщен|описан|задач)($|\s)/.test(b))put('message',el);
+    }); return m; }
+  function enrich(f){var qs=new URLSearchParams(location.search);
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){hid(f,k).value=qs.get(k)||'';});
+    hid(f,'page_url').value=location.href; hid(f,'referrer').value=document.referrer||''; }
+  function thanks(){var m=document.getElementById('cfg_ok'); if(!m){m=document.createElement('div');m.id='cfg_ok';m.style.cssText='position:fixed;inset:0;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;z-index:999999';m.innerHTML='<div style="background:#fff;border-radius:16px;box-shadow:0 12px 30px rgba(2,6,23,.12);padding:28px;max-width:480px;width:92%"><h3 style="margin:0 0 8px">✅ Спасибо, заявка отправлена</h3><p style="margin:0;color:#475569">Мы свяжемся в течение 24 часов.</p></div>';document.body.appendChild(m);} m.style.display='flex'; setTimeout(function(){m.style.display='none'},4000);}
+  function intercept(f){enrich(f); f.addEventListener('submit',function(ev){ev.preventDefault();ev.stopImmediatePropagation();
+    try{var m=mapFields(f); function v(k){return m[k]?m[k].value||'':''} ['name','email','phone','company','inn','message'].forEach(function(k){hid(f,k).value=v(k);});}catch(_ ){}
+    try{var fd=new FormData(f); fetch(ENDPOINT,{method:'POST',body:fd,mode:'no-cors'}).then(function(){thanks(); f.reset();}).catch(function(){thanks(); f.reset();});}catch(_ ){thanks();}
+  }}, true);}
+  function hideMailUI(){var list=document.querySelectorAll('a[href^="mailto:"]:not(.cfg-allow-mail),[data-open-gmail],.open-gmail'); list.forEach(function(el){el.remove();});
+    var phrases=['если почтовая программа не открылась','открыть gmail','копировать адрес']; 
+    [].forEach.call(document.querySelectorAll('div,section,article,dialog,button,a,span,p,li'), function(n){try{var t=(n.innerText||n.textContent||'').toLowerCase(); if(phrases.some(function(p){return t.includes(p)})) n.style.display='none';}catch(_ ){} });
+  }
+  var mo=new MutationObserver(function(){hideMailUI();});
+  ready(function(){[].forEach.call(document.forms, intercept); hideMailUI(); mo.observe(document.documentElement,{childList:true,subtree:true}); });
+})();</script>
