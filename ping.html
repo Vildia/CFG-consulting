@@ -1,3 +1,0 @@
-<!doctype html><meta charset="utf-8"><title>ping</title>
-<button id=btn>fetch</button><pre id=log></pre>
-<script>const URL='https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec';document.getElementById('btn').onclick=()=>{const t=Date.now();fetch(URL,{method:'POST',body:new URLSearchParams({name:'Ping '+t}),mode:'no-cors'}).then(_=>log.textContent='sent '+t).catch(e=>log.textContent='err '+e);};</script>
