@@ -96,6 +96,14 @@ window.CFG_I18N = {
 };
 </script>
 
+
+<style>
+#cookie-banner{position:fixed;left:16px;right:16px;bottom:16px;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;display:none;z-index:9999}
+#cookie-banner button{margin-left:8px;padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+#cookie-banner .primary{background:#10B981;color:#fff}
+#cookie-banner .secondary{background:#374151;color:#fff}
+</style>
+
 </head><body>
 <section id="hero" class="hero">
   <div class="hero__text">
@@ -108,30 +116,42 @@ window.CFG_I18N = {
   </div>
   <div class="hero__img"><img src="/assets/portrait.png" alt="Evgeniy Chapurin" loading="eager"/></div>
 </section>
+<section class="trustbar" style="padding:20px 0;border-bottom:1px solid #eee">
+  <div class="container">
+    <h2 style="margin:0 0 8px 0">Компании и проекты</h2>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap"><li style='display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff'>ADEO / Leroy Merlin</li><li style='display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff'>Альфа-Банк</li><li style='display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff'>ВТБ</li><li style='display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff'>Росбанк</li><li style='display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff'>Траст Банк</li><li style='display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff'>Этажи</li><li style='display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff'>Маяк Отель</li><li style='display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff'>Tachki.pro</li><li style='display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff'>Моё дело</li><li style='display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff'>Wildberries</li><li style='display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff'>Банк Союз</li><li style='display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff'>Laboramed</li></ul>
+    <p style="color:#6B7280;font-size:12px;margin-top:6px">*Наименования используются для иллюстрации опыта. Все товарные знаки принадлежат их правообладателям.</p>
+  </div>
+</section>
+
+<section class="impact" style="padding:24px 0;border-bottom:1px solid #eee">
+  <div class="container">
+    <h2 style="margin:0 0 12px 0">3 быстрых кейса</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+<article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
+  <h3 style="margin:0;font-size:18px">Альфа‑Банк</h3>
+  <p style="margin:4px 0 8px 0;color:#6B7280">Руководитель продаж / SMB</p>
+  <ul style="margin:0 0 8px 18px"><li style='margin:4px 0'>• Доля рынка → 33% за 5 лет</li><li style='margin:4px 0'>• Партнёрский канал: 70% доли региона</li><li style='margin:4px 0'>• 1000+ встреч/день, «борд фактов»</li></ul>
+</article>
+
+<article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
+  <h3 style="margin:0;font-size:18px">ADEO / Leroy Merlin</h3>
+  <p style="margin:4px 0 8px 0;color:#6B7280">Директор по продажам B2B (запуск)</p>
+  <ul style="margin:0 0 8px 18px"><li style='margin:4px 0'>• Карта клиента и ёмкости рынка по РФ</li><li style='margin:4px 0'>• Школа менеджмента, стандарты, команда</li><li style='margin:4px 0'>• Запуск прибыли без доп. IT</li></ul>
+</article>
+
+<article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
+  <h3 style="margin:0;font-size:18px">Автодилер (Сибирь)</h3>
+  <p style="margin:4px 0 8px 0;color:#6B7280">Исполнительный директор (процессы)</p>
+  <ul style="margin:0 0 8px 18px"><li style='margin:4px 0'>• Конверсия лид→сделка до 27% за 8 мес</li><li style='margin:4px 0'>• Управленческая отчётность в одном окне</li><li style='margin:4px 0'>• Перезапуск KPI и мотивации</li></ul>
+</article>
+</div>
+  </div>
+</section>
+
 
 <section class='cfg-hero' style='padding:48px 0;border-bottom:1px solid #eee;'><div class='container'><h1>12 недель к управляемой прибыли</h1><p class='lead'>Фракционный COO: данные → мотивация → продажи. Довожу 3–5 инициатив до денег — без тяжёлого IT.</p><div class='pills-row' style='display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;'><span class='pill'>CFG Network • экспертная сеть</span><span class='pill'>SLA и «борд фактов» по пятницам</span><span class='pill'>Иркутск • Красноярск • РФ</span></div><div class='cta' style='display:flex;gap:12px;flex-wrap:wrap;'><a class='btn btn-primary' href='#estimate'>Диагностика 10 дней</a><a class='btn btn-outline' href='#downloads'>Портфель кейсов</a><a class='btn btn-outline' href='#contact'>20‑мин созвон</a></div></div></section>
 
-<section class="cfg-logos" style="padding:12px 0;border-bottom:1px solid #eee;">
-  <div class="container">
-    <h2>Опыт в компаниях</h2>
-    <div class="logo-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:16px;align-items:center;">
-      <figure class="logo-item"><img src="/assets/logos/adeo.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">ADEO</figcaption></figure><figure class="logo-item"><img src="/assets/logos/leroy-merlin.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">LEROY MERLIN</figcaption></figure><figure class="logo-item"><img src="/assets/logos/alfa-bank.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">ALFA BANK</figcaption></figure><figure class="logo-item"><img src="/assets/logos/vtb.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">VTB</figcaption></figure><figure class="logo-item"><img src="/assets/logos/rosbank.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">ROSBANK</figcaption></figure><figure class="logo-item"><img src="/assets/logos/trust-bank.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">TRUST BANK</figcaption></figure><figure class="logo-item"><img src="/assets/logos/etagi.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">ETAGI</figcaption></figure><figure class="logo-item"><img src="/assets/logos/mayak-hotel.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">MAYAK HOTEL</figcaption></figure><figure class="logo-item"><img src="/assets/logos/tachki-pro.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">TACHKI.PRO</figcaption></figure><figure class="logo-item"><img src="/assets/logos/moedelo.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">МОЁ ДЕЛО</figcaption></figure><figure class="logo-item"><img src="/assets/logos/wildberries.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">WILDBERRIES</figcaption></figure>
-    
-<figure class="logo-item"><img src="/assets/logos/bank-soyuz.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">Банк Союз</figcaption></figure>
-<figure class="logo-item"><img src="/assets/logos/laboramed.svg" style="height:28px;max-width:100%;object-fit:contain;filter:grayscale(100%);opacity:.85;" /><figcaption class="sr-only">Laboramed</figcaption></figure>
-</div>
-    <p style="color:#6B7280;font-size:12px;margin-top:8px;">Логотипы используются для иллюстрации профессионального опыта. Все товарные знаки принадлежат их правообладателям.</p>
-  </div>
-</section>
-<section class="cfg-exp" style="padding:28px 0;border-bottom:1px solid #eee;">
-  <div class="container">
-    <h2>Опыт руководящих ролей и запусков</h2>
-    <ul class="logo-row" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;align-items:center;">
-      <li><img src='/assets/logos/adeo.png' alt='ADEO / Leroy Merlin' loading='lazy'></li><li><img src='/assets/logos/alfabank.png' alt='Alfa-Bank' loading='lazy'></li><li><img src='/assets/logos/vtb.png' alt='VTB' loading='lazy'></li><li><img src='/assets/logos/rosbank.png' alt='Rosbank' loading='lazy'></li><li><img src='/assets/logos/etagi.png' alt='Etagi' loading='lazy'></li><li><img src='/assets/logos/mayak.png' alt='Mayak Hotel' loading='lazy'></li><li><img src='/assets/logos/tachki.png' alt='Tachki.pro' loading='lazy'></li>
-    </ul>
-    <p style="font-size:12px;color:#666;margin-top:8px;">*Все товарные знаки принадлежат их правообладателям.</p>
-  </div>
-</section>
 <section class='cfg-partners' style='padding:28px 0;border-bottom:1px solid #eee;'><div class='container'><h2>Партнёрская программа</h2><p>Диагностика для вашего клиента — бесплатно. Мы делаем «грязную» операционку и берём на себя отчётный результат. Вы получаете процент от оплаченного чека.</p><a class='btn btn-primary' href='#partner'>Отправить лида</a></div></section><section id='downloads' style='padding:24px 0;border-top:1px solid #eee;'><div class='container'><h2>Материалы</h2><ul><li><a href='/downloads/CFG_OnePager.docx' download>One‑pager (DOCX)</a></li><li><a href='/downloads/CFG_PitchDeck.pptx' download>Pitch‑дека (PPTX)</a></li></ul></div></section><section id='method' class='cfg-dppm' style='padding:40px 0;'><div class='container'><h2>DPPM‑12: Data → People → Process → Market</h2><ul><li><b>DATA:</b> единый слой данных и 5–7 управленческих дашбордов</li><li><b>PEOPLE:</b> KPI + мотивация, карьерные треки, замена/найм</li><li><b>PROCESS:</b> регламенты, цикл встреч; Пн цели — Пт «борд фактов»</li><li><b>MARKET:</b> воронка, офферы, партнёрский канал</li></ul></div></section>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
@@ -427,4 +447,55 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
   });
 })();
 </script>
+
+<script>
+(function(){
+  var form = document.getElementById('lead-form');
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    var pd = document.getElementById('consent_pd');
+    var xb = document.getElementById('consent_xb');
+    if(!(pd && pd.checked && xb && xb.checked)){
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'err' }));
+      alert('Пожалуйста, отметьте согласия на обработку и трансграничную передачу данных.');
+      return false;
+    } else {
+      window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'sending' }));
+    }
+  }, true);
+})();
+</script>
+
+
+<div id="cookie-banner" role="dialog" aria-live="polite">
+  <span>Мы используем аналитические cookie (Google Analytics). Согласны?</span>
+  <button class="primary" id="cookie-yes">Да</button>
+  <button class="secondary" id="cookie-no">Нет</button>
+</div>
+
+<script>
+(function(){
+  var key='ga_consent';
+  function hasConsent(){ return localStorage.getItem(key)==='yes'; }
+  function loadGA(){
+    if(document.getElementById('ga-script')) return;
+    var s=document.createElement('script');
+    s.id='ga-script';
+    s.async=true;
+    s.src='/analytics/analytics.js';
+    document.head.appendChild(s);
+  }
+  function init(){
+    var b=document.getElementById('cookie-banner'); if(!b) return;
+    if(localStorage.getItem(key)==='yes'){ loadGA(); return; }
+    if(localStorage.getItem(key)==='no'){ return; }
+    b.style.display='flex';
+    document.getElementById('cookie-yes').onclick=function(){ localStorage.setItem(key,'yes'); b.remove(); loadGA(); };
+    document.getElementById('cookie-no').onclick=function(){ localStorage.setItem(key,'no'); b.remove(); };
+  }
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
 </body></html>
