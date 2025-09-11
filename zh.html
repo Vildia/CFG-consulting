@@ -106,7 +106,7 @@ window.CFG_I18N = {
 
 </head><body>
 
-<header id="site-header" style="position:sticky;top:0;z-index:1000;background:rgba(11,16,32,.85);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.06)">
+<header id="site-header" style="position:sticky;top:0;left:0;right:0;z-index:2000;background:#0B1020;border-bottom:1px solid rgba(255,255,255,.06);">
   <div class="container" style="max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between">
     <div style="font-weight:700;color:#E5E7EB">C|F|G consulting</div>
     <nav style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
@@ -114,7 +114,7 @@ window.CFG_I18N = {
       <a href="#cases" style="color:#E5E7EB;text-decoration:none">• 案例</a>
       <a href="#partner" style="color:#E5E7EB;text-decoration:none">• 合作伙伴</a>
       <a href="#contacts" style="color:#E5E7EB;text-decoration:none">• 联系</a>
-      <a href="#lead-form" class="btn btn-primary" data-ev="cta_diagnostic" style="margin-left:8px">10天诊断</a>
+      <a href="#estimate" class="btn btn-primary" data-ev="cta_diagnostic" style="margin-left:8px;position:relative;z-index:2100;pointer-events:auto">10天诊断</a>
       <div class="lang" style="display:flex;gap:8px;margin-left:12px"><a href="/index.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">RU</a><a href="/en.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">EN</a><a href="/zh.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;background:linear-gradient(135deg,#6D28D9,#3B82F6);color:#fff;">中文</a></div>
     </nav>
   </div>
@@ -132,7 +132,7 @@ window.CFG_I18N = {
     <h1>12周实现可控利润</h1>
     <p>我们以分时COO/CGO的角色加入，在12周内将3–5项举措落地到利润：报表、激励、销售，无需复杂IT。</p>
     <div class="hero__cta" style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap">
-  <a href="#lead-form" class="btn btn-primary" data-ev="cta_diagnostic">Запросить диагностику 10 дней</a>
+  <a href="#estimate" class="btn btn-primary" data-ev="cta_diagnostic">Запросить диагностику 10 дней</a>
   <a href="#partner" class="btn btn-secondary" data-ev="cta_partner">Партнёрская программа</a>
 </div>
   </div></div>
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </ul>
 </div>
 </div></section>
-<section id="estimate"><div class="container">
+<section id="estimate" style="scroll-margin-top: 96px;"><div class="container">
 <h2 class="section-title">24小时评估</h2>
 <form aria-label="评估表单" data-estimate="" data-locale="zh">
 <div class="form-grid">
