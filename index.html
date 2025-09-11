@@ -105,16 +105,38 @@ window.CFG_I18N = {
 </style>
 
 </head><body>
-<section id="hero" class="hero">
-  <div class="hero__text">
+
+<header id="site-header" style="position:sticky;top:0;z-index:1000;background:rgba(11,16,32,.85);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.06)">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between">
+    <div style="font-weight:700;color:#E5E7EB">C|F|G consulting</div>
+    <nav style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <a href="#services" style="color:#E5E7EB;text-decoration:none">• Услуги</a>
+      <a href="#cases" style="color:#E5E7EB;text-decoration:none">• Кейсы</a>
+      <a href="#partner" style="color:#E5E7EB;text-decoration:none">• Партнёрам</a>
+      <a href="#contacts" style="color:#E5E7EB;text-decoration:none">• Контакты</a>
+      <a href="#lead-form" class="btn btn-primary" data-ev="cta_diagnostic" style="margin-left:8px">Диагностика 10 дней</a>
+      <div class="lang" style="display:flex;gap:8px;margin-left:12px"><a href="/index.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;background:linear-gradient(135deg,#6D28D9,#3B82F6);color:#fff;">RU</a><a href="/en.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">EN</a><a href="/zh.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">中文</a></div>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function(){var h=document.getElementById('site-header'); if(!h) return;
+  function sc(){ var y=window.scrollY||document.documentElement.scrollTop; }
+  window.addEventListener('scroll', sc, {passive:true}); sc();
+})();
+</script>
+
+<section id="hero" class="hero" style="padding:56px 0;background:linear-gradient(180deg,#2A2C7C 0%, #151835 100%);">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:36px"><div class="hero__text">
     <h1>12 недель к управляемой прибыли</h1>
     <p>Я прихожу как операционный партнёр собственника и довожу 3–5 инициатив до денег: отчётность, мотивация, продажи — без тяжёлого IT.</p>
-    <div class="hero__cta">
-      <a href="#lead-form" class="btn btn--primary" data-cta="diagnostic">Запросить диагностику 10 дней</a>
-      <a href="#partner" class="btn btn--secondary" data-cta="partner">Партнёрская программа</a>
-    </div>
-  </div>
-  <div class="hero__img"><img src="/assets/portrait.png" alt="Evgeniy Chapurin" loading="eager"/></div>
+    <div class="hero__cta" style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap">
+  <a href="#lead-form" class="btn btn-primary" data-ev="cta_diagnostic">Запросить диагностику 10 дней</a>
+  <a href="#partner" class="btn btn-secondary" data-ev="cta_partner">Партнёрская программа</a>
+</div>
+  </div></div>
+  <div class="hero__img" style="max-width:420px"><img src="/assets/portrait.png" alt="Evgeniy Chapurin" loading="eager"/></div>
 </section>
 <section class="trustbar" style="padding:20px 0;border-bottom:1px solid #eee">
   <div class="container">
@@ -124,30 +146,32 @@ window.CFG_I18N = {
   </div>
 </section>
 
-<section class="impact" style="padding:24px 0;border-bottom:1px solid #eee">
-  <div class="container">
+
+<section id="cases" class="impact" style="padding:24px 0;border-bottom:1px solid #eee">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
     <h2 style="margin:0 0 12px 0">3 быстрых кейса</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
 <article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
   <h3 style="margin:0;font-size:18px">Альфа‑Банк</h3>
   <p style="margin:4px 0 8px 0;color:#6B7280">Руководитель продаж / SMB</p>
-  <ul style="margin:0 0 8px 18px"><li style='margin:4px 0'>• Доля рынка → 33% за 5 лет</li><li style='margin:4px 0'>• Партнёрский канал: 70% доли региона</li><li style='margin:4px 0'>• 1000+ встреч/день, «борд фактов»</li></ul>
+  <ul style="margin:0 0 12px 18px"><li style='margin:4px 0'>• Доля рынка → 33% за 5 лет</li><li style='margin:4px 0'>• Партнёрский канал: 70% региона</li><li style='margin:4px 0'>• 1000+ встреч/день, «борд фактов»</li></ul>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>33% доля</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l4 2" stroke="currentColor" stroke-width="2"/></svg><span>5 лет</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg><span>70% партнёрский канал</span></span></div>
 </article>
-
 <article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
   <h3 style="margin:0;font-size:18px">ADEO / Leroy Merlin</h3>
   <p style="margin:4px 0 8px 0;color:#6B7280">Директор по продажам B2B (запуск)</p>
-  <ul style="margin:0 0 8px 18px"><li style='margin:4px 0'>• Карта клиента и ёмкости рынка по РФ</li><li style='margin:4px 0'>• Школа менеджмента, стандарты, команда</li><li style='margin:4px 0'>• Запуск прибыли без доп. IT</li></ul>
+  <ul style="margin:0 0 12px 18px"><li style='margin:4px 0'>• Карта клиента и ёмкости рынка по РФ</li><li style='margin:4px 0'>• Школа менеджмента, стандарты, команда</li><li style='margin:4px 0'>• Запуск прибыли без доп. IT</li></ul>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg><span>B2B с нуля</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l4 2" stroke="currentColor" stroke-width="2"/></svg><span>12 мес</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>рост выручки</span></span></div>
 </article>
-
 <article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
   <h3 style="margin:0;font-size:18px">Автодилер (Сибирь)</h3>
   <p style="margin:4px 0 8px 0;color:#6B7280">Исполнительный директор (процессы)</p>
-  <ul style="margin:0 0 8px 18px"><li style='margin:4px 0'>• Конверсия лид→сделка до 27% за 8 мес</li><li style='margin:4px 0'>• Управленческая отчётность в одном окне</li><li style='margin:4px 0'>• Перезапуск KPI и мотивации</li></ul>
-</article>
-</div>
+  <ul style="margin:0 0 12px 18px"><li style='margin:4px 0'>• Конверсия лид→сделка до 27% за 8 мес</li><li style='margin:4px 0'>• Отчётность в одном окне</li><li style='margin:4px 0'>• Перезапуск KPI и мотивации</li></ul>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>27% конверсия</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l4 2" stroke="currentColor" stroke-width="2"/></svg><span>8 мес</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg><span>KPI перезапущены</span></span></div>
+</article></div>
   </div>
 </section>
+
 
 
 <section class='cfg-hero' style='padding:48px 0;border-bottom:1px solid #eee;'><div class='container'><h1>12 недель к управляемой прибыли</h1><p class='lead'>Фракционный COO: данные → мотивация → продажи. Довожу 3–5 инициатив до денег — без тяжёлого IT.</p><div class='pills-row' style='display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;'><span class='pill'>CFG Network • экспертная сеть</span><span class='pill'>SLA и «борд фактов» по пятницам</span><span class='pill'>Иркутск • Красноярск • РФ</span></div><div class='cta' style='display:flex;gap:12px;flex-wrap:wrap;'><a class='btn btn-primary' href='#estimate'>Диагностика 10 дней</a><a class='btn btn-outline' href='#downloads'>Портфель кейсов</a><a class='btn btn-outline' href='#contact'>20‑мин созвон</a></div></div></section>
@@ -214,21 +238,32 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="industry">Маркетплейсы (Wildberries)</div>
 </div>
 </div></section>
-<section id="cases"><div class="container">
-<h2 class="section-title">Кейсы</h2>
-<div class="cards">
-<div class="card"><h3>Банковский сектор</h3>
-<p>33% доли территории против 27% у конкурента. 1000 встреч/день, контроль конверсии на каждом касании.</p>
-</div>
-<div class="card"><h3>DIY-ритейл</h3>
-<p>Запуск B2B‑направления по РФ: стандарты, команда, ассортимент, логистика, обучение менеджеров.</p>
-</div>
-<div class="card"><h3>Автобизнес</h3>
-<p>Рост конверсии продаж с 8% → 26% за счёт аналитики, скриптов и доработки клиентского пути.</p>
-</div>
-</div>
-<p class="small" style="margin-top:10px">* Часть проектов под NDA. Детали и контакты референсов — по запросу.</p>
-</div></section>
+
+<section id="cases" class="impact" style="padding:24px 0;border-bottom:1px solid #eee">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
+    <h2 style="margin:0 0 12px 0">3 быстрых кейса</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+<article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
+  <h3 style="margin:0;font-size:18px">Альфа‑Банк</h3>
+  <p style="margin:4px 0 8px 0;color:#6B7280">Руководитель продаж / SMB</p>
+  <ul style="margin:0 0 12px 18px"><li style='margin:4px 0'>• Доля рынка → 33% за 5 лет</li><li style='margin:4px 0'>• Партнёрский канал: 70% региона</li><li style='margin:4px 0'>• 1000+ встреч/день, «борд фактов»</li></ul>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>33% доля</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l4 2" stroke="currentColor" stroke-width="2"/></svg><span>5 лет</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg><span>70% партнёрский канал</span></span></div>
+</article>
+<article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
+  <h3 style="margin:0;font-size:18px">ADEO / Leroy Merlin</h3>
+  <p style="margin:4px 0 8px 0;color:#6B7280">Директор по продажам B2B (запуск)</p>
+  <ul style="margin:0 0 12px 18px"><li style='margin:4px 0'>• Карта клиента и ёмкости рынка по РФ</li><li style='margin:4px 0'>• Школа менеджмента, стандарты, команда</li><li style='margin:4px 0'>• Запуск прибыли без доп. IT</li></ul>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg><span>B2B с нуля</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l4 2" stroke="currentColor" stroke-width="2"/></svg><span>12 мес</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>рост выручки</span></span></div>
+</article>
+<article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
+  <h3 style="margin:0;font-size:18px">Автодилер (Сибирь)</h3>
+  <p style="margin:4px 0 8px 0;color:#6B7280">Исполнительный директор (процессы)</p>
+  <ul style="margin:0 0 12px 18px"><li style='margin:4px 0'>• Конверсия лид→сделка до 27% за 8 мес</li><li style='margin:4px 0'>• Отчётность в одном окне</li><li style='margin:4px 0'>• Перезапуск KPI и мотивации</li></ul>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>27% конверсия</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l4 2" stroke="currentColor" stroke-width="2"/></svg><span>8 мес</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg><span>KPI перезапущены</span></span></div>
+</article></div>
+  </div>
+</section>
+
 <section id="process"><div class="container">
 <h2 class="section-title">Как работаем</h2>
 <div class="process">
@@ -271,6 +306,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 
+
+<section id="nofit" style="padding:36px 0">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
+    <h2 style="margin:0 0 12px 0">Кому мы не подходим</h2>
+    <ul style="margin:0 0 8px 18px"><li style='margin:6px 0'>• Нет доступа к ЛПР и данным — решения по слухам.</li><li style='margin:6px 0'>• Нежелание менять мотивацию/процессы («как есть»).</li><li style='margin:6px 0'>• Ожидание «чудо‑роста» без вовлечения команды.</li><li style='margin:6px 0'>• Запрос только на отчёт/аудит без внедрения изменений.</li></ul>
+    <p style="color:#6B7280;font-size:12px">Честность экономит время — наше и ваше.</p>
+  </div>
+</section>
 <section id="partner" class="partner" style="padding:48px 0;border-top:1px solid #eee;border-bottom:1px solid #eee">
   <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
     <h2 style="margin:0 0 12px 0">Партнёрская программа</h2>
@@ -438,7 +481,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
     }
     if(needFix()) tryNext(0);
   } catch(_) {}
-})();</script><footer class="footer"><p>ИП Чапурин Евгений Александрович • ОГРНИП 324385000032592 • ИНН 380121912339 • УСН 6%</p><p><a href="/privacy.html">Политика ПДн</a> • <a href="/offer.html">Договор оферты</a></p></footer>
+})();</script><footer style="padding:28px 0;background:#0B1020;color:#D1D5DB" class="footer"><div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px"><p>ИП Чапурин Евгений Александрович • ОГРНИП 324385000032592 • ИНН 380121912339 • УСН 6%</p><p><a href="/privacy.html">Политика ПДн</a> • <a href="/offer.html">Договор оферты</a></p></div></footer>
 
 <script>
 (function(){
@@ -508,4 +551,24 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
 })();
 </script>
 
+
+<script>
+// cfg:smooth-scroll
+(function(){
+  function smooth(e){
+    var a = e.target.closest('a[href^="#"]'); if(!a) return;
+    var id = a.getAttribute('href').slice(1);
+    if(!id) return;
+    var el = document.getElementById(id);
+    if(!el) return;
+    e.preventDefault();
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+    if(id==='lead-form'){
+      var first = el.querySelector('input,textarea,select'); if(first) setTimeout(function(){ first.focus(); }, 400);
+      window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'open' }));
+    }
+  }
+  document.addEventListener('click', smooth);
+})();
+</script>
 </body></html>

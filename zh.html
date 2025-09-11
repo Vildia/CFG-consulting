@@ -105,16 +105,38 @@ window.CFG_I18N = {
 </style>
 
 </head><body>
-<section id="hero" class="hero">
-  <div class="hero__text">
+
+<header id="site-header" style="position:sticky;top:0;z-index:1000;background:rgba(11,16,32,.85);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.06)">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between">
+    <div style="font-weight:700;color:#E5E7EB">C|F|G consulting</div>
+    <nav style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <a href="#services" style="color:#E5E7EB;text-decoration:none">• 服务</a>
+      <a href="#cases" style="color:#E5E7EB;text-decoration:none">• 案例</a>
+      <a href="#partner" style="color:#E5E7EB;text-decoration:none">• 合作伙伴</a>
+      <a href="#contacts" style="color:#E5E7EB;text-decoration:none">• 联系</a>
+      <a href="#lead-form" class="btn btn-primary" data-ev="cta_diagnostic" style="margin-left:8px">10天诊断</a>
+      <div class="lang" style="display:flex;gap:8px;margin-left:12px"><a href="/index.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">RU</a><a href="/en.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">EN</a><a href="/zh.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;background:linear-gradient(135deg,#6D28D9,#3B82F6);color:#fff;">中文</a></div>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function(){var h=document.getElementById('site-header'); if(!h) return;
+  function sc(){ var y=window.scrollY||document.documentElement.scrollTop; }
+  window.addEventListener('scroll', sc, {passive:true}); sc();
+})();
+</script>
+
+<section id="hero" class="hero" style="padding:56px 0;background:linear-gradient(180deg,#2A2C7C 0%, #151835 100%);">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:36px"><div class="hero__text">
     <h1>12周实现可控利润</h1>
     <p>我以分时COO/CGO的角色加入，12周把3–5项举措落地到利润：报表、激励、销售，无需复杂IT。</p>
-    <div class="hero__cta">
-      <a href="#lead-form" class="btn btn--primary" data-cta="diagnostic">申请10天诊断</a>
-      <a href="#partner" class="btn btn--secondary" data-cta="partner">合作伙伴计划</a>
-    </div>
-  </div>
-  <div class="hero__img"><img src="/assets/portrait.png" alt="Evgeniy Chapurin" loading="eager"/></div>
+    <div class="hero__cta" style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap">
+  <a href="#lead-form" class="btn btn-primary" data-ev="cta_diagnostic">Запросить диагностику 10 дней</a>
+  <a href="#partner" class="btn btn-secondary" data-ev="cta_partner">Партнёрская программа</a>
+</div>
+  </div></div>
+  <div class="hero__img" style="max-width:420px"><img src="/assets/portrait.png" alt="Evgeniy Chapurin" loading="eager"/></div>
 </section>
 <section class="trustbar" style="padding:20px 0;border-bottom:1px solid #eee">
   <div class="container">
@@ -124,30 +146,32 @@ window.CFG_I18N = {
   </div>
 </section>
 
-<section class="impact" style="padding:24px 0;border-bottom:1px solid #eee">
-  <div class="container">
+
+<section id="cases" class="impact" style="padding:24px 0;border-bottom:1px solid #eee">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
     <h2 style="margin:0 0 12px 0">3个快速案例</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
 <article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
   <h3 style="margin:0;font-size:18px">Alfa‑Bank</h3>
   <p style="margin:4px 0 8px 0;color:#6B7280">中小企业销售负责人</p>
-  <ul style="margin:0 0 8px 18px"><li style='margin:4px 0'>• 市场份额→33%（5年）</li><li style='margin:4px 0'>• 伙伴渠道：区域70%份额</li><li style='margin:4px 0'>• 每天1000+拜访，数据看板</li></ul>
+  <ul style="margin:0 0 12px 18px"><li style='margin:4px 0'>• 市场份额→33%（5年）</li><li style='margin:4px 0'>• 伙伴渠道：区域70%</li><li style='margin:4px 0'>• 每日1000+拜访，数据看板</li></ul>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>33% 份额</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l4 2" stroke="currentColor" stroke-width="2"/></svg><span>5年</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg><span>70% 伙伴渠道</span></span></div>
 </article>
-
 <article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
   <h3 style="margin:0;font-size:18px">ADEO / Leroy Merlin</h3>
   <p style="margin:4px 0 8px 0;color:#6B7280">B2B 销售总监（从0启动）</p>
-  <ul style="margin:0 0 8px 18px"><li style='margin:4px 0'>• 全国客户/市场容量图谱</li><li style='margin:4px 0'>• 管理学院与标准化团队</li><li style='margin:4px 0'>• 无需重IT即可落地盈利</li></ul>
+  <ul style="margin:0 0 12px 18px"><li style='margin:4px 0'>• 全国客户/市场容量图谱</li><li style='margin:4px 0'>• 管理学院、标准与团队</li><li style='margin:4px 0'>• 无需重IT即可落地盈利</li></ul>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg><span>B2B起步</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l4 2" stroke="currentColor" stroke-width="2"/></svg><span>12个月</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>营收提升</span></span></div>
 </article>
-
 <article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
   <h3 style="margin:0;font-size:18px">汽车经销商（西伯利亚）</h3>
   <p style="margin:4px 0 8px 0;color:#6B7280">执行管理（流程）</p>
-  <ul style="margin:0 0 8px 18px"><li style='margin:4px 0'>• 线索→成交转化至27%（8个月）</li><li style='margin:4px 0'>• 一窗化经营报表</li><li style='margin:4px 0'>• KPI 与激励重构</li></ul>
-</article>
-</div>
+  <ul style="margin:0 0 12px 18px"><li style='margin:4px 0'>• 线索→成交转化至27%（8个月）</li><li style='margin:4px 0'>• 一窗化经营报表</li><li style='margin:4px 0'>• KPI 与激励重构</li></ul>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>27% 转化</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l4 2" stroke="currentColor" stroke-width="2"/></svg><span>8个月</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg><span>KPI重构</span></span></div>
+</article></div>
   </div>
 </section>
+
 
 
 <section class='cfg-hero' style='padding:48px 0;border-bottom:1px solid #eee;'><div class='container'><h1>12 周内实现可控利润</h1><p class='lead'>兼职 COO：数据 → 激励 → 销售。无需复杂 IT，将 3–5 个举措落地到收益。</p><div class='pills-row' style='display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;'><span class='pill'>CFG 专家网络</span><span class='pill'>每周五成果看板</span><span class='pill'>伊尔库茨克 • 克拉斯诺亚尔斯克 • 俄罗斯</span></div><div class='cta' style='display:flex;gap:12px;flex-wrap:wrap;'><a class='btn btn-primary' href='#estimate'>10 天利润诊断 — 起价 ₽150k</a><a class='btn btn-outline' href='#downloads'>资料下载</a><a class='btn btn-outline' href='#contact'>预约 20 分钟</a></div></div></section>
@@ -214,21 +238,32 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="industry">电商平台（Wildberries）</div>
 </div>
 </div></section>
-<section id="cases"><div class="container">
-<h2 class="section-title">案例</h2>
-<div class="cards">
-<div class="card"><h3>银行业</h3>
-<p>区域份额33%（对标27%）。每天1000次会面，逐触点转化监控。</p>
-</div>
-<div class="card"><h3>DIY-零售</h3>
-<p>全俄B2B启动：标准、团队、品类、物流与培训。</p>
-</div>
-<div class="card"><h3>汽车行业</h3>
-<p>通过分析、话术与旅程优化，转化率从 8%→26%。</p>
-</div>
-</div>
-<p class="small" style="margin-top:10px">* 部分项目受 NDA 限制，细节与推荐联系人可按需提供。</p>
-</div></section>
+
+<section id="cases" class="impact" style="padding:24px 0;border-bottom:1px solid #eee">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
+    <h2 style="margin:0 0 12px 0">3个快速案例</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+<article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
+  <h3 style="margin:0;font-size:18px">Alfa‑Bank</h3>
+  <p style="margin:4px 0 8px 0;color:#6B7280">中小企业销售负责人</p>
+  <ul style="margin:0 0 12px 18px"><li style='margin:4px 0'>• 市场份额→33%（5年）</li><li style='margin:4px 0'>• 伙伴渠道：区域70%</li><li style='margin:4px 0'>• 每日1000+拜访，数据看板</li></ul>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>33% 份额</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l4 2" stroke="currentColor" stroke-width="2"/></svg><span>5年</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg><span>70% 伙伴渠道</span></span></div>
+</article>
+<article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
+  <h3 style="margin:0;font-size:18px">ADEO / Leroy Merlin</h3>
+  <p style="margin:4px 0 8px 0;color:#6B7280">B2B 销售总监（从0启动）</p>
+  <ul style="margin:0 0 12px 18px"><li style='margin:4px 0'>• 全国客户/市场容量图谱</li><li style='margin:4px 0'>• 管理学院、标准与团队</li><li style='margin:4px 0'>• 无需重IT即可落地盈利</li></ul>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg><span>B2B起步</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l4 2" stroke="currentColor" stroke-width="2"/></svg><span>12个月</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>营收提升</span></span></div>
+</article>
+<article style="border:1px solid #E5E7EB;border-radius:12px;padding:16px;background:#fff">
+  <h3 style="margin:0;font-size:18px">汽车经销商（西伯利亚）</h3>
+  <p style="margin:4px 0 8px 0;color:#6B7280">执行管理（流程）</p>
+  <ul style="margin:0 0 12px 18px"><li style='margin:4px 0'>• 线索→成交转化至27%（8个月）</li><li style='margin:4px 0'>• 一窗化经营报表</li><li style='margin:4px 0'>• KPI 与激励重构</li></ul>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>27% 转化</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l4 2" stroke="currentColor" stroke-width="2"/></svg><span>8个月</span></span><span style='display:inline-flex;align-items:center;gap:6px;border:1px solid #E5E7EB;border-radius:999px;padding:4px 8px'><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg><span>KPI重构</span></span></div>
+</article></div>
+  </div>
+</section>
+
 <section id="process"><div class="container">
 <h2 class="section-title">流程</h2>
 <div class="process">
@@ -271,6 +306,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 
+
+<section id="nofit" style="padding:36px 0">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
+    <h2 style="margin:0 0 12px 0">不适用的情况</h2>
+    <ul style="margin:0 0 8px 18px"><li style='margin:6px 0'>• 无法接触决策人或数据。</li><li style='margin:6px 0'>• 不愿调整激励/流程。</li><li style='margin:6px 0'>• 期待“奇迹增长”而团队不参与。</li><li style='margin:6px 0'>• 只要报告/审计，不做实施。</li></ul>
+    <p style="color:#6B7280;font-size:12px">Честность экономит время — наше и ваше.</p>
+  </div>
+</section>
 <section id="partner" class="partner" style="padding:48px 0;border-top:1px solid #eee;border-bottom:1px solid #eee">
   <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
     <h2 style="margin:0 0 12px 0">合作伙伴计划</h2>
@@ -438,7 +481,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
     }
     if(needFix()) tryNext(0);
   } catch(_) {}
-})();</script><footer class="footer"><p>ИП Чапурин Евгений Александрович • ОГРНИП 324385000032592 • ИНН 380121912339 • УСН 6%</p><p><a href="/privacy.html">Политика ПДн</a> • <a href="/offer.html">Договор оферты</a></p></footer>
+})();</script><footer style="padding:28px 0;background:#0B1020;color:#D1D5DB" class="footer"><div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px"><p>ИП Чапурин Евгений Александрович • ОГРНИП 324385000032592 • ИНН 380121912339 • УСН 6%</p><p><a href="/privacy.html">Политика ПДн</a> • <a href="/offer.html">Договор оферты</a></p></div></footer>
 
 <script>
 (function(){
@@ -508,4 +551,24 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
 })();
 </script>
 
+
+<script>
+// cfg:smooth-scroll
+(function(){
+  function smooth(e){
+    var a = e.target.closest('a[href^="#"]'); if(!a) return;
+    var id = a.getAttribute('href').slice(1);
+    if(!id) return;
+    var el = document.getElementById(id);
+    if(!el) return;
+    e.preventDefault();
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+    if(id==='lead-form'){
+      var first = el.querySelector('input,textarea,select'); if(first) setTimeout(function(){ first.focus(); }, 400);
+      window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'open' }));
+    }
+  }
+  document.addEventListener('click', smooth);
+})();
+</script>
 </body></html>
