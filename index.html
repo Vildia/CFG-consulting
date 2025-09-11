@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html lang="ru"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>C|F|G consulting — аудит, рост, запуски под ключ</title><meta content="Аудит, стратегия, продажи, команды, аналитика. Запуски подразделений под ключ за 30–60 дней." name="description"/><link href="assets/favicon-512.png" rel="icon" type="image/png"/>
+<style>
+:root{--navy:#0A1F44;--indigo:#4F46E5;--slate:#0F172A;--accent:#22C55E;--ring:#3B82F6;}
+*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a;scroll-behavior:smooth}
+:focus-visible{outline:3px solid var(--ring);outline-offset:2px;border-radius:10px}
+.container{max-width:1160px;margin:0 auto;padding:0 20px}
+.btn{display:inline-block;padding:14px 20px;border-radius:12px;font-weight:600;text-decoration:none;cursor:pointer;border:none}
+.btn-primary{background:linear-gradient(90deg,var(--slate),var(--indigo));color:#fff}
+.btn-secondary{border:2px solid #e2e8f0;color:var(--slate);background:#fff}
+nav{position:sticky;top:0;background:#ffffffd6;backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid #e5e7eb;z-index:10}
+nav .row{display:flex;align-items:center;justify-content:space-between;min-height:64px}
+nav .brand{display:flex;align-items:center;gap:12px;font-weight:800;color:var(--navy)}
+nav .brand svg{border-radius:10px}
+.hero{background:linear-gradient(135deg,var(--slate),var(--indigo));color:#fff;padding:28px 0 24px;position:relative;overflow:hidden}
+.hero .content{display:grid;grid-template-columns:1.15fr 1fr;gap:28px;align-items:center}
+.hero h1{font-size:44px;line-height:1.15;margin:6px 0 12px}
+.hero p.lead{font-size:18px;opacity:.9;margin:0 0 16px}
+section{padding:56px 0;border-top:1px solid #f1f5f9}
+.section-title{font-size:28px;margin:0 0 18px;color:var(--navy)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;box-shadow:0 10px 24px rgba(2,6,23,.06)}
+ul.tick{padding:0;margin:0;list-style:none}
+ul.tick li{margin:10px 0;padding-left:28px;position:relative}
+ul.tick li:before{content:'✔';position:absolute;left:0;top:0;color:var(--accent)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{text-align:center;padding:14px;background:#fff;border:1px solid #e5e7eb;border-radius:14px}
+.badge{display:inline-block;padding:6px 10px;border:1px solid #e5e7eb;border-radius:999px;background:#fff;color:#334155;margin-right:8px;margin-bottom:8px}
+.process{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.step{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.cta{background:#0b1220;color:#fff;text-align:center;padding:48px 18px;border-radius:16px}
+footer{background:#0b1220;color:#cbd5e1;padding:26px 0}footer a{color:#e2e8f0;text-decoration:none}
+input,textarea,select{font:inherit;border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;background:#fff;width:100%}
+label{font-weight:600;display:block;margin:8px 0 6px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.small{font-size:12px;color:#64748b}
+@media(max-width:980px){.hero .content{grid-template-columns:1fr;gap:10px}.cards{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.process{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}}
+.lang-toggle{display:inline-flex;align-items:center;background:#f1f5f9;border:1px solid #e5e7eb;border-radius:999px;padding:2px;margin:0 10px}
+.lang-toggle a{padding:6px 10px;border-radius:999px;text-decoration:none;color:#334155;font-weight:600;min-width:42px;text-align:center}
+.lang-toggle a.active{background:linear-gradient(90deg,var(--slate),var(--indigo));color:#fff}
+.modal{position:fixed;inset:0;background:rgba(2,6,23,.65);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal.open{display:flex}
+.modal .box{background:#fff;border-radius:16px;max-width:560px;width:100%;padding:22px;border:1px solid #e5e7eb;box-shadow:0 20px 40px rgba(2,6,23,.2)}
+.modal .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#f8fafc}
+.toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#111827;color:#fff;padding:12px 16px;border-radius:14px;display:none;z-index:60;max-width:90%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.toast.show{display:block}
+.industry{display:flex;align-items:center;gap:10px;border:1px dashed #e5e7eb;border-radius:12px;padding:10px 12px;background:#fff}
+
+.pills-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.pill{display:inline-block;background:#e2e8f0;color:#0f172a;padding:6px 10px;border-radius:999px;font-weight:600;font-size:12px}
+.pill-outline{background:#fff;border:1px solid #e5e7eb}
+
+.pill-lg{font-size:14px;padding:10px 14px}
+.pill,.pill-outline{border-width:1.5px}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"C|F|G consulting","url":"https://cfg-consulting.vercel.app","logo":"https://cfg-consulting.vercel.app/assets/favicon-512.png","email":"C.F.G.consulting@bk.ru","telephone":"+7 902 568 35 29","sameAs":["https://t.me/Evgeniy_Chapurin"]}
+</script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());</script> <script defer="" src="analytics/analytics.js"></script>
+
+<link rel="canonical" href="https://cfg-consulting.vercel.app/">
+<link rel="alternate" hreflang="ru" href="https://cfg-consulting.vercel.app/">
+<link rel="alternate" hreflang="en" href="https://cfg-consulting.vercel.app/en.html">
+<link rel="alternate" hreflang="zh" href="https://cfg-consulting.vercel.app/zh.html">
+<meta name="description" content="Fractional COO: 12 weeks to controllable profit. Data discipline, incentive design, commercial relaunch.">
+<meta property="og:title" content="CFG consulting — 12 недель к управляемой прибыли">
+<meta property="og:description" content="Фракционный COO: данные → мотивация → продажи. 3–5 инициатив — без тяжёлого IT.">
+<meta property="og:image" content="/assets/hero-1200.jpg">
+<meta property="og:type" content="website">
+
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"ProfessionalService",
+ "name":"C | F | G consulting",
+ "image":"/assets/hero-1200.jpg",
+ "url":"https://cfg-consulting.vercel.app/",
+ "areaServed":"RU",
+ "founder":{"@type":"Person","name":"Evgeniy Chapurin"},
+ "telephone":"+7-902-568-35-29",
+ "email":"C.F.G.consulting@bk.ru",
+ "sameAs":["https://t.me/Evgeniy_Chapurin"]
+}
+</script>
+
+</head><body>
+<section class='cfg-hero' style='padding:48px 0;border-bottom:1px solid #eee;'><div class='container'><h1>12 недель к управляемой прибыли</h1><p class='lead'>Фракционный COO: данные → мотивация → продажи. Довожу 3–5 инициатив до денег — без тяжёлого IT.</p><div class='pills-row' style='display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;'><span class='pill'>CFG Network • экспертная сеть</span><span class='pill'>SLA и «борд фактов» по пятницам</span><span class='pill'>Иркутск • Красноярск • РФ</span></div><div class='cta' style='display:flex;gap:12px;flex-wrap:wrap;'><a class='btn btn-primary' href='#estimate'>Диагностика 10 дней</a><a class='btn btn-outline' href='#downloads'>Портфель кейсов</a><a class='btn btn-outline' href='#contact'>20‑мин созвон</a></div></div></section>
+
+<section class="cfg-logos" style="padding:28px 0;border-bottom:1px solid #eee;">
+  <div class="container">
+    <h2>Опыт в компаниях</h2>
+    <div class="logo-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:16px;align-items:center;">
+      <figure class="logo-item"><img src="/assets/logos/adeo.svg" alt="ADEO logo"><figcaption class="sr-only">ADEO</figcaption></figure><figure class="logo-item"><img src="/assets/logos/leroy-merlin.svg" alt="LEROY MERLIN logo"><figcaption class="sr-only">LEROY MERLIN</figcaption></figure><figure class="logo-item"><img src="/assets/logos/alfa-bank.svg" alt="ALFA BANK logo"><figcaption class="sr-only">ALFA BANK</figcaption></figure><figure class="logo-item"><img src="/assets/logos/vtb.svg" alt="VTB logo"><figcaption class="sr-only">VTB</figcaption></figure><figure class="logo-item"><img src="/assets/logos/rosbank.svg" alt="ROSBANK logo"><figcaption class="sr-only">ROSBANK</figcaption></figure><figure class="logo-item"><img src="/assets/logos/trust-bank.svg" alt="TRUST BANK logo"><figcaption class="sr-only">TRUST BANK</figcaption></figure><figure class="logo-item"><img src="/assets/logos/etagi.svg" alt="ETAGI logo"><figcaption class="sr-only">ETAGI</figcaption></figure><figure class="logo-item"><img src="/assets/logos/mayak-hotel.svg" alt="MAYAK HOTEL logo"><figcaption class="sr-only">MAYAK HOTEL</figcaption></figure><figure class="logo-item"><img src="/assets/logos/tachki-pro.svg" alt="TACHKI.PRO logo"><figcaption class="sr-only">TACHKI.PRO</figcaption></figure><figure class="logo-item"><img src="/assets/logos/moedelo.svg" alt="МОЁ ДЕЛО logo"><figcaption class="sr-only">МОЁ ДЕЛО</figcaption></figure><figure class="logo-item"><img src="/assets/logos/wildberries.svg" alt="WILDBERRIES logo"><figcaption class="sr-only">WILDBERRIES</figcaption></figure>
+    
+<figure class="logo-item"><img src="/assets/logos/bank-soyuz.svg" alt="Банк Союз logo"><figcaption class="sr-only">Банк Союз</figcaption></figure>
+<figure class="logo-item"><img src="/assets/logos/laboramed.svg" alt="Laboramed logo"><figcaption class="sr-only">Laboramed</figcaption></figure>
+</div>
+    <p style="color:#6B7280;font-size:12px;margin-top:8px;">Логотипы используются для иллюстрации профессионального опыта. Все товарные знаки принадлежат их правообладателям.</p>
+  </div>
+</section>
+<section class="cfg-exp" style="padding:28px 0;border-bottom:1px solid #eee;">
+  <div class="container">
+    <h2>Опыт руководящих ролей и запусков</h2>
+    <ul class="logo-row" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;align-items:center;">
+      <li><img src='/assets/logos/adeo.png' alt='ADEO / Leroy Merlin' loading='lazy'></li><li><img src='/assets/logos/alfabank.png' alt='Alfa-Bank' loading='lazy'></li><li><img src='/assets/logos/vtb.png' alt='VTB' loading='lazy'></li><li><img src='/assets/logos/rosbank.png' alt='Rosbank' loading='lazy'></li><li><img src='/assets/logos/etagi.png' alt='Etagi' loading='lazy'></li><li><img src='/assets/logos/mayak.png' alt='Mayak Hotel' loading='lazy'></li><li><img src='/assets/logos/tachki.png' alt='Tachki.pro' loading='lazy'></li>
+    </ul>
+    <p style="font-size:12px;color:#666;margin-top:8px;">*Все товарные знаки принадлежат их правообладателям.</p>
+  </div>
+</section>
+<section class='cfg-partners' style='padding:28px 0;border-bottom:1px solid #eee;'><div class='container'><h2>Партнёрская программа</h2><p>Диагностика для вашего клиента — бесплатно. Мы делаем «грязную» операционку и берём на себя отчётный результат. Вы получаете процент от оплаченного чека.</p><a class='btn btn-primary' href='#partner'>Отправить лида</a></div></section><section id='downloads' style='padding:24px 0;border-top:1px solid #eee;'><div class='container'><h2>Материалы</h2><ul><li><a href='/downloads/CFG_OnePager.docx' download>One‑pager (DOCX)</a></li><li><a href='/downloads/CFG_PitchDeck.pptx' download>Pitch‑дека (PPTX)</a></li></ul></div></section><section id='method' class='cfg-dppm' style='padding:40px 0;'><div class='container'><h2>DPPM‑12: Data → People → Process → Market</h2><ul><li><b>DATA:</b> единый слой данных и 5–7 управленческих дашбордов</li><li><b>PEOPLE:</b> KPI + мотивация, карьерные треки, замена/найм</li><li><b>PROCESS:</b> регламенты, цикл встреч; Пн цели — Пт «борд фактов»</li><li><b>MARKET:</b> воронка, офферы, партнёрский канал</li></ul></div></section>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('form[data-estimate]').forEach(function(f){
+    f.addEventListener('submit', function(e){
+      var root = document.documentElement.lang || 'ru';
+      this.setAttribute('data-locale', this.getAttribute('data-locale') || root);
+    });
+  });
+});
+</script>
+<nav><div class="container row"><div class="brand"><svg aria-hidden="true" height="28" viewbox="0 0 256 256" width="28" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0B1220"></stop><stop offset="1" stop-color="#4F46E5"></stop></lineargradient></defs><rect fill="url(#g)" height="256" rx="40" ry="40" width="256"></rect><text dominant-baseline="middle" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="800" text-anchor="middle" x="50%" y="55%">CFG</text></svg><span>C|F|G consulting</span></div><div><a class="badge" href="#services">Услуги</a><a class="badge" href="#industries">Сферы</a><a class="badge" href="#cases">Кейсы</a><a class="badge" href="#process">Процесс</a><a class="badge" href="#partner">Партнёрам</a><span aria-label="Language" class="lang-toggle" role="group"><a aria-current="page" class="active" href="/">RU</a><a href="en.html">EN</a><a href="zh.html">中文</a></span><a class="btn btn-primary" href="#contacts">Связаться</a></div></div></nav>
+<header class="hero"><div class="container content">
+<div>
+<h1>Помогаем компаниям расти и запускаться быстрее</h1>
+<p class="lead">Аудит, стратегия, продажи, команды, аналитика. Запуски подразделений <b>под ключ</b> за 30–60 дней. <span style="white-space:nowrap">Международный уровень</span> исполнения — локальная скорость.</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
+<a class="btn btn-primary" data-ev="cta_email" href="#contacts">Обсудить проект</a>
+<a class="btn btn-secondary" data-scroll="#estimate" href="#estimate">Оценить проект за 24 часа</a>
+<button class="btn btn-secondary" data-gcal="" type="button">Предложить слот (GCal)</button>
+</div>
+<div class="pills-row"><a class="pill pill-outline pill-lg" data-scroll="#partner" href="#partner">Партнёрская программа</a></div>
+<div class="pills-row"><span class="pill">Основано в Иркутске</span><span class="pill">Работаем по РФ и СНГ</span><span class="pill">Сеть экспертов</span></div>
+</div>
+<div><img alt="Evgeniy Chapurin — C|F|G consulting" fetchpriority="high" onerror="this.onerror=null; this.src='assets/hero.jpg';" sizes="(max-width: 980px) 100vw, 560px" src="assets/hero-1200.jpg" srcset="assets/hero-800.jpg 800w, assets/hero-1200.jpg 1200w, assets/hero-1600.jpg 1600w" style="width:100%;border-radius:16px;border:1px solid #1f2937;box-shadow:0 20px 40px rgba(2,6,23,.4)"/></div>
+</div></header>
+<section id="kpis"><div class="container">
+<div class="kpis">
+<div class="kpi"><div style="font-size:28px;font-weight:800">15+ лет</div><div>в управлении и продажах</div></div>
+<div class="kpi"><div style="font-size:28px;font-weight:800">2600+</div><div>собеседований / 1000+ наймов</div></div>
+<div class="kpi"><div style="font-size:28px;font-weight:800">33%</div><div>доля рынка на территориях</div></div>
+<div class="kpi"><div style="font-size:28px;font-weight:800">8% → 26%</div><div>рост конверсии продаж</div></div>
+</div>
+</div></section>
+<section id="why"><div class="container">
+<h2 class="section-title">Почему с нами</h2>
+<div class="cards">
+<div class="card"><b>Прозрачная отчётность</b><br/>Еженедельные отчёты, созвоны и понятные метрики.</div>
+<div class="card"><b>Прирост KPI</b><br/>Считаем экономику и фиксируем целевые показатели.</div>
+<div class="card"><b>Выходим в срок</b><br/>Сроки работ закрепляем в ТЗ и договоре (SLA).</div>
+<div class="card"><b>Команда победителей</b><br/>Найм, обучение, нефинансовая мотивация.</div>
+</div>
+</div></section>
+<section id="services"><div class="container">
+<h2 class="section-title">Услуги</h2>
+<div class="cards">
+<div class="card"><h3>Аудит и стратегия</h3><ul class="tick"><li>Диагностика продаж, операционки, экономики</li><li>Дорожная карта: 30/60/90 дней</li><li>KPI, отчётность, управленческие ритуалы</li></ul></div>
+<div class="card"><h3>Запуски «под ключ»</h3><ul class="tick"><li>Открытие подразделений, склады, B2B‑направления</li><li>Подбор и обучение команды</li><li>Процессы, регламенты, контроль качества</li></ul></div>
+<div class="card"><h3>Продажи и партнёрки</h3><ul class="tick"><li>Сегментация, скрипты, воронка, мотивация</li><li>Партнёрские сети: подбор, запуск, SLA</li><li>Онбординг и сопровождение партнёров</li></ul></div>
+</div>
+</div></section>
+<section id="industries"><div class="container">
+<h2 class="section-title">Сферы, в которых работали</h2>
+<div class="cards">
+<div class="industry">Банки и финсервисы</div>
+<div class="industry">DIY/строительные сети</div>
+<div class="industry">Автобизнес</div>
+<div class="industry">Недвижимость</div>
+<div class="industry">Медицина</div>
+<div class="industry">Маркетплейсы (Wildberries)</div>
+</div>
+</div></section>
+<section id="cases"><div class="container">
+<h2 class="section-title">Кейсы</h2>
+<div class="cards">
+<div class="card"><h3>Банковский сектор</h3>
+<p>33% доли территории против 27% у конкурента. 1000 встреч/день, контроль конверсии на каждом касании.</p>
+</div>
+<div class="card"><h3>DIY-ритейл</h3>
+<p>Запуск B2B‑направления по РФ: стандарты, команда, ассортимент, логистика, обучение менеджеров.</p>
+</div>
+<div class="card"><h3>Автобизнес</h3>
+<p>Рост конверсии продаж с 8% → 26% за счёт аналитики, скриптов и доработки клиентского пути.</p>
+</div>
+</div>
+<p class="small" style="margin-top:10px">* Часть проектов под NDA. Детали и контакты референсов — по запросу.</p>
+</div></section>
+<section id="process"><div class="container">
+<h2 class="section-title">Как работаем</h2>
+<div class="process">
+<div class="step"><b>01. Диагностика</b><br/>Интервью, цифры, быстрые победы.</div>
+<div class="step"><b>02. План</b><br/>Дорожная карта и KPI 30/60/90.</div>
+<div class="step"><b>03. Команда</b><br/>Подбор, роли, обучение, мотивация.</div>
+<div class="step"><b>04. Запуск</b><br/>Процессы, регламенты, контроль.</div>
+<div class="step"><b>05. Масштаб</b><br/>Аналитика, автоматизация, рост.</div>
+</div>
+</div></section>
+<section id="guarantee"><div class="container">
+<h2 class="section-title">Подход и гарантии</h2>
+<div class="card">
+<ul class="tick">
+<li>Прозрачная отчётность: еженедельные отчёты и созвоны.</li>
+<li>Контрольные точки: 30/60/90 с KPI.</li>
+<li>Сроки: «выходим в срок» — фиксируем в ТЗ и договоре.</li>
+</ul>
+</div>
+</div></section>
+<section id="estimate"><div class="container">
+<h2 class="section-title">Оценка за 24 часа</h2>
+<form aria-label="Форма оценки" data-estimate="" data-locale="ru">
+<div class="form-grid">
+<div><label>Имя</label><input name="name" required=""/></div>
+<div><label>Компания</label><input name="company"/></div>
+<div><label>ИНН</label><input name="inn"/></div>
+<div><label>Email</label><input name="email" required="" type="email"/></div>
+<div><label>Телефон</label><input name="phone"/></div>
+<div style="grid-column:1/-1"><label>Кратко о задаче</label><textarea name="desc" rows="4"></textarea></div>
+</div>
+<div class="form-actions">
+<button class="btn btn-primary" type="submit">Отправить</button>
+<button class="btn btn-secondary" data-gcal="" type="button">Предложить слот (GCal)</button>
+</div>
+<p class="small">Соглашаясь, вы принимаете <a href="privacy.html">Политику</a> и <a href="terms.html">Условия</a>.</p>
+</form>
+</div></section>
+<section id="partner"><div class="container">
+<h2 class="section-title">Партнёрская программа</h2>
+<div class="card">
+<p><b>Вы — аутсорсер</b> (бухгалтерия, юристы, HR, маркетинг)? Передавайте клиентов и получайте вознаграждение за каждый оплаченный проект.</p>
+<ul class="tick" style="margin-top:4px">
+<li>Прозрачные правила и отчётность</li>
+<li>Материалы и скрипты для лидов</li>
+<li>Долгосрочное сотрудничество</li>
+</ul>
+<p style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
+<a class="btn btn-secondary" data-ev="partner_email" data-mailto="" data-subject="Партнёрство с CFG consulting" href="mailto:C.F.G.consulting@bk.ru?subject=Партнёрство%20с%20CFG%20consulting">Стать партнёром (Email)</a>
+<a class="btn btn-primary" href="https://t.me/Evgeniy_Chapurin" rel="noopener" target="_blank">Стать партнёром (Telegram)</a>
+<a class="btn btn-secondary" data-ev="partner_whatsapp" href="https://wa.me/79025683529?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%20%D0%BF%D0%B0%D1%80%D1%82%D0%BD%D1%91%D1%80%D0%BE%D0%BC%20CFG." rel="noopener" target="_blank">Стать партнёром (WhatsApp)</a></p>
+</div>
+</div></section>
+<section id="contacts"><div class="container">
+<div class="cta">
+<h2 style="margin:0 0 10px">Обсудим вашу задачу</h2>
+<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+<a class="btn btn-primary" data-ev="cta_email" data-mailto="" data-subject="Проект для CFG consulting" href="mailto:C.F.G.consulting@bk.ru?subject=Проект%20для%20CFG%20consulting">Написать на Email</a>
+<a class="btn btn-secondary" href="https://t.me/Evgeniy_Chapurin" rel="noopener" target="_blank">Telegram</a>
+<a class="btn btn-secondary" href="https://wa.me/79025683529" rel="noopener" target="_blank">WhatsApp</a>
+</div>
+</div>
+</div></section>
+<footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+<div style="display:flex;align-items:center;gap:10px"><strong>C|F|G consulting</strong></div>
+<div style="opacity:.9">Tel./WhatsApp: +7 902 568 35 29 • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a> • Build v3.5</div>
+</div></footer>
+<div aria-hidden="true" class="modal" id="mailModal">
+<div class="box">
+<h3 style="margin-top:0">Если почтовая программа не открылась</h3>
+<input class="input subject" placeholder="Тема письма" value=""/>
+<textarea class="input body" placeholder="Текст письма" rows="6"></textarea>
+<div class="row">
+<button class="btn btn-secondary" id="copyEmail" type="button">Скопировать адрес</button>
+<button class="btn btn-primary" id="gmailOpen" type="button">Открыть Gmail</button>
+<button class="btn btn-secondary" data-modal-close="" type="button">Закрыть</button>
+</div>
+<p class="small">C.F.G.consulting@bk.ru</p>
+</div>
+</div>
+<div class="toast"></div><script>
+(function(){
+  'use strict';
+  var EMAIL='C.F.G.consulting@bk.ru', TG='@Evgeniy_Chapurin', WA='79025683529';
+  function track(ev, params){ try{ gtag('event', ev, params||{}); }catch(e){} }
+  function toast(t){ var n=document.querySelector('.toast'); if(!n) return; n.textContent=t; n.classList.add('show'); setTimeout(function(){n.classList.remove('show')},1800); }
+  function openGmail(subject, body){
+    var url='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(EMAIL);
+    if(subject) url += '&su='+encodeURIComponent(subject);
+    if(body) url += '&body='+encodeURIComponent(body);
+    window.open(url,'_blank'); track('open_gmail');
+  }
+  var modal=document.getElementById('mailModal');
+  document.querySelectorAll('[data-mailto]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var href=this.getAttribute('href'); 
+      try{ window.location.href=href; }catch(_){}
+      if(modal){
+        var subj = this.getAttribute('data-subject')||''; 
+        var body = this.getAttribute('data-body')||'';
+        modal.querySelector('.subject').value=subj; 
+        modal.querySelector('.body').value=body;
+        modal.classList.add('open');
+      }
+      e.preventDefault();
+      track(this.getAttribute('data-ev')||'cta_email');
+    });
+  });
+  document.querySelectorAll('[data-modal-close]').forEach(function(btn){
+    btn.addEventListener('click', function(){ modal.classList.remove('open'); });
+  });
+  var btnG=document.getElementById('gmailOpen');
+  var btnCopy=document.getElementById('copyEmail');
+  if(btnG) btnG.addEventListener('click', function(){
+    var subj = modal.querySelector('.subject').value||''; 
+    var body = modal.querySelector('.body').value||'';
+    openGmail(subj, body);
+  });
+  if(btnCopy) btnCopy.addEventListener('click', function(){ navigator.clipboard.writeText(EMAIL).then(function(){toast('Скопировано');}); track('copy_email'); });
+  
+  // Estimate form: async submit via Apps Script (no mailto, no modal)
+  document.querySelectorAll('form[data-estimate]').forEach(function(f){
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      var locale=this.getAttribute('data-locale')||'ru';
+      function val(n){ var x=f.querySelector('[name='+n+']'); return x?x.value.trim():''; }
+      var name=val('name'), company=val('company'), inn=val('inn'), email=val('email'), phone=val('phone'), desc=val('desc');
+      var q=new URLSearchParams(location.search);
+      var utm={}; ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','gclid','yclid','fbclid'].forEach(function(k){ var v=q.get(k); if(v) utm[k]=v; });
+      var payload={ notify:'short',  action:'estimate_24h', locale:locale, name:name, company:company, inn:inn, email:email, phone:phone, desc:desc, page_url:location.href, referrer:document.referrer||'', utm:utm };
+      var btn=f.querySelector('button[type=submit]');
+      if(btn){ btn.disabled=true; btn.textContent=(locale==='en'?'Sending...':(locale==='zh'?'正在发送…':'Отправляем…')); }
+      (function(){
+        var compat = new URLSearchParams();
+        Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
+        [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
+        var url='https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec?'+compat.toString();
+        var req = fetch(url, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+        return req;
+      })()
+        .then(function(){ toast(locale==='en'?'Request sent! We\'ll get back within 24 hours.':(locale==='zh'?'已提交！我们会在24小时内联系您。':'Заявка отправлена! Мы свяжемся в течение 24 часов.')); f.reset(); })
+        .catch(function(){ toast(locale==='en'?'Submission failed. Please try again.':(locale==='zh'?'提交失败，请重试。':'Не удалось отправить. Повторите попытку.')); })
+        .finally(function(){ if(btn){ btn.disabled=false; btn.textContent=(locale==='en'?'Submit':(locale==='zh'?'提交':'Отправить')); } });
+      track('form_submit', {locale: locale});
+      track('estimate_24h', {locale: locale});
+    });
+  });
+document.querySelectorAll('[data-gcal]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var details = 'Intro call with C|F|G consulting%0A%0AAgenda:%0A• Goals%0A• Current state%0A• Next steps%0A%0AContacts:%0AEmail: '+encodeURIComponent(EMAIL)+'%0ATG: '+encodeURIComponent(TG)+'%0AWhatsApp: +'+encodeURIComponent(WA);
+      var url = 'https://calendar.google.com/calendar/u/0/r/eventedit?text=Intro%20call%20%E2%80%94%20CFG%20consulting&details='+details+'&location=Online';
+      window.open(url,'_blank');
+      track('gcal_open');
+    });
+  });
+
+  // Smooth scroll to estimate + focus
+  document.querySelectorAll('[data-scroll]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      var target = btn.getAttribute('data-scroll'); var id = (target||'').replace('#',''); var el = document.getElementById(id);
+      if(el){ el.scrollIntoView({behavior:'smooth'}); }
+      try{ setTimeout(function(){ var i=document.querySelector('#estimate input[name="name"]'); if(i){ i.focus(); } }, 450); }catch(_){}
+    });
+  });
+
+})();</script><script>
+(function(){try{
+var base="\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439\u0442\u0435! \u0425\u043e\u0447\u0443 \u0441\u0442\u0430\u0442\u044c \u043f\u0430\u0440\u0442\u043d\u0451\u0440\u043e\u043c CFG.";
+var q=new URLSearchParams(location.search);
+var keys=["utm_source","utm_medium","utm_campaign","utm_term","utm_content","gclid","yclid","fbclid"];
+var utm=[];
+keys.forEach(function(k){var v=q.get(k); if(v) utm.push(k+"="+v);});
+var ref=document.referrer?new URL(document.referrer).hostname:"";
+var parts=[];
+if(utm.length) parts.push("UTM: "+utm.join("&"));
+if(ref) parts.push("ref="+ref);
+parts.push("url="+location.href);
+var msg=base + (parts.length ? "\n" + parts.join(" | ") : "");
+var href="https://wa.me/79025683529?text="+encodeURIComponent(msg);
+document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a.setAttribute("href",href);});
+}catch(e){} })();
+</script><script>
+(function(){
+  try {
+    var hero = document.querySelector('.hero img');
+    if(!hero) return;
+    function needFix() {
+      return (!hero.complete || !hero.naturalWidth || hero.naturalWidth===0);
+    }
+    var paths = [
+      'assets/hero-1200.jpg',
+      '/assets/hero-1200.jpg',
+      'Лендинг/assets/hero-1200.jpg',
+      '/Лендинг/assets/hero-1200.jpg',
+      'assets/hero.jpg',
+      '/assets/hero.jpg'
+    ];
+    function tryNext(i){
+      if(i>=paths.length) return;
+      var probe = new Image();
+      probe.onload = function(){ hero.src = paths[i]; hero.removeAttribute('srcset'); };
+      probe.onerror = function(){ tryNext(i+1); };
+      probe.src = paths[i];
+    }
+    if(needFix()) tryNext(0);
+  } catch(_) {}
+})();</script></body></html>
