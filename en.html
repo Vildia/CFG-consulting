@@ -66,7 +66,7 @@ label{font-weight:600;display:block;margin:8px 0 6px}
 <link href="https://cfg-consulting.vercel.app/en.html" hreflang="en" rel="alternate"/>
 <link href="https://cfg-consulting.vercel.app/zh.html" hreflang="zh" rel="alternate"/>
 <meta content="Fractional COO: 12 weeks to controllable profit. Data discipline, incentive design, commercial relaunch." name="description"/>
-<meta content="CFG consulting — 12 недель к управляемой прибыли" property="og:title">
+<meta content="CFG consulting — 12 недель к управляемой прибыли" property="og:title"/>
 <meta content="Фракционный COO: данные → мотивация → продажи. 3–5 инициатив — без тяжёлого IT." property="og:description"/>
 <meta content="/assets/hero-1200.jpg" property="og:image"/>
 <meta content="website" property="og:type"/>
@@ -101,22 +101,56 @@ window.CFG_I18N = {
 <meta content="en_US" property="og:locale"/>
 <meta content="ru_RU" property="og:locale:alternate"/>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Service", "name": "Operational & Growth Consulting (DPPM-12)", "provider": {"@type": "Organization", "name": "C|F|G consulting"}, "areaServed": "RU", "offers": {"@type": "Offer", "availability": "https://schema.org/InStock"}}</script>
-</meta></head><body>
+<style>.disclaimer{margin-top:16px;color:#6B7280;font-size:12px;line-height:1.5}</style>
+<style>
+:root{ --section-gap: 56px; }
+#logos{ padding-bottom: 12px; }
+#cases{ margin-top: var(--section-gap); }
+#cases h2{ margin-top: 0; }
+#cases .cards{ margin-top: 12px; }
+</style>
+<style>
+/* Cases section spacing refinements */
+#cases{ margin-top:64px; }
+#cases .cards{ margin-top:24px; gap:20px; }
+#cases .card{ padding:20px 22px; border-radius:14px; }
+#cases .card h3{ margin:0 0 10px 0; }
+#cases .card p{ margin:0; }
+#cases .disclaimer{ margin-top:16px; }
+</style>
+<style>
+#cases .container{ padding-left:20px; padding-right:20px; }
+#cases{ margin-top:40px; }
+#cases h2{ margin:0; }
+#cases .cards{ margin-top:18px; gap:20px; }
+</style>
+<style>.container .disclaimer{margin-left:0;margin-right:0;}</style>
+<style>
+:root{ --header-offset: 96px; }
+section[id]{ scroll-margin-top: var(--header-offset); }
+/* Fallback for browsers that ignore scroll-margin: */
+:target::before{ content: ""; display: block; height: var(--header-offset); margin-top: calc(-1 * var(--header-offset)); }
+</style>
+
+<style>
+#site-header .container{display:flex;align-items:center;justify-content:space-between;gap:24px}
+#site-header nav{display:flex;align-items:center;gap:20px;flex:1;justify-content:flex-end;flex-wrap:wrap;row-gap:10px}
+#site-header .nav-links{display:flex;gap:16px;margin-right:auto}
+#site-header .header-tools{display:flex;align-items:center;gap:12px}
+#site-header .lang{display:flex;gap:8px}
+</style>
+</head><body>
 <header id="site-header" style="position:sticky;top:0;left:0;right:0;z-index:2000;background:#0B1020;">
 <div class="container" style="max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between">
 <div style="font-weight:700;color:#E5E7EB">C|F|G consulting</div>
-<nav style="position:relative;z-index:2050;background:transparent;">
-<a href="#services" style="color:#E5E7EB;text-decoration:none">• Services</a>
-<a href="#cases" style="color:#E5E7EB;text-decoration:none">• Cases</a>
-<a href="#partner" style="color:#E5E7EB;text-decoration:none">• Partners</a>
-<a href="#contacts" style="color:#E5E7EB;text-decoration:none">• Contacts</a>
-<a class="btn btn-primary" data-ev="cta_diagnostic" href="#estimate" style="margin-left:8px;position:relative;z-index:2100;pointer-events:auto">10‑day Diagnostic</a> <a class="btn btn-secondary" data-body="Hello!
+<nav style="position:relative;z-index:2050;background:transparent;"><div class="nav-links"><a href="#services">Services</a><a href="#cases">Cases</a><a href="#partners">For partners</a><a href="#contacts">Contacts</a></div>
+
+
+<div class="header-tools"><div class="lang" style="display:flex;gap:8px;margin-left:12px"><a href="/index.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">RU</a><a href="/en.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;background:linear-gradient(135deg,#6D28D9,#3B82F6);color:#fff;">EN</a><a href="/zh.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">中文</a></div><a class="btn btn-secondary" data-body="Hello!
 I’d like to book a 20-min intro call.
 My preferred slot: ____ (date/time, timezone).
 Name/Company:
-Phone/Telegram:" data-ev="cta_slot" data-slot="open" data-subject="CFG Intro Call" href="https://mail.google.com/mail/?view=cm&amp;to=C.F.G.consulting%40bk.ru&amp;su=CFG%20Intro%20Call&amp;body=Hello%21%0AI%E2%80%99d%20like%20to%20book%20a%2020-min%20intro%20call.%0AMy%20preferred%20slot%3A%20____%20%28date/time%2C%20timezone%29.%0AName/Company%3A%0APhone/Telegram%3A" rel="noopener" style="margin-left:10px;position:relative;z-index:2100;pointer-events:auto" target="_blank">Propose a slot</a>
-<div class="lang" style="display:flex;gap:8px;margin-left:12px"><a href="/index.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">RU</a><a href="/en.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;background:linear-gradient(135deg,#6D28D9,#3B82F6);color:#fff;">EN</a><a href="/zh.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">中文</a></div>
-</nav>
+Phone/Telegram:" data-ev="cta_slot" data-slot="open" data-subject="CFG Intro Call" href="https://mail.google.com/mail/?view=cm&amp;to=C.F.G.consulting%40bk.ru&amp;su=CFG%20Intro%20Call&amp;body=Hello%21%0AI%E2%80%99d%20like%20to%20book%20a%2020-min%20intro%20call.%0AMy%20preferred%20slot%3A%20____%20%28date/time%2C%20timezone%29.%0AName/Company%3A%0APhone/Telegram%3A" rel="noopener" style="margin-left:10px;position:relative;z-index:2100;pointer-events:auto" target="_blank">Propose a slot</a></div></nav>
 </div>
 </header>
 <script>
@@ -131,21 +165,21 @@ Phone/Telegram:" data-ev="cta_slot" data-slot="open" data-subject="CFG Intro Cal
 <p>We act as your fractional COO/CGO and take 3–5 initiatives to revenue in 12 weeks: reporting, incentives, sales — without heavy IT.</p>
 <div class="hero__cta" style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap">
 <a class="btn btn-primary" data-ev="cta_diagnostic" href="#estimate">Запросить диагностику 10 дней</a>
-<a class="btn btn-secondary" data-ev="cta_partner" href="#partner">Партнёрская программа</a>
+<a class="btn btn-secondary" data-ev="cta_partner" href="#partners">Партнёрская программа</a>
 </div>
 </div></div>
 <div class="hero__img" style="max-width:420px"><img alt="Evgeniy Chapurin" loading="eager" src="/assets/portrait.png"/></div>
 </section>
-<section class="trustbar" id="cases" style="padding:20px 0;">
+<section class="trustbar" id="logos" style="padding:20px 0;">
 <div class="container">
 <h2 style="margin:0 0 8px 0">Companies &amp; projects</h2>
 <ul style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap"><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">ADEO / Leroy Merlin</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Alfa-Bank</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">VTB</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Rosbank</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Trust Bank</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Etagi</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Mayak Hotel</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Tachki.pro</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Moe Delo</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Wildberries</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Bank Soyuz</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Laboramed</li></ul>
 <p style="color:#6B7280;font-size:12px;margin-top:6px">*Names are used to illustrate professional experience. Trademarks belong to their owners.</p>
-</div>
-</section>
+<p class="disclaimer">Logos refer to employers/projects and do not imply endorsement.</p></div>
+</section><section class="section" id="cases"><div class="container"><h2>Case studies</h2><div class="cards grid-3"><article class="card"><h3>Banking B2B — 33% share</h3><p>Segmentation, partner channel, sales rituals &amp; reporting. 12 sales teams, churn down to 2%.</p></article><article class="card"><h3>DIY retail — B2B launch from zero</h3><p>3‑year ticket audit, TAM per city, standards, team, suppliers, logistics. Rolled out nationwide.</p></article><article class="card"><h3>Auto dealer — CR 8% → 26%</h3><p>Mgmt reporting w/o heavy IT, new funnel, KPIs &amp; incentives, “board of facts”, meeting cadence.</p></article></div><p class="small">Company names under NDA; figures can be verified on call.</p><p class="disclaimer">Company names are under NDA; figures can be verified on a call.</p></div></section>
 <p class="small" style="margin:8px 0 0;color:#6B7280">Logos refer to employers/projects; they do not imply endorsement.</p>
-<section class="cfg-hero" style="padding:48px 0;"><div class="container"><h1>12 weeks to controllable profit</h1><p class="lead">Fractional COO: Data → Incentives → Sales. I deliver 3–5 initiatives to money — without heavy IT.</p><div class="pills-row" style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;"><span class="pill">CFG Network • expert partners</span><span class="pill">Weekly Friday Results Board</span><span class="pill">Irkutsk • Krasnoyarsk • Russia</span></div><div class="cta" style="display:flex;gap:12px;flex-wrap:wrap;"><a class="btn btn-primary" href="#estimate">10‑day diagnosis</a><a class="btn btn-outline" href="#downloads">Pitch &amp; one‑pager</a><a class="btn btn-outline" href="#contact">Book 20‑min call</a></div></div></section>
-<section class="cfg-partners" style="padding:28px 0;"><div class="container"><h2>Partner program</h2><p>Free diagnosis for your client. We handle the heavy lifting and deliver results; you get a revenue share on paid projects.</p><a class="btn btn-primary" href="#partner">Refer a lead</a></div></section><section id="downloads" style="padding:24px 0;"><div class="container"><h2>Downloads</h2><ul><li><a data-evt="case_download" download="" href="/downloads/CFG_OnePager.docx">One‑pager (DOCX)</a></li><li><a data-evt="case_download" download="" href="/downloads/CFG_PitchDeck.pptx">Pitch deck (PPTX)</a></li></ul></div></section><section class="cfg-dppm" id="method" style="padding:40px 0;"><div class="container"><h2>DPPM‑12: Data → People → Process → Market</h2><ul><li><b>DATA:</b> single data layer, 5–7 executive dashboards</li><li><b>PEOPLE:</b> KPI &amp; incentives, career tracks, hires/replacements</li><li><b>PROCESS:</b> playbooks, ritual of Mon goals — Fri results board</li><li><b>MARKET:</b> funnel, offers, partner channel</li></ul></div></section>
+<section class="cfg-hero" style="padding:48px 0;"><div class="container"><h1>12 weeks to controllable profit</h1><p class="lead">Fractional COO: Data → Incentives → Sales. I deliver 3–5 initiatives to money — without heavy IT.</p><div class="pills-row" style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;"><span class="pill">CFG Network • expert partners</span><span class="pill">Weekly Friday Results Board</span><span class="pill">Irkutsk • Krasnoyarsk • Russia</span></div><div class="cta" style="display:flex;gap:12px;flex-wrap:wrap;"><a class="btn btn-primary" href="#estimate">10‑day diagnosis</a><a class="btn btn-outline" href="#downloads">Pitch &amp; one‑pager</a><a class="btn btn-outline" data-slot="open" href="#">Book 20‑min call</a></div></div></section>
+<section class="cfg-partners" style="padding:28px 0;"><div class="container"><h2>Partner program</h2><p>Free diagnosis for your client. We handle the heavy lifting and deliver results; you get a revenue share on paid projects.</p><a class="btn btn-primary" href="#partners">Refer a lead</a></div></section><section id="downloads" style="padding:24px 0;"><div class="container"><h2>Downloads</h2><ul><li><a data-evt="case_download" download="" href="/downloads/CFG_OnePager.docx">One‑pager (DOCX)</a></li><li><a data-evt="case_download" download="" href="/downloads/CFG_PitchDeck.pptx">Pitch deck (PPTX)</a></li></ul></div></section><section class="cfg-dppm" id="method" style="padding:40px 0;"><div class="container"><h2>DPPM‑12: Data → People → Process → Market</h2><ul><li><b>DATA:</b> single data layer, 5–7 executive dashboards</li><li><b>PEOPLE:</b> KPI &amp; incentives, career tracks, hires/replacements</li><li><b>PROCESS:</b> playbooks, ritual of Mon goals — Fri results board</li><li><b>MARKET:</b> funnel, offers, partner channel</li></ul></div></section>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('form[data-estimate]').forEach(function(f){
@@ -156,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 </script>
-<nav><div class="container row"><div class="brand"><svg aria-hidden="true" height="28" viewbox="0 0 256 256" width="28" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0B1220"></stop><stop offset="1" stop-color="#4F46E5"></stop></lineargradient></defs><rect fill="url(#g)" height="256" rx="40" ry="40" width="256"></rect><text dominant-baseline="middle" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="800" text-anchor="middle" x="50%" y="55%">CFG</text></svg><span>C|F|G consulting</span></div><div><a class="badge" href="#services">Services</a><a class="badge" href="#industries">Industries</a><a class="badge" href="#cases">Case studies</a><a class="badge" href="#process">Process</a><a class="badge" href="#partner">For partners</a><span aria-label="Language" class="lang-toggle" role="group"><a href="/">RU</a><a aria-current="page" class="active" href="en.html">EN</a><a href="zh.html">中文</a></span><a class="btn btn-primary" href="#contacts">Contact</a></div></div></nav>
+<nav><div class="container row"><div class="brand"><svg aria-hidden="true" height="28" viewbox="0 0 256 256" width="28" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0B1220"></stop><stop offset="1" stop-color="#4F46E5"></stop></lineargradient></defs><rect fill="url(#g)" height="256" rx="40" ry="40" width="256"></rect><text dominant-baseline="middle" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="800" text-anchor="middle" x="50%" y="55%">CFG</text></svg><span>C|F|G consulting</span></div><div><a class="badge" href="#services">Services</a><a class="badge" href="#industries">Industries</a><a class="badge" href="#cases">Case studies</a><a class="badge" href="#process">Process</a><a class="badge" href="#partners">For partners</a><span aria-label="Language" class="lang-toggle" role="group"><a href="/">RU</a><a aria-current="page" class="active" href="en.html">EN</a><a href="zh.html">中文</a></span><a class="btn btn-primary" data-slot="open" href="#">Propose a slot</a></div></div></nav>
 <header class="hero"><div class="container content">
 <div>
 <h1>We help companies grow and launch faster</h1>
@@ -166,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <a class="btn btn-secondary" data-scroll="#estimate" href="#estimate">24‑hour project assessment</a>
 <a class="btn btn-secondary" data-slot="open" href="https://mail.google.com/mail/?view=cm&amp;to=C.F.G.consulting%40bk.ru&amp;su=CFG%20Intro%20Call&amp;body=Hello%21%0AI%E2%80%99d%20like%20to%20book%20a%2020-min%20intro%20call.%0AMy%20preferred%20slot%3A%20____%20%28date/time%2C%20timezone%29.%0AName/Company%3A%0APhone/Telegram%3A" rel="noopener" style=";position:relative;z-index:2100;pointer-events:auto" target="_blank">Propose a slot</a>
 </div>
-<div class="pills-row"><a class="pill pill-outline pill-lg" data-scroll="#partner" href="#partner">Partner program</a></div>
+<div class="pills-row"><a class="pill pill-outline pill-lg" data-scroll="#partner" href="#partners">Partner program</a></div>
 <div class="pills-row"><span class="pill">Founded in Irkutsk</span><span class="pill">Operating across Russia &amp; CIS</span><span class="pill">Expert network</span></div>
 </div>
 <div><img alt="Evgeniy Chapurin — C|F|G consulting" fetchpriority="high" onerror="this.onerror=null; this.src='assets/hero.jpg';" sizes="(max-width: 980px) 100vw, 560px" src="assets/hero-1200.jpg" srcset="assets/hero-800.jpg 800w, assets/hero-1200.jpg 1200w, assets/hero-1600.jpg 1600w" style="width:100%;border-radius:16px;border:1px solid #1f2937;box-shadow:0 20px 40px rgba(2,6,23,.4)"/></div>
@@ -254,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <p style="color:#6B7280;font-size:12px">Честность экономит время — наше и ваше.</p>
 </div>
 </section>
-<section class="partner" id="partner" style="padding:48px 0;">
+<section class="partner" id="partners" style="padding:48px 0;">
 <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
 <h2 style="margin:0 0 12px 0">Partner program</h2>
 <p style="margin:0 0 8px 0;color:#374151">Outsourcing partners (accounting, HR, legal, integrators): bring a client — earn 10–15% from Diagnostic/Implement and 5% retention up to 6 months on Operate.</p>
@@ -505,25 +539,25 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
 })();
 </script>
 </footer>
-<div id="slot-modal" class="slot-modal" hidden>
-  <div class="slot-modal__backdrop" data-slot="close"></div>
-  <div class="slot-modal__dialog">
-    <h3 class="slot-modal__title">How would you like to propose a time?</h3>
-    <div class="slot-modal__grid">
-      <a class="btn btn-primary" data-slot-open="gmail">Gmail</a>
-      <a class="btn btn-secondary" data-slot-open="outlook">Outlook</a>
-      <a class="btn btn-secondary" data-slot-open="yandex">Yandex</a>
-      <a class="btn btn-secondary" data-slot-open="mailru">Mail.ru</a>
-      <a class="btn btn-secondary" data-slot-open="mailto">Default mail app</a>
-      <a class="btn btn-secondary" data-slot-open="whatsapp">WhatsApp</a>
-      <a class="btn btn-secondary" data-slot-open="telegram">Telegram</a>
-      <button class="btn btn-light" data-slot-copy="email">Copy e‑mail</button>
-      <button class="btn btn-light" data-slot-copy="body">Copy message</button>
-    </div>
-    <div class="slot-modal__actions">
-      <button class="btn btn-light" data-slot="close">Close</button>
-    </div>
-  </div>
+<div class="slot-modal" hidden="" id="slot-modal">
+<div class="slot-modal__backdrop" data-slot="close"></div>
+<div class="slot-modal__dialog">
+<h3 class="slot-modal__title">How would you like to propose a time?</h3>
+<div class="slot-modal__grid">
+<a class="btn btn-primary" data-slot-open="gmail">Gmail</a>
+<a class="btn btn-secondary" data-slot-open="outlook">Outlook</a>
+<a class="btn btn-secondary" data-slot-open="yandex">Yandex</a>
+<a class="btn btn-secondary" data-slot-open="mailru">Mail.ru</a>
+<a class="btn btn-secondary" data-slot-open="mailto">Default mail app</a>
+<a class="btn btn-secondary" data-slot-open="whatsapp">WhatsApp</a>
+<a class="btn btn-secondary" data-slot-open="telegram">Telegram</a>
+<button class="btn btn-light" data-slot-copy="email">Copy e‑mail</button>
+<button class="btn btn-light" data-slot-copy="body">Copy message</button>
+</div>
+<div class="slot-modal__actions">
+<button class="btn btn-light" data-slot="close">Close</button>
+</div>
+</div>
 </div>
 <style>
 .slot-modal{position:fixed;inset:0;z-index:2500;display:block}
@@ -561,7 +595,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
   function closeModal(){ document.getElementById('slot-modal').hidden=true; document.body.style.overflow=''; }
   document.querySelectorAll('a.btn, a[data-slot], button.btn').forEach(function(el){
     var txt=(el.textContent||"").trim();
-    if(/Предложить слот|Propose a slot|预约通话/.test(txt)){ 
+    if(/Предложить слот|20-мин|20 min|Propose a slot|20-min|预约通话/.test(txt)){ 
       el.addEventListener('click', function(e){ e.preventDefault(); openModal(); }, true);
     }
   });
@@ -569,9 +603,72 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
   document.querySelectorAll('[data-slot-open]').forEach(function(el){ 
     el.addEventListener('click', function(){ var k=this.getAttribute('data-slot-open'); window.open(links[k], '_blank', 'noopener'); });
   });
+  document.querySelectorAll('[data-slot="open"]').forEach(function(el){ el.addEventListener('click', function(e){ e.preventDefault(); openModal(); }, true); });
   document.querySelectorAll('[data-slot-copy]').forEach(function(el){ 
     el.addEventListener('click', function(){ var kind=this.getAttribute('data-slot-copy'); var text=(kind==='email')?email:body; if(navigator.clipboard) navigator.clipboard.writeText(text); });
   });
+})();
+</script>
+
+<script>
+// cfg:estimate-submit
+(function(){
+  var URL="https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec";
+  var SECRET="cfg-sec-IRK-2025";
+  function val(name, root){ var el = (root||document).querySelector('[name="'+name+'"]'); return el?el.value.trim():""; }
+  function paramsFromUrl(){ 
+    var u=new URLSearchParams(location.search), o={}; 
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){ if(u.get(k)) o[k]=u.get(k); }); 
+    return o; 
+  }
+  function disable(btn, on){ if(!btn) return; btn.disabled=!!on; btn.setAttribute('aria-busy', on?'true':'false'); }
+  document.addEventListener('submit', function(e){
+    var f = e.target;
+    if(!(f && f.matches('form[data-estimate]'))) return;
+    e.preventDefault();
+    // honeypot
+    if(val('company_site', f)) return false;
+    var btn = f.querySelector('button[type="submit"]');
+    disable(btn, true);
+    var fd = new FormData(f);
+    fd.append('secret', SECRET);
+    // enrich
+    var p = paramsFromUrl();
+    for (var k in p) fd.append(k, p[k]);
+    fd.append('page_url', location.href);
+    fd.append('referrer', document.referrer||'');
+    fetch(URL, { method:'POST', body: fd, mode:'no-cors' })
+      .then(function(){ 
+        try { f.reset(); } catch(e){}
+        var t=(window.CFG_I18N||{})['en']||{submitted:'OK'}; 
+        var n=document.getElementById('form-status'); if(n) n.textContent=t.submitted; 
+      })
+      .catch(function(err){ console.warn('estimate submit:', err); alert((window.CFG_I18N||{ru:{error:'Ошибка. Попробуйте ещё раз.'}}).ru.error); })
+      .finally(function(){ disable(btn, false); });
+    return false;
+  }, true);
+})();
+</script>
+
+
+<script>
+// cfg:mailto-fallback
+(function(){
+  function serialize(form){
+    var data = new FormData(form), lines = [];
+    data.forEach(function(v,k){ if(k!=='company_site' && v) lines.push(k+': '+v); });
+    return lines.join('%0D%0A');
+  }
+  document.addEventListener('submit', function(e){
+    var f = e.target;
+    if(!(f && f.matches('form[data-estimate]'))) return;
+    var status = document.getElementById('form-status');
+    var mail = 'mailto:C.F.G.consulting@bk.ru?subject=Заявка%20на%20оценку%2024ч&body='+serialize(f);
+    // Save fallback href for user
+    if(status){ status.insertAdjacentHTML('afterend','<div class="muted">Если форма не отправилась — <a href="'+mail+'">нажмите для отправки на email</a>.</div>'); }
+    // Replace window.CFG_FAIL to open mailto if fetch throws
+    window.CFG_FAIL = function(){ try{ window.location.href = mail; }catch(e){} };
+  }, true);
 })();
 </script>
 
