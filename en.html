@@ -106,7 +106,7 @@ window.CFG_I18N = {
 
 </head><body>
 
-<header id="site-header" style="position:sticky;top:0;z-index:1000;background:rgba(11,16,32,.85);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.06)">
+<header id="site-header" style="position:sticky;top:0;z-index:1000;background:#0B1020;border-bottom:1px solid rgba(255,255,255,.06);box-shadow:0 2px 16px rgba(0,0,0,.25)">
   <div class="container" style="max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between">
     <div style="font-weight:700;color:#E5E7EB">C|F|G consulting</div>
     <nav style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
@@ -114,7 +114,7 @@ window.CFG_I18N = {
       <a href="#cases" style="color:#E5E7EB;text-decoration:none">• Cases</a>
       <a href="#partner" style="color:#E5E7EB;text-decoration:none">• Partners</a>
       <a href="#contacts" style="color:#E5E7EB;text-decoration:none">• Contacts</a>
-      <a href="#lead-form" class="btn btn-primary" data-ev="cta_diagnostic" style="margin-left:8px">10‑day Diagnostic</a>
+      <a href="#lead-form" class="btn btn-primary" style="background:linear-gradient(135deg,#1F2937,#3B82F6);color:#fff" data-ev="cta_diagnostic" style="margin-left:8px">10‑day Diagnostic</a>
       <div class="lang" style="display:flex;gap:8px;margin-left:12px"><a href="/index.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">RU</a><a href="/en.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;background:linear-gradient(135deg,#6D28D9,#3B82F6);color:#fff;">EN</a><a href="/zh.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">中文</a></div>
     </nav>
   </div>
@@ -131,12 +131,29 @@ window.CFG_I18N = {
   <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:36px"><div class="hero__text">
     <h1>12 weeks to controlled profit</h1>
     <p>I join as your fractional COO/CGO and take 3–5 initiatives to cash in 12 weeks: reporting, incentives, sales — without heavy IT.</p>
-    <div class="hero__cta" style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap">
-  <a href="#lead-form" class="btn btn-primary" data-ev="cta_diagnostic">Запросить диагностику 10 дней</a>
-  <a href="#partner" class="btn btn-secondary" data-ev="cta_partner">Партнёрская программа</a>
+    <div class="hero__cta" style="background:rgba(0,0,0,.18);padding:8px;border-radius:12px;display:inline-flex" style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap">
+  <a href="#lead-form" class="btn btn-primary" style="background:linear-gradient(135deg,#1F2937,#3B82F6);color:#fff" data-ev="cta_diagnostic" href="#estimate" data-mailto="false">Запросить диагностику 10 дней</a>
+  <a href="#partner" class="btn btn-secondary" data-ev="cta_partner" href="#partner">Партнёрская программа</a>
 </div>
   </div></div>
-  <div class="hero__img" style="max-width:420px"><img src="/assets/portrait.png" alt="Evgeniy Chapurin" loading="eager"/></div>
+  <div class="hero__img" style="max-width:420px;overflow:hidden;border-radius:14px"><img src="/assets/portrait.png" alt="Evgeniy Chapurin" loading="eager"/></div>
+
+<script>(function(){
+  var sec=document.getElementById('estimate');
+  if(!sec) return;
+  var form=sec.querySelector('form');
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    var pd=document.getElementById('consent_pd');
+    var xb=document.getElementById('consent_xb');
+    if(!(pd&&pd.checked&&xb&&xb.checked)){
+      e.preventDefault();
+      alert('Пожалуйста, отметьте согласия на обработку и трансграничную передачу данных.');
+      return false;
+    }
+  }, true);
+})();</script>
+
 </section>
 <section class="trustbar" style="padding:20px 0;border-bottom:1px solid #eee">
   <div class="container">
@@ -174,7 +191,7 @@ window.CFG_I18N = {
 
 
 
-<section class='cfg-hero' style='padding:48px 0;border-bottom:1px solid #eee;'><div class='container'><h1>12 weeks to controllable profit</h1><p class='lead'>Fractional COO: Data → Incentives → Sales. I deliver 3–5 initiatives to money — without heavy IT.</p><div class='pills-row' style='display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;'><span class='pill'>CFG Network • expert partners</span><span class='pill'>Weekly Friday Results Board</span><span class='pill'>Irkutsk • Krasnoyarsk • Russia</span></div><div class='cta' style='display:flex;gap:12px;flex-wrap:wrap;'><a class='btn btn-primary' href='#estimate'>10‑day diagnosis</a><a class='btn btn-outline' href='#downloads'>Pitch & one‑pager</a><a class='btn btn-outline' href='#contact'>Book 20‑min call</a></div></div></section>
+<section class='cfg-hero' style='padding:48px 0;border-bottom:1px solid #eee;'><div class='container'><h1>12 weeks to controllable profit</h1><p class='lead'>Fractional COO: Data → Incentives → Sales. I deliver 3–5 initiatives to money — without heavy IT.</p><div class='pills-row' style='display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;'><span class='pill'>CFG Network • expert partners</span><span class='pill'>Weekly Friday Results Board</span><span class='pill'>Irkutsk • Krasnoyarsk • Russia</span></div><div class='cta' style='display:flex;gap:12px;flex-wrap:wrap;'><a class='btn btn-primary' href='#estimate'>10‑day diagnosis</a><a class='btn btn-outline' href='#downloads'>Pitch & one‑pager</a><a class='btn btn-outline' href='#contact'>Book <a href="mailto:C.F.G.consulting@bk.ru?subject=20‑min%20call" data-mailto class="link">20‑min call</a></a></div></div></section>
 
 <section class='cfg-partners' style='padding:28px 0;border-bottom:1px solid #eee;'><div class='container'><h2>Partner program</h2><p>Free diagnosis for your client. We handle the heavy lifting and deliver results; you get a revenue share on paid projects.</p><a class='btn btn-primary' href='#partner'>Refer a lead</a></div></section><section id='downloads' style='padding:24px 0;border-top:1px solid #eee;'><div class='container'><h2>Downloads</h2><ul><li><a href='/downloads/CFG_OnePager.docx' download>One‑pager (DOCX)</a></li><li><a href='/downloads/CFG_PitchDeck.pptx' download>Pitch deck (PPTX)</a></li></ul></div></section><section id='method' class='cfg-dppm' style='padding:40px 0;'><div class='container'><h2>DPPM‑12: Data → People → Process → Market</h2><ul><li><b>DATA:</b> single data layer, 5–7 executive dashboards</li><li><b>PEOPLE:</b> KPI & incentives, career tracks, hires/replacements</li><li><b>PROCESS:</b> playbooks, ritual of Mon goals — Fri results board</li><li><b>MARKET:</b> funnel, offers, partner channel</li></ul></div></section>
 <script>
@@ -187,13 +204,13 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 </script>
-<nav><div class="container row"><div class="brand"><svg aria-hidden="true" height="28" viewbox="0 0 256 256" width="28" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0B1220"></stop><stop offset="1" stop-color="#4F46E5"></stop></lineargradient></defs><rect fill="url(#g)" height="256" rx="40" ry="40" width="256"></rect><text dominant-baseline="middle" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="800" text-anchor="middle" x="50%" y="55%">CFG</text></svg><span>C|F|G consulting</span></div><div><a class="badge" href="#services">Services</a><a class="badge" href="#industries">Industries</a><a class="badge" href="#cases">Case studies</a><a class="badge" href="#process">Process</a><a class="badge" href="#partner">For partners</a><span aria-label="Language" class="lang-toggle" role="group"><a href="/">RU</a><a aria-current="page" class="active" href="en.html">EN</a><a href="zh.html">中文</a></span><a class="btn btn-primary" href="#contacts">Contact</a></div></div></nav>
+<nav><div class="container row"><div class="brand"><svg aria-hidden="true" height="28" viewbox="0 0 256 256" width="28" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0B1220"></stop><stop offset="1" stop-color="#4F46E5"></stop></lineargradient></defs><rect fill="url(#g)" height="256" rx="40" ry="40" width="256"></rect><text dominant-baseline="middle" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="800" text-anchor="middle" x="50%" y="55%">CFG</text></svg><span>C|F|G consulting</span></div><div><a class="badge" href="#services">Services</a><a class="badge" href="#industries">Industries</a><a class="badge" href="#cases">Case studies</a><a class="badge" href="#process">Process</a><a class="badge" href="#partner">For partners</a><span aria-label="Language" class="lang-toggle" role="group"><a href="/">RU</a><a aria-current="page" class="active" href="en.html">EN</a><a href="zh.html">中文</a></span><a class="btn btn-primary" style="background:linear-gradient(135deg,#1F2937,#3B82F6);color:#fff" href="#contacts">Contact</a></div></div></nav>
 <header class="hero"><div class="container content">
 <div>
 <h1>We help companies grow and launch faster</h1>
 <p class="lead">Audit, strategy, sales, teams, analytics. Launchand branches <b>turnkey</b> in 30–60 days. <span style="white-space:nowrap">International‑grade</span> execution — local speed.</p>
 <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
-<a class="btn btn-primary" data-ev="cta_email" href="#contacts">Discuss your project</a>
+<a class="btn btn-primary" style="background:linear-gradient(135deg,#1F2937,#3B82F6);color:#fff" data-ev="cta_email" href="#contacts">Discuss your project</a>
 <a class="btn btn-secondary" data-scroll="#estimate" href="#estimate">24‑hour project assessment</a>
 <button class="btn btn-secondary" data-gcal="" type="button">Suggest a slot (GCal)</button>
 </div>
@@ -296,7 +313,11 @@ document.addEventListener('DOMContentLoaded', function(){
 <div style="grid-column:1/-1"><label>Brief</label><textarea name="desc" rows="4"></textarea></div>
 </div>
 <div class="form-actions">
-<button class="btn btn-primary" type="submit">Send</button>
+<div class="consents" style="margin:8px 0 0 0">
+  <label style="display:block;margin:6px 0"><input type="checkbox" id="consent_pd"> I consent to personal data processing</label>
+  <label style="display:block;margin:6px 0"><input type="checkbox" id="consent_xb"> I consent to cross-border transfer to Google services</label>
+</div>
+<button class="btn btn-primary" style="background:linear-gradient(135deg,#1F2937,#3B82F6);color:#fff" type="submit">Send</button>
 <button class="btn btn-secondary" data-gcal="" type="button">Suggest a slot (GCal)</button>
 </div>
 <p class="small">By proceeding you accept <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms</a>.</p>
@@ -320,7 +341,7 @@ document.addEventListener('DOMContentLoaded', function(){
     <p style="margin:0 0 8px 0;color:#374151">Outsourcing partners (accounting, HR, legal, integrators): bring a client — earn 10–15% from Diagnostic/Implement and 5% retention up to 6 months on Operate.</p>
     <p style="margin:0 0 16px 0;font-weight:600;color:#111827">Become a partner — choose a channel:</p>
     <div class="buttons" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
-      <a class="btn btn-primary" data-ev="cta_email" data-mailto href="mailto:C.F.G.consulting@bk.ru?subject=Partnership%20with%20CFG%20consulting">Email us</a>
+      <a class="btn btn-primary" style="background:linear-gradient(135deg,#1F2937,#3B82F6);color:#fff" data-ev="cta_email" data-mailto href="mailto:C.F.G.consulting@bk.ru?subject=Partnership%20with%20CFG%20consulting">Email us</a>
       <a class="btn btn-secondary" data-cta="partner-telegram" href="https://t.me/Evgeniy_Chapurin" target="_blank" rel="noopener">Telegram</a>
       <a class="btn btn-secondary" data-cta="partner-whatsapp" href="https://wa.me/79025683529" target="_blank" rel="noopener">WhatsApp</a>
     </div>
@@ -331,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="cta">
 <h2 style="margin:0 0 10px">Let’s discuss your task</h2>
 <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
-<a class="btn btn-primary" data-ev="cta_email" data-mailto="" data-subject="Проект для CFG consulting" href="mailto:C.F.G.consulting@bk.ru?subject=Проект%20для%20CFG%20consulting">Email us</a>
+<a class="btn btn-primary" style="background:linear-gradient(135deg,#1F2937,#3B82F6);color:#fff" data-ev="cta_email" data-mailto="" data-subject="Проект для CFG consulting" href="mailto:C.F.G.consulting@bk.ru?subject=Проект%20для%20CFG%20consulting">Email us</a>
 <a class="btn btn-secondary" href="https://t.me/Evgeniy_Chapurin" rel="noopener" target="_blank">Telegram</a>
 <a class="btn btn-secondary" href="https://wa.me/79025683529" rel="noopener" target="_blank">WhatsApp</a>
 </div>
@@ -348,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <textarea class="input body" placeholder="Email body" rows="6"></textarea>
 <div class="row">
 <button class="btn btn-secondary" id="copyEmail" type="button">Copy address</button>
-<button class="btn btn-primary" id="gmailOpen" type="button">Open Gmail</button>
+<button class="btn btn-primary" style="background:linear-gradient(135deg,#1F2937,#3B82F6);color:#fff" id="gmailOpen" type="button">Open Gmail</button>
 <button class="btn btn-secondary" data-modal-close="" type="button">Close</button>
 </div>
 <p class="small">C.F.G.consulting@bk.ru</p>
@@ -563,7 +584,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
     if(!el) return;
     e.preventDefault();
     el.scrollIntoView({behavior:'smooth', block:'start'});
-    if(id==='lead-form'){
+    if(id==='lead-form'||id==='estimate'){
       var first = el.querySelector('input,textarea,select'); if(first) setTimeout(function(){ first.focus(); }, 400);
       window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'open' }));
     }
