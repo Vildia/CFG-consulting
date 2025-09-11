@@ -131,7 +131,6 @@ section[id]{ scroll-margin-top: var(--header-offset); }
 /* Fallback for browsers that ignore scroll-margin: */
 :target::before{ content: ""; display: block; height: var(--header-offset); margin-top: calc(-1 * var(--header-offset)); }
 </style>
-
 <style>
 #site-header .container{display:flex;align-items:center;justify-content:space-between;gap:24px}
 #site-header nav{display:flex;align-items:center;gap:20px;flex:1;justify-content:flex-end;flex-wrap:wrap;row-gap:10px}
@@ -144,8 +143,6 @@ section[id]{ scroll-margin-top: var(--header-offset); }
 <div class="container" style="max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between">
 <div style="font-weight:700;color:#E5E7EB">C|F|G consulting</div>
 <nav style="position:relative;z-index:2050;background:transparent;"><div class="nav-links"><a href="#services">Услуги</a><a href="#cases">Кейсы</a><a href="#partners">Партнёрам</a><a href="#contacts">Контакты</a></div>
-
-
 <div class="header-tools"><div class="lang" style="display:flex;gap:8px;margin-left:12px"><a href="/index.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;background:linear-gradient(135deg,#6D28D9,#3B82F6);color:#fff;">RU</a><a href="/en.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">EN</a><a href="/zh.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">中文</a></div><a class="btn btn-secondary" data-body="Здравствуйте!
 Хочу назначить 20-минутный звонок.
 Удобный слот: ____ (дата/время, часовой пояс).
@@ -382,8 +379,8 @@ document.addEventListener('DOMContentLoaded', function(){
         Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
         [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
         var url='https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec?'+compat.toString();
-        var req = if(document.querySelector('input[name="company_site"]').value){return;}
-fetch(url, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+        var honeypot=(f.querySelector('input[name="company_site"]')||{}).value; if(honeypot){ return Promise.resolve(); } var req = 
+
         return req;
       })()
         .then(function(){ toast(locale==='en'?'Request sent! We\'ll get back within 24 hours.':(locale==='zh'?'已提交！我们会在24小时内联系您。':'Заявка отправлена! Мы свяжемся в течение 24 часов.')); f.reset(); })
@@ -608,65 +605,46 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
 })();
 </script>
 
-<script>
-// cfg:estimate-submit
-(function(){
-  var URL="https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec";
-  var SECRET="cfg-sec-IRK-2025";
-  function val(name, root){ var el = (root||document).querySelector('[name="'+name+'"]'); return el?el.value.trim():""; }
-  function paramsFromUrl(){ 
-    var u=new URLSearchParams(location.search), o={}; 
-    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){ if(u.get(k)) o[k]=u.get(k); }); 
-    return o; 
-  }
-  function disable(btn, on){ if(!btn) return; btn.disabled=!!on; btn.setAttribute('aria-busy', on?'true':'false'); }
-  document.addEventListener('submit', function(e){
-    var f = e.target;
-    if(!(f && f.matches('form[data-estimate]'))) return;
-    e.preventDefault();
-    // honeypot
-    if(val('company_site', f)) return false;
-    var btn = f.querySelector('button[type="submit"]');
-    disable(btn, true);
-    var fd = new FormData(f);
-    fd.append('secret', SECRET);
-    // enrich
-    var p = paramsFromUrl();
-    for (var k in p) fd.append(k, p[k]);
-    fd.append('page_url', location.href);
-    fd.append('referrer', document.referrer||'');
-    fetch(URL, { method:'POST', body: fd, mode:'no-cors' })
-      .then(function(){ 
-        try { f.reset(); } catch(e){}
-        var t=(window.CFG_I18N||{})['ru']||{submitted:'OK'}; 
-        var n=document.getElementById('form-status'); if(n) n.textContent=t.submitted; 
-      })
-      .catch(function(err){ console.warn('estimate submit:', err); alert((window.CFG_I18N||{ru:{error:'Ошибка. Попробуйте ещё раз.'}}).ru.error); })
-      .finally(function(){ disable(btn, false); });
-    return false;
-  }, true);
-})();
-</script>
 
 
 <script>
-// cfg:mailto-fallback
-(function(){
-  function serialize(form){
-    var data = new FormData(form), lines = [];
-    data.forEach(function(v,k){ if(k!=='company_site' && v) lines.push(k+': '+v); });
-    return lines.join('%0D%0A');
-  }
-  document.addEventListener('submit', function(e){
-    var f = e.target;
-    if(!(f && f.matches('form[data-estimate]'))) return;
-    var status = document.getElementById('form-status');
-    var mail = 'mailto:C.F.G.consulting@bk.ru?subject=Заявка%20на%20оценку%2024ч&body='+serialize(f);
-    // Save fallback href for user
-    if(status){ status.insertAdjacentHTML('afterend','<div class="muted">Если форма не отправилась — <a href="'+mail+'">нажмите для отправки на email</a>.</div>'); }
-    // Replace window.CFG_FAIL to open mailto if fetch throws
-    window.CFG_FAIL = function(){ try{ window.location.href = mail; }catch(e){} };
-  }, true);
+(function(){ // Estimate form: async submit via Apps Script (no mailto, no modal)
+  document.querySelectorAll('form[data-estimate]').forEach(function(f){
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      var locale=this.getAttribute('data-locale')||'en';
+      function val(n){ var x=f.querySelector('[name='+n+']'); return x?x.value.trim():''; }
+      var name=val('name'), company=val('company'), inn=val('inn'), email=val('email'), phone=val('phone'), desc=val('desc');
+      var q=new URLSearchParams(location.search);
+      var utm={}; ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','gclid','yclid','fbclid'].forEach(function(k){ var v=q.get(k); if(v) utm[k]=v; });
+      var payload={ secret:'cfg-sec-IRK-2025',  notify:'short',  action:'estimate_24h', locale:locale, name:name, company:company, inn:inn, email:email, phone:phone, desc:desc, page_url:location.href, referrer:document.referrer||'', utm:utm };
+      var btn=f.querySelector('button[type=submit]');
+      if(btn){ btn.disabled=true; btn.textContent=(locale==='en'?'Sending...':(locale==='zh'?'正在发送…':'Отправляем…')); }
+      (function(){
+        var compat = new URLSearchParams();
+        Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
+        [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
+        var url='https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec?'+compat.toString();
+        var req = fetch(url, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+        return req;
+      })()
+        .then(function(){ toast(locale==='en'?'Request sent! We\'ll get back within 24 hours.':(locale==='zh'?'已提交！我们会在24小时内联系您。':'Заявка отправлена! Мы свяжемся в течение 24 часов.')); f.reset(); })
+        .catch(function(){ toast(locale==='en'?'Submission failed. Please try again.':(locale==='zh'?'提交失败，请重试。':'Не удалось отправить. Повторите попытку.')); })
+        .finally(function(){ if(btn){ btn.disabled=false; btn.textContent=(locale==='en'?'Submit':(locale==='zh'?'提交':'Отправить')); } });
+      track('form_submit', {locale: locale});
+      track('estimate_24h', {locale: locale});
+    });
+  });
+document.querySelectorAll('[data-gcal]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var details = 'Intro call with C|F|G consulting%0A%0AAgenda:%0A• Goals%0A• Current state%0A• Next steps%0A%0AContacts:%0AEmail: '+encodeURIComponent(EMAIL)+'%0ATG: '+encodeURIComponent(TG)+'%0AWhatsApp: +'+encodeURIComponent(WA);
+      var url = 'https://calendar.google.com/calendar/u/0/r/eventedit?text=Intro%20call%20%E2%80%94%20CFG%20consulting&details='+details+'&location=Online';
+      window.open(url,'_blank');
+      track('gcal_open');
+    });
+  });
+
+  
 })();
 </script>
 
