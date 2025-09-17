@@ -138,8 +138,8 @@ section[id]{ scroll-margin-top: var(--header-offset); }
 #site-header .header-tools{display:flex;align-items:center;gap:12px}
 #site-header .lang{display:flex;gap:8px}
 </style>
-<script defer src="/analytics/ux-metrics.js"></script>
-<link rel="preload" as="image" href="assets/hero-1200.jpg" fetchpriority="high">
+<script defer="" src="/analytics/ux-metrics.js"></script>
+<link as="image" fetchpriority="high" href="assets/hero-1200.jpg" rel="preload"/>
 <style id="cfg-lang-style">
 /* CFG v5 language chips (force override) */
 .lang-chip{ 
@@ -222,7 +222,7 @@ body.modal-open{overflow:hidden !important;}
 Хочу назначить 20-минутный звонок.
 Удобный слот: ____ (дата/время, часовой пояс).
 Имя/Компания:
-Телефон/Telegram:" data-ev="cta_slot" data-slot="open" data-subject="CFG Intro Call"  data-slot="open" rel="noopener" style="margin-left:10px;position:relative;z-index:2100;pointer-events:auto"  href="#slot" onclick="return (window.cfgOpenSlot ? window.cfgOpenSlot(event) : false)">Предложить слот</a></div></nav>
+Телефон/Telegram:" data-ev="cta_slot" data-slot="open" data-subject="CFG Intro Call" href="#slot" onclick="return (window.cfgOpenSlot ? window.cfgOpenSlot(event) : false)" rel="noopener" style="margin-left:10px;position:relative;z-index:2100;pointer-events:auto">Предложить слот</a></div><a class="nav-link" href="#pricing" style="margin-left:10px">Формат и бюджеты</a></nav>
 </div>
 </header>
 <script>
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 </script>
-<nav><div class="container row"><div class="brand"><svg aria-hidden="true" height="28" viewbox="0 0 256 256" width="28" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0B1220"></stop><stop offset="1" stop-color="#4F46E5"></stop></lineargradient></defs><rect fill="url(#g)" height="256" rx="40" ry="40" width="256"></rect><text dominant-baseline="middle" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="800" text-anchor="middle" x="50%" y="55%">CFG</text></svg><span>C|F|G consulting</span></div><div><a class="badge" href="#services">Услуги</a><a class="badge" href="#industries">Сферы</a><a class="badge" href="#cases">Кейсы</a><a class="badge" href="#process">Процесс</a><a class="badge" href="#partners">Партнёрам</a><span aria-label="Language" class="lang-toggle" role="group"><a class="lang-chip active" data-locale="ru" aria-current="page" class="" href="/">RU</a><a class="lang-chip" data-locale="en" href="en.html">EN</a><a class="lang-chip" data-locale="zh" href="zh.html">中文</a></span><a class="btn btn-primary" data-slot="open" href="#" href="#slot" onclick="return (window.cfgOpenSlot ? window.cfgOpenSlot(event) : false)">Предложить слот</a></div></div></nav>
+<nav><div class="container row"><div class="brand"><svg aria-hidden="true" height="28" viewbox="0 0 256 256" width="28" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0B1220"></stop><stop offset="1" stop-color="#4F46E5"></stop></lineargradient></defs><rect fill="url(#g)" height="256" rx="40" ry="40" width="256"></rect><text dominant-baseline="middle" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="800" text-anchor="middle" x="50%" y="55%">CFG</text></svg><span>C|F|G consulting</span></div><div><a class="badge" href="#services">Услуги</a><a class="badge" href="#industries">Сферы</a><a class="badge" href="#cases">Кейсы</a><a class="badge" href="#process">Процесс</a><a class="badge" href="#partners">Партнёрам</a><span aria-label="Language" class="lang-toggle" role="group"><a aria-current="page" class="" data-locale="ru" href="/">RU</a><a class="lang-chip" data-locale="en" href="en.html">EN</a><a class="lang-chip" data-locale="zh" href="zh.html">中文</a></span><a class="btn btn-primary" data-slot="open" href="#slot" onclick="return (window.cfgOpenSlot ? window.cfgOpenSlot(event) : false)">Предложить слот</a></div></div></nav>
 <header class="hero"><div class="container content">
 <div>
 <h1>Помогаем компаниям расти и запускаться быстрее</h1>
@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
 <a class="btn btn-primary" data-ev="cta_email" href="#contacts">Обсудить проект</a>
 <a class="btn btn-secondary" data-scroll="#estimate" href="#estimate">Оценить проект за 24 часа</a>
-<a class="btn btn-secondary" data-slot="open"  data-slot="open" rel="noopener" style=";position:relative;z-index:2100;pointer-events:auto"  href="#slot" onclick="return (window.cfgOpenSlot ? window.cfgOpenSlot(event) : false)">Предложить слот</a>
+<a class="btn btn-secondary" data-slot="open" href="#slot" onclick="return (window.cfgOpenSlot ? window.cfgOpenSlot(event) : false)" rel="noopener" style=";position:relative;z-index:2100;pointer-events:auto">Предложить слот</a>
 </div>
 <div class="pills-row"><a class="pill pill-outline pill-lg" data-scroll="#partner" href="#partners">Партнёрская программа</a></div>
 <div class="pills-row"><span class="pill">Основано в Иркутске</span><span class="pill">Работаем по РФ и СНГ</span><span class="pill">Сеть экспертов</span></div>
@@ -345,10 +345,23 @@ document.addEventListener('DOMContentLoaded', function(){
 <div><label>Email</label><input name="email" required="" type="email"/></div>
 <div><label>Телефон</label><input name="phone"/></div>
 <div style="grid-column:1/-1"><label>Кратко о задаче</label><textarea name="desc" rows="4"></textarea></div>
+
+<div style="grid-column:1/-1;margin-top:8px">
+<div class="grid2">
+<div><label>Отрасль</label><input name="industry" placeholder="Автодилер, девелопер, HoReCa, e‑com …"/></div>
+<div><label>Оборот (в год)</label><input name="revenue" placeholder="Напр.: 500 млн — 1,2 млрд ₽"/></div>
+<div><label>География</label><input name="geo" placeholder="Иркутская обл., Красноярский край …"/></div>
+<div><label>Срочность</label><select name="urgency">
+<option selected="" value="">Обычный срок</option>
+<option>Ускоренно (до 8 недель)</option>
+<option>Крайний срок (≤ 4 недель)</option>
+</select></div>
+</div>
+</div>
 </div>
 <div class="form-actions">
 <button class="btn btn-primary" type="submit">Отправить</button>
-<a class="btn btn-secondary" data-slot="open"  data-slot="open" rel="noopener" style=";position:relative;z-index:2100;pointer-events:auto"  href="#slot" onclick="return (window.cfgOpenSlot ? window.cfgOpenSlot(event) : false)">Предложить слот</a>
+<a class="btn btn-secondary" data-slot="open" href="#slot" onclick="return (window.cfgOpenSlot ? window.cfgOpenSlot(event) : false)" rel="noopener" style=";position:relative;z-index:2100;pointer-events:auto">Предложить слот</a>
 </div>
 <p class="small">Соглашаясь, вы принимаете <a href="privacy.html">Политику</a> и <a href="terms.html">Условия</a>.</p>
 </form>
@@ -382,6 +395,43 @@ document.addEventListener('DOMContentLoaded', function(){
 </div>
 </div>
 </div></section>
+<section class="container" id="pricing" style="padding:56px 0;">
+<h2 class="section-title">Формат и бюджеты</h2>
+<ul class="tick" style="margin:0 0 12px 0">
+<li><strong>Диагностика 10 дней</strong> — от ₽90–150 тыс.</li>
+<li><strong>Внедрение 12 недель (DPPM‑12)</strong> — от ₽450–900 тыс. или ₽250–400 тыс./мес + 5–10% KPI‑бонус (потолок).</li>
+<li><strong>Operate 6–12 мес</strong> — от ₽450–700 тыс./мес + KPI‑бонус.</li>
+<li><strong>Data‑Block 3 недели</strong> — от ₽180–350 тыс.</li>
+<li><strong>Sales‑Boost 4 недели</strong> — от ₽160–280 тыс.</li>
+</ul>
+<p style="margin:8px 0 0 0;opacity:.85">
+<em>Финальная стоимость зависит от масштаба и сложности. Расчёт — по прозрачной формуле с коэффициентами:</em>
+</p>
+<ul class="tick">
+<li><strong>K<sub>масштаб</sub></strong> (выручка/число точек), <strong>K<sub>сложн</sub></strong> (ИТ/процессы/сопротивление), <strong>K<sub>срочн</sub></strong> (ускорение), <strong>K<sub>логист</sub></strong> (дистанция/онсайт).</li>
+<li>Онсайт-дни: ₽25–35 тыс./день (без дороги и проживания). Удалённый режим — скидка до 10%.</li>
+<li>ИП на УСН 6% — НДС не облагается.</li>
+</ul>
+<div style="margin-top:12px;display:flex;gap:12px">
+<a class="btn btn-primary" data-cta="pricing-quote" href="#lead">Получить смету за 24 часа</a>
+<a class="btn btn-secondary" data-cta="pricing-faq" href="partner.html">Партнёрская программа</a>
+</div>
+</section>
+<section class="container" style="padding: 8px 0 40px 0">
+<details>
+<summary><strong>Почему стоимость может отличаться?</strong></summary>
+<p>Мы считаем смету по прозрачной формуле с коэффициентами: масштаб (выручка/число точек), сложность (ИТ/процессы/сопротивление), срочность и логистика. Это защищает вашу выгоду и наш ресурс.</p>
+</details>
+<details>
+<summary><strong>Что включено в каждый продукт?</strong></summary>
+<p>Диагностика — карта потерь EBITDA и план на 12 недель. Внедрение — 3–5 инициатив «под ключ» (данные, мотивация, продажи). Operate — фракционный COO/CGO 6–12 мес. Data‑Block — BI‑слой и 5–7 дашбордов. Sales‑Boost — редизайн KPI/мотивации.</p>
+</details>
+<details>
+<summary><strong>Есть ли НДС?</strong></summary>
+<p>Нет. ИП на УСН 6% — НДС не облагается.</p>
+</details>
+</section>
+
 <footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
 <div style="display:flex;align-items:center;gap:10px"><strong>C|F|G consulting</strong></div>
 <div style="opacity:.9">Tel./WhatsApp: <a href="tel:+79025683529">+7 902 568‑35‑29</a> • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a> • Build v3.5</div>
@@ -681,9 +731,6 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
   });
 })();
 </script>
-
-
-
 <script>
 (function(){ // Estimate form: async submit via Apps Script (no mailto, no modal)
   document.querySelectorAll('form[data-estimate]').forEach(function(f){
@@ -724,10 +771,8 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
   
 })();
 </script>
-
-<div style="text-align:center;margin:24px"><a href="/partner.html" data-partner-cta="footer_partner">Партнёрская программа →</a></div>
-
-<section id="vff" data-section="vff" style="margin:24px auto;max-width:960px;padding:16px;border:1px solid #273057;border-radius:16px;background:#121833">
+<div style="text-align:center;margin:24px"><a data-partner-cta="footer_partner" href="/partner.html">Партнёрская программа →</a></div>
+<section data-section="vff" id="vff" style="margin:24px auto;max-width:960px;padding:16px;border:1px solid #273057;border-radius:16px;background:#121833">
 <h2>Как ранжируем проекты (VFF)</h2>
 <ul>
 <li><b>Value</b> — ожидаемая экономическая ценность для клиента.</li>
@@ -735,12 +780,10 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
 <li><b>Fast</b> — скорость получения первых эффектов.</li>
 </ul>
 </section>
-<section id="downloads" data-section="downloads" style="margin:24px auto;max-width:960px;padding:16px;border:1px solid #273057;border-radius:16px;background:#121833">
+<section data-section="downloads" id="downloads" style="margin:24px auto;max-width:960px;padding:16px;border:1px solid #273057;border-radius:16px;background:#121833">
 <h2>Материалы</h2>
-<p><a href="/downloads/one-pager.pdf" data-cta="dl_onepager">One‑pager</a> · <a href="/downloads/deck.pdf" data-cta="dl_deck">Deck</a></p>
+<p><a data-cta="dl_onepager" href="/downloads/one-pager.pdf">One‑pager</a> · <a data-cta="dl_deck" href="/downloads/deck.pdf">Deck</a></p>
 </section>
-
-
 <script>
 // CFG unified lead sender v3 — injected
 (function(){
@@ -906,9 +949,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 })();
 </script>
-
-
-
 <script id="cfg-slot-script">
 (function(){
   var EMAIL = "C.F.G.consulting@bk.ru";
@@ -1099,7 +1139,6 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 })();
 </script>
-
 <script>
 // CFG slot modal — robust event handling
 (function(){
@@ -1202,5 +1241,4 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 })();
 </script>
-
 </body></html>
