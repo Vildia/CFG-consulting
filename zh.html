@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function(){
         var compat = new URLSearchParams();
         Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
         [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
-        var url='https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec?'+compat.toString();
+        var url='/api/lead'+compat.toString();
         var honeypot=(f.querySelector('input[name="company_site"]')||{}).value; if(honeypot){ return Promise.resolve(); } var req = 
 
         return req;
@@ -626,7 +626,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
         var compat = new URLSearchParams();
         Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
         [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
-        var url='https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec?'+compat.toString();
+        var url='/api/lead'+compat.toString();
         var req = fetch(url, { method:'POST',  headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
         return req;
       })()
@@ -651,4 +651,80 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
 </script>
 
 <div style="text-align:center;margin:24px"><a href="/partner.html" data-partner-cta="footer_partner">Партнёрская программа →</a></div>
+
+<script>
+// CFG unified lead sender v3 — injected
+(function(){
+  function qs(form, name){ return form.querySelector('[name="'+name+'"]'); }
+  function getVal(form, name){ const el = qs(form, name); return el ? el.value.trim() : ''; }
+  function getLocale(){ try { return document.documentElement.lang || (window.CFG_LOCALE || '').toString() || ''; } catch(e){ return ''; } }
+  function getUTM(){
+    const params = new URLSearchParams(location.search);
+    const keys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+    const out = {};
+    keys.forEach(k => { if (params.get(k)) out[k] = params.get(k); });
+    return out;
+  }
+  async function sendLead(form){
+    const hp = getVal(form, 'company_site'); // honeypot
+    if (hp) return Promise.reject(new Error('honeypot_filled'));
+
+    // Basic payload (common names across pages)
+    const payload = {
+      name: getVal(form, 'name') || getVal(form, 'full_name') || '',
+      company: getVal(form, 'company') || '',
+      inn: getVal(form, 'inn') || '',
+      email: getVal(form, 'email') || '',
+      phone: getVal(form, 'phone') || '',
+      message: getVal(form, 'message') || getVal(form, 'task') || getVal(form, 'comment') || '',
+      // meta
+      locale: getLocale(),
+      page_url: location.href,
+      referrer: document.referrer || '',
+      utm: getUTM()
+    };
+
+    const btn = form.querySelector('button[type="submit"], [type="submit"]');
+    const origText = btn && (btn.textContent || btn.value);
+
+    function setState(t){ if (btn) { if (btn.tagName === 'BUTTON') btn.textContent = t; else btn.value = t; } document.dispatchEvent(new CustomEvent('cfg:form-state', {detail:{state:t}})); }
+
+    try{
+      setState('Отправка…');
+      const res = await fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const ok = res.ok;
+      let data = {};
+      try { data = await res.json(); } catch(e){}
+      if (!ok) throw new Error('bad_status_'+res.status);
+      setState('Готово ✓');
+      document.dispatchEvent(new CustomEvent('cfg:form-success', {detail:{payload, data}}));
+      form.reset();
+      return data;
+    }catch(err){
+      setState('Ошибка');
+      document.dispatchEvent(new CustomEvent('cfg:form-error', {detail:{error: (err && err.message) || 'unknown', payload}}));
+      throw err;
+    }finally{
+      setTimeout(()=> setState(origText || 'Отправить'), 1400);
+    }
+  }
+
+  // Attach to all forms that carry data-cfg-lead or id matches known ids
+  function wireForm(form){
+    if (form.__cfg_wired) return;
+    form.__cfg_wired = true;
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      sendLead(form).catch(()=>{});
+    });
+  }
+
+  document.querySelectorAll('form[data-cfg-lead], form#lead-form, form#partner-form').forEach(wireForm);
+  // If forms injected later
+  const mo = new MutationObserver(() => {
+    document.querySelectorAll('form[data-cfg-lead], form#lead-form, form#partner-form').forEach(wireForm);
+  });
+  mo.observe(document.documentElement, {subtree:true, childList:true});
+})();
+</script>
 </body></html>
