@@ -1,7 +1,19 @@
+/* Simple UX metrics: section visibility + outbound clicks */
 (function(){
-  if (typeof window.gtag !== 'function'){ window.dataLayer=window.dataLayer||[]; window.gtag=function(){dataLayer.push(arguments)} }
-  const env = location.hostname === 'cfg-consulting.vercel.app' ? 'production' : (location.hostname.endsWith('.vercel.app') ? 'preview' : 'unknown');
-  const io = new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ const id = e.target.id || e.target.getAttribute('data-section') || 'section'; gtag('event','section_view',{section:id,env}); io.unobserve(e.target); } }); },{threshold:0.5});
-  document.querySelectorAll('section[id], [data-section]').forEach(el=>io.observe(el));
-  document.addEventListener('click',(e)=>{ const a=e.target.closest('a[href^="http"]'); if(!a) return; if(a.host!==location.host) gtag('event','outbound_click',{url:a.href,env}); },{capture:true});
+  function send(event, params){ if (!window.gtag) return; try{ gtag('event', event, params||{}); }catch(e){} }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        var id = entry.target.getAttribute('id') || entry.target.getAttribute('data-section') || 'section';
+        send('section_view', {section:id});
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.5});
+  document.querySelectorAll('section[id], [data-section]').forEach(function(el){ io.observe(el); });
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest && e.target.closest('a[href^="http"]');
+    if (!a) return;
+    if (a.host !== location.host){ send('outbound_click', {url:a.href}); }
+  }, {capture:true});
 })();
