@@ -191,6 +191,27 @@ body.modal-open{overflow:hidden !important;}
     const API = (location.origin && location.origin.startsWith('http')) 
   ? '/api/lead' 
   : 'https://cfg-consulting.vercel.app/api/lead';
+
+function buildQuery(params){
+  const usp = new URLSearchParams();
+  Object.keys(params||{}).forEach(k=>{ if (params[k]!==undefined && params[k]!==null) usp.append(k, String(params[k])); });
+  return usp.toString();
+}
+
+async function apiCall(payload){
+  // In file:// mode use GET without custom headers to avoid CORS preflight
+  const isFile = !(location.origin && location.origin.startsWith('http'));
+  if (isFile){
+    const q = buildQuery(Object.assign({ __selftest: '1' }, payload));
+    const url = API.replace(/^\//,'https://cfg-consulting.vercel.app/') + '?' + q;
+    const res = await fetch(url, { method:'GET' });
+    return res;
+  }else{
+    const res = await apiCall(, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    return res;
+  }
+}
+
 const ENV = location.origin ? (location.origin.startsWith('http') ? 'web' : 'file') : 'unknown';
 try{ var el=document.getElementById('apiInfo'); if(el){ el.textContent='Endpoint: '+API; }}catch(e){}
 function curl(payload){
@@ -198,7 +219,7 @@ function curl(payload){
   return `curl -i -X POST '${API.replace(/^\//,'https://cfg-consulting.vercel.app/')}' -H 'Content-Type: application/json' -d "${body}"`;
 }
 
-      const res = await fetch(API, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
+      const res = await apiCall(, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
       const duration = performance.now() - started;
       const text = await res.text();
       let data; try { data = JSON.parse(text); } catch(e){ data = text; }
@@ -254,7 +275,7 @@ function curl(payload){
 
     try{
       setState('Отправка…');
-      const res = await fetch(API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const res = await apiCall(, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
       const ok = res.ok;
       let data = {};
       try { data = await res.json(); } catch(e){}
