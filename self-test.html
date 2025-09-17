@@ -66,6 +66,21 @@
   });
 })();
 </script>
+<style id="cfg-lang-style">
+/* CFG v5 language chips (force override) */
+.lang-chip{ 
+  display:inline-block; padding:6px 10px; border-radius:999px;
+  border:1px solid #93C5FD !important; 
+  background:transparent !important;
+  color:#E5E7EB !important; 
+  text-decoration:none !important; 
+}
+.lang-chip.active, .lang-chip[aria-current="true"], .lang-chip[data-active="1"]{
+  border-color:transparent !important;
+  background:linear-gradient(135deg, #4F46E5, #06B6D4) !important;
+  color:#FFFFFF !important;
+}
+</style>
 </head>
 <body>
 <div class="card">
@@ -204,6 +219,26 @@
   });
   mo.observe(document.documentElement, {subtree:true, childList:true});
 })();
+</script>
+<script id="cfg-lang-active">
+document.addEventListener('DOMContentLoaded', function(){
+  var lang = (document.documentElement.getAttribute('lang')||'').toLowerCase();
+  var lc = (lang.split('-')[0]||'ru');
+  document.querySelectorAll('.lang-chip').forEach(function(el){
+    // clear inline style that might lock colors
+    el.style.background=''; el.style.color=''; el.style.border='';
+    var loc = (el.getAttribute('data-locale')||'').toLowerCase();
+    el.classList.remove('active');
+    if (loc === lc) { 
+      el.classList.add('active'); 
+      el.setAttribute('aria-current','true');
+      el.setAttribute('data-active','1');
+    } else {
+      el.removeAttribute('aria-current');
+      el.setAttribute('data-active','0');
+    }
+  });
+});
 </script>
 </body>
 </html>

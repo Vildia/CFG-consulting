@@ -140,6 +140,21 @@ section[id]{ scroll-margin-top: var(--header-offset); }
 </style>
 <script defer src="/analytics/ux-metrics.js"></script>
 <link rel="preload" as="image" href="assets/hero-1200.jpg" fetchpriority="high">
+<style id="cfg-lang-style">
+/* CFG v5 language chips (force override) */
+.lang-chip{ 
+  display:inline-block; padding:6px 10px; border-radius:999px;
+  border:1px solid #93C5FD !important; 
+  background:transparent !important;
+  color:#E5E7EB !important; 
+  text-decoration:none !important; 
+}
+.lang-chip.active, .lang-chip[aria-current="true"], .lang-chip[data-active="1"]{
+  border-color:transparent !important;
+  background:linear-gradient(135deg, #4F46E5, #06B6D4) !important;
+  color:#FFFFFF !important;
+}
+</style>
 </head><body>
 <header id="site-header" style="position:sticky;top:0;left:0;right:0;z-index:2000;background:#0B1020;">
 <div class="container" style="max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between">
@@ -744,6 +759,9 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
 <script id="cfg-lang-active">
 // Enforce active language chip based on <html lang>
 document.addEventListener('DOMContentLoaded', function(){
+  // strip conflicting inline styles
+  document.querySelectorAll('.lang-chip').forEach(function(el){ el.style.background=''; el.style.color=''; el.style.border=''; });
+
   var lang = (document.documentElement.getAttribute('lang')||'').toLowerCase();
   if (!lang) {"ru"}
   var map = {'ru':'index.html','en':'en.html','zh':'zh.html','zh-cn':'zh.html','zh-hans':'zh.html','zh-hant':'zh.html'};
@@ -751,7 +769,7 @@ document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('.lang-chip').forEach(function(el){
     el.classList.remove('active');
     var loc = (el.getAttribute('data-locale')||'').toLowerCase();
-    if (loc === lc) el.classList.add('active');
+    if (loc === lc) { el.classList.add('active'); el.setAttribute('aria-current','true'); el.setAttribute('data-active','1'); } else { el.removeAttribute('aria-current'); el.setAttribute('data-active','0'); }
   });
 });
 </script>

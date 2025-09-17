@@ -50,6 +50,21 @@
   });
 })();
 </script>
+<style id="cfg-lang-style">
+/* CFG v5 language chips (force override) */
+.lang-chip{ 
+  display:inline-block; padding:6px 10px; border-radius:999px;
+  border:1px solid #93C5FD !important; 
+  background:transparent !important;
+  color:#E5E7EB !important; 
+  text-decoration:none !important; 
+}
+.lang-chip.active, .lang-chip[aria-current="true"], .lang-chip[data-active="1"]{
+  border-color:transparent !important;
+  background:linear-gradient(135deg, #4F46E5, #06B6D4) !important;
+  color:#FFFFFF !important;
+}
+</style>
 </head><body>
 <main style="max-width:900px;margin:48px auto;padding:0 16px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial">
 <h1>Политика обработки персональных данных</h1>
@@ -153,6 +168,9 @@
 <script id="cfg-lang-active">
 // Enforce active language chip based on <html lang>
 document.addEventListener('DOMContentLoaded', function(){
+  // strip conflicting inline styles
+  document.querySelectorAll('.lang-chip').forEach(function(el){ el.style.background=''; el.style.color=''; el.style.border=''; });
+
   var lang = (document.documentElement.getAttribute('lang')||'').toLowerCase();
   if (!lang) {"ru"}
   var map = {'ru':'index.html','en':'en.html','zh':'zh.html','zh-cn':'zh.html','zh-hans':'zh.html','zh-hant':'zh.html'};
@@ -160,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('.lang-chip').forEach(function(el){
     el.classList.remove('active');
     var loc = (el.getAttribute('data-locale')||'').toLowerCase();
-    if (loc === lc) el.classList.add('active');
+    if (loc === lc) { el.classList.add('active'); el.setAttribute('aria-current','true'); el.setAttribute('data-active','1'); } else { el.removeAttribute('aria-current'); el.setAttribute('data-active','0'); }
   });
 });
 </script>
