@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 
 <html lang="en"><head>
-<meta content="cfg-sec-IRK-2025" name="cfg-secret"/><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>C|F|G consulting — аудит, рост, запуски под ключ</title><meta content="Аудит, стратегия, продажи, команды, аналитика. Запуски подразделений под ключ за 30–60 дней." name="description"/><link href="assets/favicon-512.png" rel="icon" type="image/png"/>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>CFG consulting — Operating profit in 12 weeks. Fractional COO/CGO</title><meta content="Аудит, стратегия, продажи, команды, аналитика. Запуски подразделений под ключ за 30–60 дней." name="description"/><link href="assets/favicon-512.png" rel="icon" type="image/png"/>
 <style>
 :root{--navy:#0A1F44;--indigo:#4F46E5;--slate:#0F172A;--accent:#22C55E;--ring:#3B82F6;}
 *{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a;scroll-behavior:smooth}
@@ -59,7 +59,7 @@ label{font-weight:600;display:block;margin:8px 0 6px}
 .pill,.pill-outline{border-width:1.5px}
 </style>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Organization","name":"C|F|G consulting","url":"https://cfg-consulting.vercel.app","logo":"https://cfg-consulting.vercel.app/assets/favicon-512.png","email":"C.F.G.consulting@bk.ru","telephone":"+7 902 568 35 29","sameAs":["https://t.me/Evgeniy_Chapurin"]}
+{"@context":"https://schema.org","@type":"Organization","name":"C|F|G consulting","url":"https://cfg-consulting.vercel.app","logo":"https://cfg-consulting.vercel.app/assets/favicon-512.png","email":"C.F.G.consulting@bk.ru","telephone":"<a href="tel:+79025683529">+7 902 568‑35‑29</a>","sameAs":["https://t.me/Evgeniy_Chapurin"]}
 </script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());</script> <!-- analytics gated via consent -->
 <link href="https://cfg-consulting.vercel.app/" rel="canonical"/>
 <link href="https://cfg-consulting.vercel.app/" hreflang="en" rel="alternate"/>
@@ -138,6 +138,8 @@ section[id]{ scroll-margin-top: var(--header-offset); }
 #site-header .header-tools{display:flex;align-items:center;gap:12px}
 #site-header .lang{display:flex;gap:8px}
 </style>
+<script defer src="/analytics/ux-metrics.js"></script>
+<link rel="preload" as="image" href="assets/hero-1200.jpg" fetchpriority="high">
 </head><body>
 <header id="site-header" style="position:sticky;top:0;left:0;right:0;z-index:2000;background:#0B1020;">
 <div class="container" style="max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between">
@@ -307,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </div></section>
 <footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
 <div style="display:flex;align-items:center;gap:10px"><strong>C|F|G consulting</strong></div>
-<div style="opacity:.9">Tel./WhatsApp: +7 902 568 35 29 • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a> • Build v3.5</div>
+<div style="opacity:.9">Tel./WhatsApp: <a href="tel:+79025683529">+7 902 568‑35‑29</a> • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a> • Build v3.5</div>
 </div>
 <div aria-hidden="true" class="modal" id="mailModal">
 <div class="box">
@@ -371,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function(){
       var name=val('name'), company=val('company'), inn=val('inn'), email=val('email'), phone=val('phone'), desc=val('desc');
       var q=new URLSearchParams(location.search);
       var utm={}; ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','gclid','yclid','fbclid'].forEach(function(k){ var v=q.get(k); if(v) utm[k]=v; });
-      var payload={ secret:'cfg-sec-IRK-2025',  notify:'short',  action:'estimate_24h', locale:locale, name:name, company:company, inn:inn, email:email, phone:phone, desc:desc, page_url:location.href, referrer:document.referrer||'', utm:utm };
+      var payload={ /*secret_removed*/,  notify:'short',  action:'estimate_24h', locale:locale, name:name, company:company, inn:inn, email:email, phone:phone, desc:desc, page_url:location.href, referrer:document.referrer||'', utm:utm };
       var btn=f.querySelector('button[type=submit]');
       if(btn){ btn.disabled=true; btn.textContent=(locale==='en'?'Sending...':(locale==='zh'?'正在发送…':'Отправляем…')); }
       (function(){
@@ -489,7 +491,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
 <div aria-live="polite" id="cookie-banner" role="dialog">
 <span>Мы используем аналитические cookie (Google Analytics). Согласны?</span>
 <button class="primary" id="cookie-yes">Да</button>
-<button class="secondary" id="cookie-no">Нет</button>
+<button class="secondary" id="cookie-no">No</button>
 </div>
 <script>
 (function(){
@@ -567,7 +569,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
 (function() {
   var locale = "ru";
   var email = "C.F.G.consulting@bk.ru";
-  var phone = "+79025683529";
+  var phone = "<a href="tel:+79025683529">+7 902 568‑35‑29</a>";
   var tg = "@Evgeniy_Chapurin";
   var subj = {"ru":"CFG Intro Call","en":"CFG Intro Call","zh":"CFG 预约通话"}[locale] || "CFG Intro Call";
   var bodyMap = {
@@ -617,7 +619,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
       var name=val('name'), company=val('company'), inn=val('inn'), email=val('email'), phone=val('phone'), desc=val('desc');
       var q=new URLSearchParams(location.search);
       var utm={}; ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','gclid','yclid','fbclid'].forEach(function(k){ var v=q.get(k); if(v) utm[k]=v; });
-      var payload={ secret:'cfg-sec-IRK-2025',  notify:'short',  action:'estimate_24h', locale:locale, name:name, company:company, inn:inn, email:email, phone:phone, desc:desc, page_url:location.href, referrer:document.referrer||'', utm:utm };
+      var payload={ /*secret_removed*/,  notify:'short',  action:'estimate_24h', locale:locale, name:name, company:company, inn:inn, email:email, phone:phone, desc:desc, page_url:location.href, referrer:document.referrer||'', utm:utm };
       var btn=f.querySelector('button[type=submit]');
       if(btn){ btn.disabled=true; btn.textContent=(locale==='en'?'Sending...':(locale==='zh'?'正在发送…':'Отправляем…')); }
       (function(){
@@ -648,4 +650,5 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
 })();
 </script>
 
+<div style="text-align:center;margin:24px"><a href="/partner.html" data-partner-cta="footer_partner">Партнёрская программа →</a></div>
 </body></html>
