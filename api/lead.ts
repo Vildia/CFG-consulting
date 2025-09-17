@@ -21,14 +21,16 @@ catch{}
 }
 
 function allow(res:VercelResponse, origin:string){
-  res.setHeader('Access-Control-Allow-Origin', origin);
+  const isNull = origin === 'null' || origin === '';
+  res.setHeader('Access-Control-Allow-Origin', isNull ? '*' : origin);
   res.setHeader('Vary','Origin');
   res.setHeader('Access-Control-Allow-Methods','POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers','Content-Type');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization, X-Requested-With, Accept');
+  res.setHeader('Access-Control-Max-Age','600');
 }
 
 export default async function handler(req:VercelRequest, res:VercelResponse){
-  const origin = String((req.headers.origin ?? 'null'));
+  const origin = String(req.headers.origin ?? 'null');
   const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean);
 
   if (req.method === 'OPTIONS'){

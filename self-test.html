@@ -192,6 +192,7 @@ body.modal-open{overflow:hidden !important;}
   ? '/api/lead' 
   : 'https://cfg-consulting.vercel.app/api/lead';
 const ENV = location.origin ? (location.origin.startsWith('http') ? 'web' : 'file') : 'unknown';
+try{ var el=document.getElementById('apiInfo'); if(el){ el.textContent='Endpoint: '+API; }}catch(e){}
 function curl(payload){
   const body = JSON.stringify(payload).replace(/"/g,'\\\"');
   return `curl -i -X POST '${API.replace(/^\//,'https://cfg-consulting.vercel.app/')}' -H 'Content-Type: application/json' -d "${body}"`;
