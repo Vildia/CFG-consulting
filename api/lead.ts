@@ -38,7 +38,7 @@ export default async function handler(req:VercelRequest, res:VercelResponse){
     allow(res, origin); return res.status(204).end();
   }
 
-  if (req.method !== 'POST') return res.status(405).json({ok:false,error:'method_not_allowed'});
+  if (req.method !== 'POST' && req.method !== 'GET') return res.status(405).json({ok:false,error:'method_not_allowed'});
   if (!APPS_SCRIPT_URL || !CFG_KEY) return res.status(500).json({ok:false,error:'env_not_configured'});
   if (!isAllowedOrigin(origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
   allow(res, origin);
@@ -51,7 +51,15 @@ export default async function handler(req:VercelRequest, res:VercelResponse){
   rec.count += 1; RATE.set(ip, rec);
   if (rec.count > LIMIT) return res.status(429).json({ok:false,error:'rate_limited'});
 
-  // parse body and attach HMAC
+  
+  // support GET for self-test (avoid preflight from file://)
+  if (req.method === 'GET'){
+    const q = req.query as any || {};
+    // Reconstruct data object from query, drop internal flags
+    const { __selftest, ...rest } = q;
+    req.body = rest;
+  }
+// parse body and attach HMAC
   let data:any = req.body || {};
   if (typeof data === 'string'){ try { data = JSON.parse(data); } catch(e){} }
   if (!data || typeof data !== 'object') data = {};
