@@ -129,10 +129,6 @@ body.modal-open{overflow:hidden !important;}
 .slot-modal__grid{display:grid !important; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)) !important; gap:10px !important; padding:14px 16px !important;}
 .slot-modal__actions{display:flex !important; justify-content:flex-end !important; padding:12px 16px !important; border-top:1px solid #1F2937 !important;}
 </style>
-<style id="cfg-slot-click-fix">
-#slot-modal .btn, #slot-modal a.btn, #slot-modal button.btn { pointer-events:auto !important; }
-#slot-modal { pointer-events:auto !important; }
-</style>
 </head><body>
 <section id="hero" class="hero">
   <div class="hero__text">
@@ -160,7 +156,7 @@ body.modal-open{overflow:hidden !important;}
     var url='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(EMAIL);
     if(subject) url += '&su='+encodeURIComponent(subject);
     if(body) url += '&body='+encodeURIComponent(body);
-    window.location.href = url; track('open_gmail');
+    window.open(url,'_blank'); track('open_gmail');
   }
   var modal=document.getElementById('mailModal');
   document.querySelectorAll('[data-mailto]').forEach(function(a){
@@ -213,34 +209,10 @@ body.modal-open{overflow:hidden !important;}
     btn.addEventListener('click', function(){
       var details = 'Intro call with C|F|G consulting%0A%0AAgenda:%0A• Goals%0A• Current state%0A• Next steps%0A%0AContacts:%0AEmail: '+encodeURIComponent(EMAIL)+'%0ATG: '+encodeURIComponent(TG)+'%0AWhatsApp: +'+encodeURIComponent(WA);
       var url = 'https://calendar.google.com/calendar/u/0/r/eventedit?text=Intro%20call%20%E2%80%94%20CFG%20consulting&details='+details+'&location=Online';
-      window.location.href = url;
+      window.open(url,'_blank');
       track('gcal_open');
     });
   });
-
-  // HARD BIND: direct click listeners inside modal (override any global handlers)
-  function hardBind(){
-    var modal = document.getElementById('slot-modal');
-    if (!modal) return;
-    // Close on backdrop
-    var bd = modal.querySelector('.slot-modal__backdrop');
-    if (bd) {
-      bd.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); closeModal(); }, {capture:true});
-    }
-    // Channel buttons
-    modal.querySelectorAll('[data-slot],[data-slot-open],[data-slot-copy]').forEach(function(el){
-      el.addEventListener('click', function(e){
-        e.preventDefault(); e.stopPropagation(); if (e.stopImmediatePropagation) e.stopImmediatePropagation();
-        var kind = el.getAttribute('data-slot') || el.getAttribute('data-slot-open') || '';
-        var t = template();
-        if (el.hasAttribute('data-slot-copy')) kind = 'copy';
-        handleChannel(kind, t, el);
-        return false;
-      }, {capture:true});
-    });
-  }
-  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', hardBind); } else { hardBind(); }
-
 })();</script><footer class="footer"><p>ИП Чапурин Евгений Александрович • ОГРНИП 324385000032592 • ИНН 380121912339 • УСН 6%</p><p><a href="/privacy.html">Политика ПДн</a> • <a href="/offer.html">Договор оферты</a></p></footer>
 
 <script>
@@ -258,30 +230,6 @@ body.modal-open{overflow:hidden !important;}
     var el = document.getElementById('form-status'); if(!el) return;
     el.textContent = (st==='sending'?t.sending:(st==='ok'?t.submitted:(st==='err'?t.error:'')));
   });
-
-  // HARD BIND: direct click listeners inside modal (override any global handlers)
-  function hardBind(){
-    var modal = document.getElementById('slot-modal');
-    if (!modal) return;
-    // Close on backdrop
-    var bd = modal.querySelector('.slot-modal__backdrop');
-    if (bd) {
-      bd.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); closeModal(); }, {capture:true});
-    }
-    // Channel buttons
-    modal.querySelectorAll('[data-slot],[data-slot-open],[data-slot-copy]').forEach(function(el){
-      el.addEventListener('click', function(e){
-        e.preventDefault(); e.stopPropagation(); if (e.stopImmediatePropagation) e.stopImmediatePropagation();
-        var kind = el.getAttribute('data-slot') || el.getAttribute('data-slot-open') || '';
-        var t = template();
-        if (el.hasAttribute('data-slot-copy')) kind = 'copy';
-        handleChannel(kind, t, el);
-        return false;
-      }, {capture:true});
-    });
-  }
-  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', hardBind); } else { hardBind(); }
-
 })();
 </script>
 
@@ -358,30 +306,6 @@ body.modal-open{overflow:hidden !important;}
     document.querySelectorAll('form[data-cfg-lead], form#lead-form, form#partner-form').forEach(wireForm);
   });
   mo.observe(document.documentElement, {subtree:true, childList:true});
-
-  // HARD BIND: direct click listeners inside modal (override any global handlers)
-  function hardBind(){
-    var modal = document.getElementById('slot-modal');
-    if (!modal) return;
-    // Close on backdrop
-    var bd = modal.querySelector('.slot-modal__backdrop');
-    if (bd) {
-      bd.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); closeModal(); }, {capture:true});
-    }
-    // Channel buttons
-    modal.querySelectorAll('[data-slot],[data-slot-open],[data-slot-copy]').forEach(function(el){
-      el.addEventListener('click', function(e){
-        e.preventDefault(); e.stopPropagation(); if (e.stopImmediatePropagation) e.stopImmediatePropagation();
-        var kind = el.getAttribute('data-slot') || el.getAttribute('data-slot-open') || '';
-        var t = template();
-        if (el.hasAttribute('data-slot-copy')) kind = 'copy';
-        handleChannel(kind, t, el);
-        return false;
-      }, {capture:true});
-    });
-  }
-  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', hardBind); } else { hardBind(); }
-
 })();
 </script>
 <script id="cfg-lang-active">
@@ -472,30 +396,6 @@ document.addEventListener('DOMContentLoaded', function(){
   document.addEventListener('DOMContentLoaded', function(){
     if (!hasConsent()) inject();
   });
-
-  // HARD BIND: direct click listeners inside modal (override any global handlers)
-  function hardBind(){
-    var modal = document.getElementById('slot-modal');
-    if (!modal) return;
-    // Close on backdrop
-    var bd = modal.querySelector('.slot-modal__backdrop');
-    if (bd) {
-      bd.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); closeModal(); }, {capture:true});
-    }
-    // Channel buttons
-    modal.querySelectorAll('[data-slot],[data-slot-open],[data-slot-copy]').forEach(function(el){
-      el.addEventListener('click', function(e){
-        e.preventDefault(); e.stopPropagation(); if (e.stopImmediatePropagation) e.stopImmediatePropagation();
-        var kind = el.getAttribute('data-slot') || el.getAttribute('data-slot-open') || '';
-        var t = template();
-        if (el.hasAttribute('data-slot-copy')) kind = 'copy';
-        handleChannel(kind, t, el);
-        return false;
-      }, {capture:true});
-    });
-  }
-  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', hardBind); } else { hardBind(); }
-
 })();
 </script>
 <div class="slot-backdrop" id="slot-backdrop"></div>
@@ -622,27 +522,27 @@ document.addEventListener('DOMContentLoaded', function(){
       window.location.href = url;
     } else if (kind === 'gmail') {
       url = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + enc(EMAIL) + '&su=' + enc(t.subj) + '&body=' + enc(t.body);
-      window.location.href = url;
+      window.open(url, '_blank');
     } else if (kind === 'outlook') {
       url = 'https://outlook.office.com/mail/deeplink/compose?to=' + enc(EMAIL) + '&subject=' + enc(t.subj) + '&body=' + enc(t.body);
-      window.location.href = url;
+      window.open(url, '_blank');
     } else if (kind === 'yandex') {
       url = 'https://mail.yandex.ru/compose?to=' + enc(EMAIL) + '&subject=' + enc(t.subj) + '&body=' + enc(t.body);
-      window.location.href = url;
+      window.open(url, '_blank');
     } else if (kind === 'mailru') {
       url = 'https://e.mail.ru/compose/?to=' + enc(EMAIL) + '&subject=' + enc(t.subj) + '&body=' + enc(t.body);
-      window.location.href = url;
+      window.open(url, '_blank');
     } else if (kind === 'wa' || kind === 'whatsapp') {
       url = 'https://wa.me/' + "79025683529" + '?text=' + enc(t.subj + '
 
 ' + t.body);
-      window.location.href = url;
+      window.open(url, '_blank');
     } else if (kind === 'tg' || kind === 'telegram') {
       var deep = 'tg://resolve?domain=' + "Evgeniy_Chapurin" + '&text=' + enc(t.subj + '
 
 ' + t.body);
       var web = 'https://t.me/' + "Evgeniy_Chapurin";
-      try { window.location.href = deep; setTimeout(function(){ window.location.href = web; }, 600); }
+      try { window.location.href = deep; setTimeout(function(){ window.open(web, '_blank'); }, 600); }
       catch(_err) { window.open(web, '_blank'); }
     } else if (kind === 'call' || kind === 'phone') {
       url = 'tel:+7' + "79025683529"; window.location.href = url;
@@ -671,8 +571,21 @@ document.addEventListener('DOMContentLoaded', function(){
   function wire(){
     // Delegated open
     document.addEventListener('click', function(e){
-      
-      // 1) Channels inside modal (first)
+      var trigger = e.target.closest('[data-slot="open"], [data-slot-open]');
+      if (trigger) {
+        // block default only for our CTA
+        e.preventDefault();
+        openModal();
+        return;
+      }
+      // Close handlers (supports old markup data-slot="close" and backdrop click)
+      var cls = e.target.closest('[data-slot="close"], .slot-modal__backdrop');
+      if (cls) {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+      // Inside modal: channels (support both data-slot and legacy data-slot-open values)
       var btn = e.target.closest('#slot-modal [data-slot], #slot-modal [data-slot-open], #slot-modal [data-slot-copy]');
       if (btn) {
         e.preventDefault();
@@ -682,14 +595,7 @@ document.addEventListener('DOMContentLoaded', function(){
         handleChannel(kind, t, btn);
         return;
       }
-      // 2) Openers outside modal
-      var trigger = e.target.closest('[data-slot="open"], [data-slot-open]');
-      if (trigger && !trigger.closest('#slot-modal')) {
-        e.preventDefault();
-        openModal();
-        return;
-      }
-}, true);
+    }, true);
 
     // Ensure modal exists: if none, create minimal container
     if (!document.getElementById('slot-modal')) {
@@ -706,30 +612,6 @@ document.addEventListener('DOMContentLoaded', function(){
   } else {
     wire();
   }
-
-  // HARD BIND: direct click listeners inside modal (override any global handlers)
-  function hardBind(){
-    var modal = document.getElementById('slot-modal');
-    if (!modal) return;
-    // Close on backdrop
-    var bd = modal.querySelector('.slot-modal__backdrop');
-    if (bd) {
-      bd.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); closeModal(); }, {capture:true});
-    }
-    // Channel buttons
-    modal.querySelectorAll('[data-slot],[data-slot-open],[data-slot-copy]').forEach(function(el){
-      el.addEventListener('click', function(e){
-        e.preventDefault(); e.stopPropagation(); if (e.stopImmediatePropagation) e.stopImmediatePropagation();
-        var kind = el.getAttribute('data-slot') || el.getAttribute('data-slot-open') || '';
-        var t = template();
-        if (el.hasAttribute('data-slot-copy')) kind = 'copy';
-        handleChannel(kind, t, el);
-        return false;
-      }, {capture:true});
-    });
-  }
-  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', hardBind); } else { hardBind(); }
-
 })();
 </script>
 </body></html>
