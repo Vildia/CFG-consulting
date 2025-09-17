@@ -57,6 +57,16 @@ label{font-weight:600;display:block;margin:8px 0 6px}
 
 .pill-lg{font-size:14px;padding:10px 14px}
 .pill,.pill-outline{border-width:1.5px}
+
+/* Ensure 'Materials' block is readable on light backgrounds */
+#downloads .card{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  box-shadow:0 6px 18px rgba(2,6,23,0.06);
+}
+#downloads .card h2{ color: var(--navy); }
+#downloads .card a{ color:#1f2937; text-decoration: underline; font-weight:600; }
+#downloads .card li{ color:#0f172a; }
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"C|F|G consulting","url":"https://cfg-consulting.vercel.app","logo":"https://cfg-consulting.vercel.app/assets/favicon-512.png","email":"C.F.G.consulting@bk.ru","telephone":"<a href="tel:+79025683529">+7 902 568‑35‑29</a>","sameAs":["https://t.me/Evgeniy_Chapurin"]}
@@ -233,7 +243,7 @@ section#vff a, section#downloads a { color:#93C5FD; }
 section#vff .muted, section#downloads .muted { color:#CBD5E1; }
 </style>
 
-</head><body>
+<script defer src="/analytics/ga-init.js"></script><script defer src="/analytics/ux-metrics.js"></script></head><body>
 <header id="site-header" style="position:sticky;top:0;left:0;right:0;z-index:2000;background:#0B1020;">
 <div class="container" style="max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between">
 <div style="font-weight:700;color:#E5E7EB">C|F|G consulting</div>
@@ -272,7 +282,7 @@ section#vff .muted, section#downloads .muted { color:#CBD5E1; }
 <p class="disclaimer">列出工作/项目经历；标识仅供参考，不代表背书。</p></div>
 </section><section class="section" id="cases"><div class="container"><h2>案例</h2><div class="cards grid-3"><article class="card"><h3>Банковский B2B — доля 33%</h3><p>细分、重启渠道、销售与报表例行。12个管理团队，流失降至2%。</p></article><article class="card"><h3>DIY-ритейл — запуск B2B с нуля</h3><p>审阅3年小票、按城市测算市场容量、制定标准与团队、与工厂达成协议、物流。已全国落地。</p></article><article class="card"><h3>Автодилер — конверсия 8% → 26%</h3><p>无需重型IT的管理报表，新漏斗、KPI与激励，“事实看板”与会议流程。</p></article></div><p class="disclaimer">公司名称受NDA保护；数据可在沟通中核验。</p></div></section>
 <section class="cfg-hero" style="padding:48px 0;"><div class="container"><h1>12周实现可控利润</h1><p class="lead">兼职COO：数据→激励→销售。我把3–5项举措落到营收上——无需重型IT。</p><div class="pills-row" style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;"><span class="pill">CFG Network • 专家网络</span><span class="pill">SLA 与“事实看板”（每周五）</span><span class="pill">伊尔库茨克 • 克拉斯诺亚尔斯克 • 俄罗斯</span></div><div class="cta" style="display:flex;gap:12px;flex-wrap:wrap;"><a class="btn btn-primary" href="#estimate">10天诊断</a><a class="btn btn-outline" href="#cases">案例集</a><a class="btn btn-outline" data-slot="open" href="#">20分钟通话</a></div></div></section>
-<section class="cfg-partners" style="padding:28px 0;"><div class="container"><h2>合作伙伴计划</h2><p>为您的客户提供免费诊断。我们负责“脏活”的运营并对结果负责；您获得已付订单的佣金比例。</p><a class="btn btn-primary" href="#partners">提交线索</a></div></section><section id="downloads" style="padding:24px 0;"><div class="container card"><h2>资料</h2><ul><li><a data-evt="case_download" download="" href="/downloads/CFG_OnePager.docx">One‑pager (DOCX)</a></li><li><a data-evt="case_download" download="" href="/downloads/CFG_PitchDeck.pptx">Pitch‑дека (PPTX)</a></li></ul></div></section><section class="cfg-dppm" id="method" style="padding:40px 0;"><div class="container"><h2>DPPM‑12: Data → People → Process → Market</h2><ul><li><b>DATA:</b> единый слой данных и 5–7 управленческих дашбордов</li><li><b>PEOPLE:</b> KPI + мотивация, карьерные треки, замена/найм</li><li><b>PROCESS:</b> регламенты, цикл встреч; Пн цели — Пт «борд фактов»</li><li><b>MARKET:</b> воронка, офферы, партнёрский канал</li></ul></div></section>
+<section class="cfg-partners" style="padding:28px 0;"><div class="container"><h2>合作伙伴计划</h2><p>为您的客户提供免费诊断。我们负责“脏活”的运营并对结果负责；您获得已付订单的佣金比例。</p><a class="btn btn-primary" href="#partners">提交线索</a></div></section><section id="downloads" style="padding:24px 0;"><div class="container card"><h2>资料</h2><ul><li><a data-evt="case_download" download="" href="downloads/CFG_OnePager.docx" download target="_blank" rel="noopener">One‑pager (DOCX)</a></li><li><a data-evt="case_download" download="" href="downloads/CFG_PitchDeck.pptx" download target="_blank" rel="noopener">Pitch‑дека (PPTX)</a></li></ul></div></section><section class="cfg-dppm" id="method" style="padding:40px 0;"><div class="container"><h2>DPPM‑12: Data → People → Process → Market</h2><ul><li><b>DATA:</b> единый слой данных и 5–7 управленческих дашбордов</li><li><b>PEOPLE:</b> KPI + мотивация, карьерные треки, замена/найм</li><li><b>PROCESS:</b> регламенты, цикл встреч; Пн цели — Пт «борд фактов»</li><li><b>MARKET:</b> воронка, офферы, партнёрский канал</li></ul></div></section>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('form[data-estimate]').forEach(function(f){
@@ -289,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <h1>帮助企业更快增长与落地</h1>
 <p class="lead">Аудит, стратегия, продажи, команды, аналитика. Запуски подразделений <b>под ключ</b> за 30–60 дней. <span style="white-space:nowrap">Международный уровень</span> исполнения — локальная скорость.</p>
 <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
-<a class="btn btn-primary" data-ev="cta_email" href="#contacts">讨论项目</a>
+<a class="btn btn-primary" data-scroll="#contacts" href="#contacts">讨论项目</a>
 <a class="btn btn-secondary" data-scroll="#estimate" href="#estimate">24小时评估</a>
 <a class="btn btn-secondary" data-slot="open"  data-slot="open" href="#slot" onclick="return (window.cfgOpenSlot ? window.cfgOpenSlot(event) : false)">预约时间</a>
 </div>
@@ -491,7 +501,7 @@ document.addEventListener('DOMContentLoaded', function(){
         var compat = new URLSearchParams();
         Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
         [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
-        var url='/api/lead'+compat.toString();
+        var url='/api/lead?'+compat.toString();
         var honeypot=(f.querySelector('input[name="company_site"]')||{}).value; if(honeypot){ return Promise.resolve(); } var req = 
 
         return req;
@@ -737,7 +747,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
         var compat = new URLSearchParams();
         Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
         [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
-        var url='/api/lead'+compat.toString();
+        var url='/api/lead?'+compat.toString();
         var req = fetch(url, { method:'POST',  headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
         return req;
       })()
