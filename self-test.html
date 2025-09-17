@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>CFG | Self-Test /api/lead</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <style>
+    :root { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+    body { margin: 24px; background:#0b1020; color:#e7ebff; }
+    .card { max-width: 780px; margin:auto; background:#121833; border:1px solid #273057; border-radius:16px; padding:20px; box-shadow: 0 8px 20px rgba(0,0,0,.35);}
+    h1 { font-size:22px; margin:0 0 8px }
+    .muted { color:#9fb0ff; font-size:13px; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; margin:12px 0 16px;}
+    button { border:0; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer; background:#3b82f6; color:#fff; }
+    button.secondary { background:#64748b; }
+    button:disabled { opacity:.6; cursor:not-allowed;}
+    pre { background:#0e142b; border:1px solid #273057; border-radius:12px; padding:12px; max-height:380px; overflow:auto; }
+    .tag { display:inline-block; padding:3px 8px; border:1px solid #3b82f6; border-radius:999px; font-size:12px; margin-right:6px; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>CFG · Self-Test</h1>
+  <div class="muted">Проверка связки <code>/api/lead → Google Apps Script → Google Sheets</code>.</div>
+  <p>
+    <span class="tag" id="envTag"></span>
+    <span class="tag" id="originTag"></span>
+    <span class="tag" id="timeTag"></span>
+  </p>
+  <div class="row">
+    <button id="btnClient">Тест: клиентская заявка</button>
+    <button id="btnPartner" class="secondary">Тест: партнёрская заявка</button>
+    <button id="btnClear" class="secondary">Очистить лог</button>
+  </div>
+  <pre id="log"></pre>
+</div>
+<script>
+(function () {
+  const $ = (s)=>document.querySelector(s);
+  const logEl = $('#log');
+  const env = (location.hostname === 'cfg-consulting.vercel.app') ? 'production'
+            : (location.hostname.endsWith('.vercel.app') ? 'preview' : 'unknown');
+  $('#envTag').textContent = 'ENV: ' + env;
+  $('#originTag').textContent = 'ORIGIN: ' + location.origin;
+  $('#timeTag').textContent = (new Date()).toISOString();
+
+  function log(){ logEl.textContent += Array.from(arguments).join(' ') + "\n"; logEl.scrollTop = logEl.scrollHeight; }
+  function ms(s){ return (Math.round(s*10)/10) + 'ms'; }
+
+  async function send(kind){
+    $('#btnClient').disabled = true; $('#btnPartner').disabled = true;
+    const started = performance.now(); const stamp = new Date().toISOString();
+    const payload = {
+      type: kind,
+      name: `SELFTEST ${env.toUpperCase()} ${kind.toUpperCase()} ${stamp}`,
+      phone: '+7 999 000-00-00',
+      email: `selftest+${env}@example.com`,
+      company: kind==='partner' ? 'Partner Test LLC' : 'Client Test LLC',
+      role: kind==='partner' ? 'Партнёр' : 'Клиент',
+      message: 'Автоматический тест через self-test.html',
+      locale: 'ru',
+      page: location.pathname,
+      referrer: document.referrer || '',
+      utm_source: 'selftest', utm_medium: env, utm_campaign: 'api-check'
+    };
+    try {
+      const res = await fetch('/api/lead', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
+      const duration = performance.now() - started;
+      const text = await res.text();
+      let data; try { data = JSON.parse(text); } catch(e){ data = text; }
+      log(`[${stamp}] ${kind.toUpperCase()} → status ${res.status} in ${ms(duration)}`);
+      log(typeof data === 'string' ? data : JSON.stringify(data,null,2));
+      log('—'.repeat(60));
+    } catch (e){ log('Network error:', e && e.message || e); }
+    finally { $('#btnClient').disabled = false; $('#btnPartner').disabled = false; }
+  }
+
+  $('#btnClient').onclick = () => send('client');
+  $('#btnPartner').onclick = () => send('partner');
+  $('#btnClear').onclick = () => (logEl.textContent = '');
+})();
+</script>
+</body>
+</html>
