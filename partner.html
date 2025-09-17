@@ -210,4 +210,18 @@ small.mut{color:var(--mut)}.ok{color:var(--ok)}.err{color:var(--err)}footer{marg
   mo.observe(document.documentElement, {subtree:true, childList:true});
 })();
 </script>
+<script id="cfg-lang-active">
+// Enforce active language chip based on <html lang>
+document.addEventListener('DOMContentLoaded', function(){
+  var lang = (document.documentElement.getAttribute('lang')||'').toLowerCase();
+  if (!lang) {"ru"}
+  var map = {'ru':'index.html','en':'en.html','zh':'zh.html','zh-cn':'zh.html','zh-hans':'zh.html','zh-hant':'zh.html'};
+  var lc = lang.split('-')[0];
+  document.querySelectorAll('.lang-chip').forEach(function(el){
+    el.classList.remove('active');
+    var loc = (el.getAttribute('data-locale')||'').toLowerCase();
+    if (loc === lc) el.classList.add('active');
+  });
+});
+</script>
 </body></html>
