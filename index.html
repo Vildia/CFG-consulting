@@ -57,6 +57,16 @@ label{font-weight:600;display:block;margin:8px 0 6px}
 
 .pill-lg{font-size:14px;padding:10px 14px}
 .pill,.pill-outline{border-width:1.5px}
+
+/* Ensure 'Materials' block is readable on light backgrounds */
+#downloads .card{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  box-shadow:0 6px 18px rgba(2,6,23,0.06);
+}
+#downloads .card h2{ color: var(--navy); }
+#downloads .card a{ color:#1f2937; text-decoration: underline; font-weight:600; }
+#downloads .card li{ color:#0f172a; }
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"C|F|G consulting","url":"https://cfg-consulting.vercel.app","logo":"https://cfg-consulting.vercel.app/assets/favicon-512.png","email":"C.F.G.consulting@bk.ru","telephone":"<a href="tel:+79025683529">+7 902 568‑35‑29</a>","sameAs":["https://t.me/Evgeniy_Chapurin"]}
