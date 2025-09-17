@@ -745,7 +745,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
   };
   function openModal(){ document.getElementById('slot-modal').hidden=false; document.body.style.overflow='hidden'; }
   function closeModal(){ document.getElementById('slot-modal').hidden=true; document.body.style.overflow=''; }
-  document.querySelectorAll('[data-slot="open"], [data-slot-open]').forEach(function(el){
+  document.querySelectorAll('a.btn, a[data-slot], button.btn').forEach(function(el){
     var txt=(el.textContent||"").trim();
     if(/Предложить слот|20-мин|20 min|Propose a slot|20-min|预约通话/.test(txt)){ 
       el.addEventListener('click', function(e){ e.preventDefault(); openModal(); }, true);
