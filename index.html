@@ -213,6 +213,26 @@ body.modal-open{overflow:hidden !important;}
 .slot-modal__grid{display:grid !important; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)) !important; gap:10px !important; padding:14px 16px !important;}
 .slot-modal__actions{display:flex !important; justify-content:flex-end !important; padding:12px 16px !important; border-top:1px solid #1F2937 !important;}
 </style>
+
+<style>
+/* partner-link style */
+.partner-link{font-weight:600;color:#2563EB;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
+.partner-link:hover{opacity:.9}
+</style>
+
+
+<style>
+/* contrast fix for dark cards */
+section#vff .card, section#downloads .card,
+section#vff, section#downloads {
+  color:#E5E7EB;
+}
+section#vff h2, section#downloads h2,
+section#vff h3, section#downloads h3 { color:#FFFFFF; }
+section#vff a, section#downloads a { color:#93C5FD; }
+section#vff .muted, section#downloads .muted { color:#CBD5E1; }
+</style>
+
 </head><body>
 <header id="site-header" style="position:sticky;top:0;left:0;right:0;z-index:2000;background:#0B1020;">
 <div class="container" style="max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between">
@@ -252,7 +272,7 @@ body.modal-open{overflow:hidden !important;}
 <p class="disclaimer">Указаны места работы/проекты. Логотипы приведены для справки и не являются одобрением.</p></div>
 </section><section class="section" id="cases"><div class="container"><h2>Кейсы</h2><div class="cards grid-3"><article class="card"><h3>Банковский B2B — доля 33%</h3><p>Сегментация, перезапуск партнёрского канала, ритуалы продаж и отчётности. 12 менеджерских команд, снижение текучки до 2%.</p></article><article class="card"><h3>DIY-ритейл — запуск B2B с нуля</h3><p>Аудит 3‑летних чеков, емкость рынка по городам, стандарты, команда, договорённости с заводами, логистика. Запущено федерально.</p></article><article class="card"><h3>Автодилер — конверсия 8% → 26%</h3><p>Управленческая отчётность без тяжёлого IT, новая воронка, KPI и мотивация, дизайн «борда фактов». + процессы встреч.</p></article></div><p class="disclaimer">Названия компаний под НДА; цифры подтверждаем на встрече.</p></div></section>
 <section class="cfg-hero" style="padding:48px 0;"><div class="container"><h1>12 недель к управляемой прибыли</h1><p class="lead">Фракционный COO: данные → мотивация → продажи. Довожу 3–5 инициатив до денег — без тяжёлого IT.</p><div class="pills-row" style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;"><span class="pill">CFG Network • экспертная сеть</span><span class="pill">SLA и «борд фактов» по пятницам</span><span class="pill">Иркутск • Красноярск • РФ</span></div><div class="cta" style="display:flex;gap:12px;flex-wrap:wrap;"><a class="btn btn-primary" href="#estimate">Диагностика 10 дней</a><a class="btn btn-outline" href="#cases">Портфель кейсов</a><a class="btn btn-outline" data-slot="open" href="#">20‑мин созвон</a></div></div></section>
-<section class="cfg-partners" style="padding:28px 0;"><div class="container"><h2>Партнёрская программа</h2><p>Диагностика для вашего клиента — бесплатно. Мы делаем «грязную» операционку и берём на себя отчётный результат. Вы получаете процент от оплаченного чека.</p><a class="btn btn-primary" href="#partners">Отправить лид</a></div></section><section id="downloads" style="padding:24px 0;"><div class="container"><h2>Материалы</h2><ul><li><a data-evt="case_download" download="" href="/downloads/CFG_OnePager.docx">One‑pager (DOCX)</a></li><li><a data-evt="case_download" download="" href="/downloads/CFG_PitchDeck.pptx">Pitch‑дека (PPTX)</a></li></ul></div></section><section class="cfg-dppm" id="method" style="padding:40px 0;"><div class="container"><h2>DPPM‑12: Data → People → Process → Market</h2><ul><li><b>DATA:</b> единый слой данных и 5–7 управленческих дашбордов</li><li><b>PEOPLE:</b> KPI + мотивация, карьерные треки, замена/найм</li><li><b>PROCESS:</b> регламенты, цикл встреч; Пн цели — Пт «борд фактов»</li><li><b>MARKET:</b> воронка, офферы, партнёрский канал</li></ul></div></section>
+<section class="cfg-partners" style="padding:28px 0;"><div class="container"><h2>Партнёрская программа</h2><p>Диагностика для вашего клиента — бесплатно. Мы делаем «грязную» операционку и берём на себя отчётный результат. Вы получаете процент от оплаченного чека.</p><a class="btn btn-primary" href="#partners">Отправить лид</a></div></section><section id="downloads" style="padding:24px 0;"><div class="container card"><h2>Материалы</h2><ul><li><a data-evt="case_download" download="" href="/downloads/CFG_OnePager.docx">One‑pager (DOCX)</a></li><li><a data-evt="case_download" download="" href="/downloads/CFG_PitchDeck.pptx">Pitch‑дека (PPTX)</a></li></ul></div></section><section class="cfg-dppm" id="method" style="padding:40px 0;"><div class="container"><h2>DPPM‑12: Data → People → Process → Market</h2><ul><li><b>DATA:</b> единый слой данных и 5–7 управленческих дашбордов</li><li><b>PEOPLE:</b> KPI + мотивация, карьерные треки, замена/найм</li><li><b>PROCESS:</b> регламенты, цикл встреч; Пн цели — Пт «борд фактов»</li><li><b>MARKET:</b> воронка, офферы, партнёрский канал</li></ul></div></section>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('form[data-estimate]').forEach(function(f){
@@ -382,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <a class="btn btn-primary" data-ev="cta_email" data-mailto="" href="mailto:C.F.G.consulting@bk.ru?subject=%D0%9F%D0%B0%D1%80%D1%82%D0%BD%D1%91%D1%80%D1%81%D1%82%D0%B2%D0%BE%20%D1%81%20CFG%20consulting">Написать на Email</a>
 <a class="btn btn-secondary" data-cta="partner-telegram" href="https://t.me/Evgeniy_Chapurin" rel="noopener" target="_blank">Telegram</a>
 <a class="btn btn-secondary" data-cta="partner-whatsapp" href="https://wa.me/79025683529" rel="noopener" target="_blank">WhatsApp</a>
-</div>
+<div class="more" style="margin-top:12px"><a class="partner-link" href="/partner.html">Условия партнёрства →</a></div>
 </div>
 </section>
 <section id="contacts"><div class="container">
@@ -413,8 +433,8 @@ document.addEventListener('DOMContentLoaded', function(){
 <li>ИП на УСН 6% — НДС не облагается.</li>
 </ul>
 <div style="margin-top:12px;display:flex;gap:12px">
-<a class="btn btn-primary" data-cta="pricing-quote" href="#lead">Получить смету за 24 часа</a>
-<a class="btn btn-secondary" data-cta="pricing-faq" href="partner.html">Партнёрская программа</a>
+<a class="btn btn-primary" data-cta="pricing-quote" href="#estimate">Получить смету за 24 часа</a>
+<a class="btn btn-secondary" data-cta="pricing-faq" href="#partners">Партнёрская программа</a>
 </div>
 </section>
 <section class="container" style="padding: 8px 0 40px 0">
@@ -771,7 +791,7 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
   
 })();
 </script>
-<div style="text-align:center;margin:24px"><a data-partner-cta="footer_partner" href="/partner.html">Партнёрская программа →</a></div>
+<div style="text-align:center;margin:24px"><a class="partner-link" href="/partner.html">Условия партнёрства →</a></div>
 <section data-section="vff" id="vff" style="margin:24px auto;max-width:960px;padding:16px;border:1px solid #273057;border-radius:16px;background:#121833">
 <h2>Как ранжируем проекты (VFF)</h2>
 <ul>
@@ -1241,4 +1261,120 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 })();
 </script>
+
+<div id="email-modal" class="slot-modal" hidden>
+  <div class="slot-modal__backdrop" data-email="close"></div>
+  <div class="slot-modal__dialog">
+    <h3 class="slot-modal__title">Выберите почтовый сервис</h3>
+    <div class="slot-modal__grid">
+      <a class="btn btn-primary" data-email-open="gmail">Gmail</a>
+      <a class="btn btn-secondary" data-email-open="outlook">Outlook</a>
+      <a class="btn btn-secondary" data-email-open="yandex">Yandex</a>
+      <a class="btn btn-secondary" data-email-open="mailru">Mail.ru</a>
+      <a class="btn btn-secondary" data-email-open="mailto">Почта по умолчанию</a>
+      <button class="btn btn-light" data-email-copy="email">Скопировать e‑mail</button>
+      <button class="btn btn-light" data-email-copy="body">Скопировать шаблон</button>
+    </div>
+    <div class="slot-modal__actions">
+      <button class="btn btn-light" data-email="close">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* CFG Email modal */
+(function(){
+  var EMAIL='C.F.G.consulting@bk.ru';
+  function track(ev, params){ try{ gtag('event', ev, params||{}); }catch(e){} }
+  function qs(sel, root){ return (root||document).querySelector(sel); }
+  function qsa(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+
+  var state = { subject: 'Проект для CFG consulting', body: '' };
+
+  function parseSubjectFromHref(href){
+    try{
+      if(!href) return '';
+      var m = href.match(/subject=([^&#]+)/);
+      return m ? decodeURIComponent(m[1].replace(/\+/g,' ')) : '';
+    }catch(_){ return '' }
+  }
+
+  function openEmailModal(subj, body){
+    state.subject = subj || state.subject;
+    state.body = body || state.body;
+    var m = qs('#email-modal'); if(!m) return;
+    m.hidden = false; document.body.style.overflow='hidden';
+    try{ qsa('[data-email-open]', m)[0]?.focus(); }catch(_){}
+    track('email_modal_open');
+  }
+  function closeEmailModal(){
+    var m = qs('#email-modal'); if(!m) return;
+    m.hidden = true; document.body.style.overflow='';
+    track('email_modal_close');
+  }
+
+  var builders = {
+    gmail: function(){ 
+      var url='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(EMAIL);
+      if(state.subject) url += '&su='+encodeURIComponent(state.subject);
+      if(state.body) url += '&body='+encodeURIComponent(state.body);
+      window.location.href = url; track('open_gmail');
+    },
+    outlook: function(){ 
+      var url='https://outlook.live.com/owa/?path=/mail/action/compose&to='+encodeURIComponent(EMAIL);
+      if(state.subject) url += '&subject='+encodeURIComponent(state.subject);
+      if(state.body) url += '&body='+encodeURIComponent(state.body);
+      window.location.href = url; track('open_outlook');
+    },
+    yandex: function(){
+      var url='https://mail.yandex.ru/compose?to='+encodeURIComponent(EMAIL);
+      if(state.subject) url += '&subject='+encodeURIComponent(state.subject);
+      if(state.body) url += '&body='+encodeURIComponent(state.body);
+      window.location.href = url; track('open_yandex');
+    },
+    mailru: function(){
+      var url='https://e.mail.ru/compose?to='+encodeURIComponent(EMAIL);
+      if(state.subject) url += '&subject='+encodeURIComponent(state.subject);
+      if(state.body) url += '&body='+encodeURIComponent(state.body);
+      window.location.href = url; track('open_mailru');
+    },
+    mailto: function(){
+      var url='mailto:'+EMAIL
+        + (state.subject?('?subject='+encodeURIComponent(state.subject)):'')
+        + (state.body?((state.subject?'&':'?')+'body='+encodeURIComponent(state.body)):''); 
+      window.location.href = url; track('open_mailto');
+    }
+  };
+
+  qsa('[data-ev="cta_email"], [data-mailto]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      var subj = this.getAttribute('data-subject') || this.getAttribute('data-subj') || parseSubjectFromHref(this.getAttribute('href')) || 'Проект для CFG consulting';
+      var body = this.getAttribute('data-body') || '';
+      openEmailModal(subj, body);
+    });
+  });
+
+  qsa('[data-email="close"]').forEach(function(el){ el.addEventListener('click', closeEmailModal); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeEmailModal(); });
+
+  qsa('[data-email-open]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var k = this.getAttribute('data-email-open');
+      if(builders[k]) builders[k]();
+    });
+  });
+
+  qsa('[data-email-copy]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var kind = this.getAttribute('data-email-copy');
+      var text = (kind==='email') ? EMAIL : ((state.subject? (state.subject + '\n\n') : '') + state.body);
+      try{ navigator.clipboard && navigator.clipboard.writeText(text); }catch(_){}
+      track('email_copy_'+kind);
+    });
+  });
+})();
+</script>
+
 </body></html>
