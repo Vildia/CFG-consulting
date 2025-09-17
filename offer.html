@@ -2,6 +2,54 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Договор оферты — C | F | G consulting</title>
 <link rel="stylesheet" href="/styles.css">
+
+<!-- CFG GA4 init v3 -->
+<script>
+(function(){
+  var GA_ID = 'G-D7QRTPW2F3';
+  function hasConsent(){
+    try {
+      if (localStorage.getItem('cfg_analytics') === '1') return true;
+      return document.cookie.split('; ').some(p => p.trim() === 'cfg_analytics=1');
+    } catch(e){ return false; }
+  }
+  function grantConsent(){
+    try {
+      localStorage.setItem('cfg_analytics','1');
+      var d = new Date(); d.setFullYear(d.getFullYear()+1);
+      document.cookie = 'cfg_analytics=1; path=/; expires='+d.toUTCString();
+    } catch(e){}
+    loadGA();
+  }
+  function loadGA(){
+    if (window.__ga_loaded) return;
+    window.__ga_loaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id='+GA_ID;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', GA_ID, { anonymize_ip: true, transport_type: 'beacon' });
+  }
+  // Wire up common accept buttons & custom events
+  function hookButtons(){
+    var selectors = ['[data-analytics-consent]','[data-cookie-accept]','#cookie-accept','[data-cc="accept"]','.cookie-accept'];
+    selectors.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(btn){
+        btn.addEventListener('click', grantConsent, {once:true});
+      });
+    });
+  }
+  document.addEventListener('cfg:consent-granted', grantConsent);
+  document.addEventListener('DOMContentLoaded', function(){
+    hookButtons();
+    if (hasConsent()) loadGA();
+  });
+})();
+</script>
 </head><body>
 <main style="max-width:900px;margin:48px auto;padding:0 16px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial">
 <h1>Публичная оферта на оказание консультационных услуг</h1>
@@ -16,4 +64,80 @@
 <p>Все споры решаются путем переговоров, при недостижении — в суде по месту регистрации Исполнителя.</p>
 <hr><p>ИП Чапурин Евгений Александрович • ОГРНИП 324385000032592 • ИНН 380121912339 • УСН 6%</p>
 </main><section id="terms-scope"><h2>Предмет договора</h2><p>Исполнитель (ИП Чапурин Е.А.) оказывает услуги по диагностике, консалтингу и внедрению управленческих практик. Заказчик оплачивает услуги на условиях настоящей оферты. Акцепт — оплата счёта или письменное согласие.</p><h3>Порядок оказания услуг</h3><ul><li>Сроки, состав работ и стоимость фиксируются в счёте/плане работ.</li><li>Еженедельная отчётность: «борд фактов». Акты допускаются в электронном виде.</li></ul><h3>Ответственность и ограничения</h3><p>Ответственность Исполнителя ограничена стоимостью оплаченного периода. Не отвечает за косвенные убытки и последствия, зависящие от действий персонала Заказчика и внешних факторов.</p><h3>Форс‑мажор</h3><p>Стороны освобождаются от ответственности при обстоятельствах непреодолимой силы.</p><h3>Расторжение</h3><p>Любая сторона вправе отказаться, предупредив за 7 календарных дней. Оплаченные и выполненные этапы не возвращаются.</p></section>
+
+<script>
+// CFG unified lead sender v3 — injected
+(function(){
+  function qs(form, name){ return form.querySelector('[name="'+name+'"]'); }
+  function getVal(form, name){ const el = qs(form, name); return el ? el.value.trim() : ''; }
+  function getLocale(){ try { return document.documentElement.lang || (window.CFG_LOCALE || '').toString() || ''; } catch(e){ return ''; } }
+  function getUTM(){
+    const params = new URLSearchParams(location.search);
+    const keys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+    const out = {};
+    keys.forEach(k => { if (params.get(k)) out[k] = params.get(k); });
+    return out;
+  }
+  async function sendLead(form){
+    const hp = getVal(form, 'company_site'); // honeypot
+    if (hp) return Promise.reject(new Error('honeypot_filled'));
+
+    // Basic payload (common names across pages)
+    const payload = {
+      name: getVal(form, 'name') || getVal(form, 'full_name') || '',
+      company: getVal(form, 'company') || '',
+      inn: getVal(form, 'inn') || '',
+      email: getVal(form, 'email') || '',
+      phone: getVal(form, 'phone') || '',
+      message: getVal(form, 'message') || getVal(form, 'task') || getVal(form, 'comment') || '',
+      // meta
+      locale: getLocale(),
+      page_url: location.href,
+      referrer: document.referrer || '',
+      utm: getUTM()
+    };
+
+    const btn = form.querySelector('button[type="submit"], [type="submit"]');
+    const origText = btn && (btn.textContent || btn.value);
+
+    function setState(t){ if (btn) { if (btn.tagName === 'BUTTON') btn.textContent = t; else btn.value = t; } document.dispatchEvent(new CustomEvent('cfg:form-state', {detail:{state:t}})); }
+
+    try{
+      setState('Отправка…');
+      const res = await fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const ok = res.ok;
+      let data = {};
+      try { data = await res.json(); } catch(e){}
+      if (!ok) throw new Error('bad_status_'+res.status);
+      setState('Готово ✓');
+      document.dispatchEvent(new CustomEvent('cfg:form-success', {detail:{payload, data}}));
+      form.reset();
+      return data;
+    }catch(err){
+      setState('Ошибка');
+      document.dispatchEvent(new CustomEvent('cfg:form-error', {detail:{error: (err && err.message) || 'unknown', payload}}));
+      throw err;
+    }finally{
+      setTimeout(()=> setState(origText || 'Отправить'), 1400);
+    }
+  }
+
+  // Attach to all forms that carry data-cfg-lead or id matches known ids
+  function wireForm(form){
+    if (form.__cfg_wired) return;
+    form.__cfg_wired = true;
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      sendLead(form).catch(()=>{});
+    });
+  }
+
+  document.querySelectorAll('form[data-cfg-lead], form#lead-form, form#partner-form').forEach(wireForm);
+  // If forms injected later
+  const mo = new MutationObserver(() => {
+    document.querySelectorAll('form[data-cfg-lead], form#lead-form, form#partner-form').forEach(wireForm);
+  });
+  mo.observe(document.documentElement, {subtree:true, childList:true});
+})();
+</script>
 </body></html>
