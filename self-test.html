@@ -188,38 +188,7 @@ body.modal-open{overflow:hidden !important;}
       utm_source: 'selftest', utm_medium: env, utm_campaign: 'api-check'
     };
     try {
-    const API = (location.origin && location.origin.startsWith('http')) 
-  ? '/api/lead' 
-  : 'https://cfg-consulting.vercel.app/api/lead';
-
-function buildQuery(params){
-  const usp = new URLSearchParams();
-  Object.keys(params||{}).forEach(k=>{ if (params[k]!==undefined && params[k]!==null) usp.append(k, String(params[k])); });
-  return usp.toString();
-}
-
-async function apiCall(payload){
-  // In file:// mode use GET without custom headers to avoid CORS preflight
-  const isFile = !(location.origin && location.origin.startsWith('http'));
-  if (isFile){
-    const q = buildQuery(Object.assign({ __selftest: '1' }, payload));
-    const url = API.replace(/^\//,'https://cfg-consulting.vercel.app/') + '?' + q;
-    const res = await fetch(url, { method:'GET' });
-    return res;
-  }else{
-    const res = await apiCall(, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-    return res;
-  }
-}
-
-const ENV = location.origin ? (location.origin.startsWith('http') ? 'web' : 'file') : 'unknown';
-try{ var el=document.getElementById('apiInfo'); if(el){ el.textContent='Endpoint: '+API; }}catch(e){}
-function curl(payload){
-  const body = JSON.stringify(payload).replace(/"/g,'\\\"');
-  return `curl -i -X POST '${API.replace(/^\//,'https://cfg-consulting.vercel.app/')}' -H 'Content-Type: application/json' -d "${body}"`;
-}
-
-      const res = await apiCall(, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
+      const res = await fetch('/api/lead', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
       const duration = performance.now() - started;
       const text = await res.text();
       let data; try { data = JSON.parse(text); } catch(e){ data = text; }
@@ -275,7 +244,7 @@ function curl(payload){
 
     try{
       setState('Отправка…');
-      const res = await apiCall(, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const res = await fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
       const ok = res.ok;
       let data = {};
       try { data = await res.json(); } catch(e){}
@@ -404,45 +373,221 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 })();
 </script>
-
+<div class="slot-backdrop" id="slot-backdrop"></div>
+<div class="slot-modal" id="slot-modal" role="dialog" aria-modal="true" aria-labelledby="slot-title">
+  <header>
+    <h3 id="slot-title">Выберите канал связи</h3>
+    <button class="slot-close" type="button" aria-label="Закрыть" data-slot-close>×</button>
+  </header>
+  <div class="grid">
+    <a class="btn primary" data-slot="mailto">Письмо (по умолчанию)</a>
+    <a class="btn" data-slot="gmail">Gmail</a>
+    <a class="btn" data-slot="outlook">Outlook</a>
+    <a class="btn" data-slot="yandex">Yandex Mail</a>
+    <a class="btn" data-slot="mailru">Mail.ru</a>
+    <a class="btn" data-slot="wa">WhatsApp</a>
+    <a class="btn" data-slot="tg">Telegram</a>
+    <a class="btn" data-slot="call">Позвонить</a>
+    <a class="btn" data-slot="form">Форма на сайте</a>
+    <a class="btn" data-slot="copy">Скопировать шаблон</a>
+  </div>
+  <footer>
+    <div class="muted">Мы подготовим тему и текст; добавим ссылку на эту страницу и UTM.</div>
+    <div class="muted">Получатель: C.F.G.consulting@bk.ru</div>
+  </footer>
+</div>
 
 
 
 <script id="cfg-slot-script">
 (function(){
   var EMAIL = "C.F.G.consulting@bk.ru";
+  var WA = "79025683529";
+  var TG = "Evgeniy_Chapurin";
+
   function enc(s){ try { return encodeURIComponent(s); } catch(e){ return s; } }
+
   function utmString() {
     try {
       var p = new URLSearchParams(location.search);
       var keys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
-      var parts = []; keys.forEach(function(k){ if (p.get(k)) parts.push(k+'='+p.get(k)); });
-      return parts.length ? ('&'+parts.join('&')) : '';
-    }catch(e){ return ''; }
+      var parts = [];
+      keys.forEach(function(k){ if(p.get(k)) parts.push(k+'='+p.get(k)); });
+      return parts.join('&');
+    } catch(e){ return ''; }
   }
-  // Self-test buttons will call window.cfgOpenDefaultMail(payload)
-  window.cfgOpenDefaultMail = function(payload){
-    try{
-      var subject = payload && payload.subject || 'CFG: заявка';
-      var body = (payload && payload.text || '').trim();
-      body += "\n\n—\nСтр.: "+location.href+"\nRef.: "+(document.referrer||'')+utmString();
-      var href = 'mailto:'+EMAIL+'?subject='+enc(subject)+'&body='+enc(body);
-      location.href = href;
-    }catch(e){ console.error(e); }
-  };
+
+  function template() {
+    var lang = (document.documentElement.getAttribute('lang')||'ru').toLowerCase();
+    var lc = lang.split('-')[0];
+    var subjMap = {
+      ru: 'Запрос консультации — C|F|G (с сайта)',
+      en: 'Consulting request — C|F|G (from site)',
+      zh: '咨询请求 — C|F|G（来自网站）'
+    };
+    var subj = subjMap[lc] || subjMap.en;
+    var lines = [];
+    if(lc==='ru') {
+      lines.push('Здравствуйте! Хочу предложить слот/получить консультацию.');
+      lines.push('Кратко о задаче: ');
+      lines.push('');
+      lines.push('— Страница: ' + location.href);
+      var u = utmString(); if (u) lines.push('— UTM: ' + u);
+      lines.push('— Язык: ' + lang);
+      lines.push('— Время: ' + new Date().toLocaleString());
+    } else if(lc==='zh') {
+      lines.push('您好！我想预约时间/获取咨询。');
+      lines.push('简要说明：');
+      lines.push('');
+      lines.push('— 页面：' + location.href);
+      var u2 = utmString(); if (u2) lines.push('— UTM：' + u2);
+      lines.push('— 语言：' + lang);
+      lines.push('— 时间：' + new Date().toLocaleString());
+    } else {
+      lines.push('Hello! I\'d like to propose a time slot / request a consultation.');
+      lines.push('Short context:');
+      lines.push('');
+      lines.push('— Page: ' + location.href);
+      var u3 = utmString(); if (u3) lines.push('— UTM: ' + u3);
+      lines.push('— Lang: ' + lang);
+      lines.push('— Time: ' + new Date().toLocaleString());
+    }
+    return { subj: subj, body: lines.join('
+') };
+  }
+
+  function show(el){
+    if (!el) return;
+    el.style.display = 'block';
+    el.removeAttribute('hidden');
+  }
+  function hide(el){
+    if (!el) return;
+    el.style.display = 'none';
+    el.setAttribute('hidden','');
+  }
+
+  function openModal() {
+    var md = document.getElementById('slot-modal');
+    if (!md) return;
+    try{ document.body.classList.add('modal-open'); }catch(_e){}
+    md.style.display = 'flex';
+    md.removeAttribute('hidden');
+  }catch(_e){}
+    var md = document.getElementById('slot-modal');
+    if (!md) return;
+    show(md);
+  }
+  function closeModal() {
+    var md = document.getElementById('slot-modal');
+    if (!md) return;
+    md.style.display = 'none';
+    md.setAttribute('hidden', '');
+    try{ document.body.classList.remove('modal-open'); }catch(_e){}
+  }catch(_e){}
+    var md = document.getElementById('slot-modal');
+    if (!md) return;
+    hide(md);
+  }
+
+  function handleChannel(kind, t, el){
+    var url = null;
+    if (kind === 'mailto') {
+      url = 'mailto:' + EMAIL + '?subject=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.location.href = url;
+    } else if (kind === 'gmail') {
+      url = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + enc(EMAIL) + '&su=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'outlook') {
+      url = 'https://outlook.office.com/mail/deeplink/compose?to=' + enc(EMAIL) + '&subject=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'yandex') {
+      url = 'https://mail.yandex.ru/compose?to=' + enc(EMAIL) + '&subject=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'mailru') {
+      url = 'https://e.mail.ru/compose/?to=' + enc(EMAIL) + '&subject=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'wa' || kind === 'whatsapp') {
+      url = 'https://wa.me/' + "79025683529" + '?text=' + enc(t.subj + '
+
+' + t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'tg' || kind === 'telegram') {
+      var deep = 'tg://resolve?domain=' + "Evgeniy_Chapurin" + '&text=' + enc(t.subj + '
+
+' + t.body);
+      var web = 'https://t.me/' + "Evgeniy_Chapurin";
+      try { window.location.href = deep; setTimeout(function(){ window.open(web, '_blank'); }, 600); }
+      catch(_err) { window.open(web, '_blank'); }
+    } else if (kind === 'call' || kind === 'phone') {
+      url = 'tel:+7' + "79025683529"; window.location.href = url;
+    } else if (kind === 'form') {
+      closeModal();
+      var f = document.querySelector('form[data-cfg-lead], form#lead-form');
+      if (f) {
+        f.scrollIntoView({behavior:'smooth', block:'start'});
+        var msg = f.querySelector('[name="message"], textarea, [name="task"], [name="comment"]');
+        var tplt = template();
+        if (msg) msg.value = tplt.body;
+        try { msg && msg.focus(); } catch(_e){}
+      } else {
+        window.location.hash = '#contacts';
+      }
+    } else if (kind === 'copy') {
+      var text = t.subj + '
+
+' + t.body;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ if(el){ el.textContent='Скопировано ✓'; setTimeout(function(){ el.textContent='Скопировать шаблон'; }, 1200);} });
+      }
+    }
+  }
+
+  function wire(){
+    // Delegated open
+    document.addEventListener('click', function(e){
+      var trigger = e.target.closest('[data-slot="open"], [data-slot-open]');
+      if (trigger) {
+        // block default only for our CTA
+        e.preventDefault();
+        openModal();
+        return;
+      }
+      // Close handlers (supports old markup data-slot="close" and backdrop click)
+      var cls = e.target.closest('[data-slot="close"], .slot-modal__backdrop');
+      if (cls) {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+      // Inside modal: channels (support both data-slot and legacy data-slot-open values)
+      var btn = e.target.closest('#slot-modal [data-slot], #slot-modal [data-slot-open], #slot-modal [data-slot-copy]');
+      if (btn) {
+        e.preventDefault();
+        var kind = btn.getAttribute('data-slot') || btn.getAttribute('data-slot-open') || '';
+        var t = template();
+        if (btn.hasAttribute('data-slot-copy')) kind = 'copy';
+        handleChannel(kind, t, btn);
+        return;
+      }
+    }, true);
+
+    // Ensure modal exists: if none, create minimal container
+    if (!document.getElementById('slot-modal')) {
+      var md = document.createElement('div');
+      md.id = 'slot-modal';
+      md.setAttribute('hidden','');
+      md.innerHTML = '<div class="slot-modal__backdrop" data-slot="close"></div><div class="slot-modal__dialog"><h3 class="slot-modal__title">Связаться</h3><div class="slot-modal__grid"><a class="btn" data-slot="mailto">Письмо</a><a class="btn" data-slot="wa">WhatsApp</a><a class="btn" data-slot="tg">Telegram</a><a class="btn" data-slot="form">Форма на сайте</a><a class="btn" data-slot="copy">Скопировать шаблон</a></div><div class="slot-modal__actions"><button class="btn" data-slot="close">Закрыть</button></div></div>';
+      document.body.appendChild(md);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', wire);
+  } else {
+    wire();
+  }
 })();
 </script>
-
-<script>
-function setCurl(payload){
-  try{
-    var box = document.getElementById('curlBox');
-    if (!box) return;
-    box.style.display='block';
-    box.textContent = 'CLI тест (скопируйте и выполните в терминале): ' + curl(payload);
-  }catch(e){}
-}
-</script>
-
 </body>
 </html>

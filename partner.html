@@ -213,7 +213,7 @@ body.modal-open{overflow:hidden !important;}
       const t=await res.text(); let j; try{j=JSON.parse(t)}catch{}
       if(res.ok && j && j.ok){ status.textContent='Заявка отправлена. Спасибо!'; status.className='ok'; }
       else { status.textContent='Ошибка. Попробуйте позже.'; status.className='err'; }
-    }catch(err){ status.textContent='Сеть недоступна.'; status.className='err'; }
+    }catch(err){ console.warn('CFG partner error', err); status.textContent='Сеть недоступна.'; status.className='err'; }
     btn.disabled=false;
   });
 })();
@@ -269,7 +269,7 @@ body.modal-open{overflow:hidden !important;}
       form.reset();
       return data;
     }catch(err){
-      setState('Ошибка');
+      console.warn('CFG lead error', err); setState('Ошибка');
       document.dispatchEvent(new CustomEvent('cfg:form-error', {detail:{error: (err && err.message) || 'unknown', payload}}));
       throw err;
     }finally{

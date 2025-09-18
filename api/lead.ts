@@ -10,27 +10,21 @@ const RATE = new Map<string,{count:number,ts:number}>();
 const WINDOW_MS = 60_000; const LIMIT = 30;
 
 function isAllowedOrigin(origin:string, allowed:string[]):boolean{
-  if (origin === 'null' || origin === '') return true; // file://
+  if (!origin) return false;
   if (allowed.includes(origin)) return true;
   try{ const u = new URL(origin); if (u.hostname.endsWith('.vercel.app')) return true; }catch{}
-  if (/^https?:\/\/localhost(?::\d+)?$/.test(origin)) return true;
-  return false;
-}
-catch{}
   return false;
 }
 
 function allow(res:VercelResponse, origin:string){
-  const isNull = origin === 'null' || origin === '';
-  res.setHeader('Access-Control-Allow-Origin', isNull ? '*' : origin);
+  res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Vary','Origin');
   res.setHeader('Access-Control-Allow-Methods','POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization, X-Requested-With, Accept');
-  res.setHeader('Access-Control-Max-Age','600');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type');
 }
 
 export default async function handler(req:VercelRequest, res:VercelResponse){
-  const origin = String(req.headers.origin ?? 'null');
+  const origin = String(req.headers.origin||'');
   const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean);
 
   if (req.method === 'OPTIONS'){
@@ -38,7 +32,7 @@ export default async function handler(req:VercelRequest, res:VercelResponse){
     allow(res, origin); return res.status(204).end();
   }
 
-  if (req.method !== 'POST' && req.method !== 'GET') return res.status(405).json({ok:false,error:'method_not_allowed'});
+  if (req.method !== 'POST') return res.status(405).json({ok:false,error:'method_not_allowed'});
   if (!APPS_SCRIPT_URL || !CFG_KEY) return res.status(500).json({ok:false,error:'env_not_configured'});
   if (!isAllowedOrigin(origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
   allow(res, origin);
@@ -51,15 +45,7 @@ export default async function handler(req:VercelRequest, res:VercelResponse){
   rec.count += 1; RATE.set(ip, rec);
   if (rec.count > LIMIT) return res.status(429).json({ok:false,error:'rate_limited'});
 
-  
-  // support GET for self-test (avoid preflight from file://)
-  if (req.method === 'GET'){
-    const q = req.query as any || {};
-    // Reconstruct data object from query, drop internal flags
-    const { __selftest, ...rest } = q;
-    req.body = rest;
-  }
-// parse body and attach HMAC
+  // parse body and attach HMAC
   let data:any = req.body || {};
   if (typeof data === 'string'){ try { data = JSON.parse(data); } catch(e){} }
   if (!data || typeof data !== 'object') data = {};
