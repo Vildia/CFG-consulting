@@ -35,7 +35,7 @@ export default async function handler(req:VercelRequest, res:VercelResponse){
     return res.status(200).json({ ok:true, mode:'status', env:{ has_APPS_SCRIPT_URL: !!APPS_SCRIPT_URL, has_CFG_KEY: !!CFG_KEY }, origin, allowed });
   }
 
-  if (req.method === 'OPTIONS'){
+  if (req.method === 'OPTIONS'){{
     if (!isAllowedOrigin(origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
     allow(res, origin); return res.status(204).end();
   }
