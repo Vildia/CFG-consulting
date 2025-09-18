@@ -1,10 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL as string;
 const CFG_KEY = process.env.CFG_KEY as string;
 const ORIGIN_PROD = process.env.ORIGIN || 'https://cfg-consulting.vercel.app';
-const ORIGIN_PREVIEW = process.env.ORIGIN_PREVIEW || ''; // optional explicit preview origin
+const ORIGIN_PREVIEW = (process.env.ORIGIN_PREVIEW || '').trim(); // optional explicit preview origin
 
 const RATE = new Map<string,{count:number,ts:number}>();
 const WINDOW_MS = 60_000; const LIMIT = 30;
