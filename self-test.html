@@ -590,32 +590,23 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
-
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   try{
-    // Hide only the share/channels panel with Gmail/Telegram/etc without touching other UI.
-    var labels = ['Gmail','Outlook','Yandex Mail','Mail.ru','WhatsApp','Telegram','Позвонить','Форма на сайте','Скопировать шаблон','Письмо (по умолчанию)'];
+    // Hide channels panel (buttons with Gmail/Telegram/...)
+    var labels = ['Письмо (по умолчанию)','Gmail','Outlook','Yandex Mail','Mail.ru','WhatsApp','Telegram','Позвонить','Форма на сайте','Скопировать шаблон'];
     var btns = Array.from(document.querySelectorAll('button, a')).filter(el => labels.includes((el.textContent||'').trim()));
     if (btns.length >= 3) {
-      // Find a common small ancestor that contains many of these buttons
-      function ancestors(el){
-        var arr=[]; var p=el;
-        for (var i=0;i<6 && p; i++){ arr.push(p); p=p.parentElement; }
-        return arr;
-      }
-      var common = null;
-      var maps = btns.map(ancestors);
-      for (var depth=0; depth<6; depth++){
-        var candidate = maps[0][depth];
-        if (!candidate) break;
-        // count how many label-buttons live inside this candidate
-        var count = btns.filter(b => candidate.contains(b)).length;
-        if (count >= Math.max(3, Math.floor(btns.length*0.6))) { common = candidate; break; }
-      }
-      if (common) { common.style.display = 'none'; }
+      var root = btns[0].closest('div'); // menu container
+      if (root) root.style.display='none';
     }
-  }catch(e){ console.warn('self-test ui trim v2 err', e); }
+    // Hide ENV/ORIGIN/timestamp chips by text
+    Array.from(document.querySelectorAll('span,div,code')).forEach(function(el){
+      var t=(el.textContent||'').trim();
+      if (/^ENV:/i.test(t) || /^ORIGIN:/i.test(t) || /^\d{4}-\d{2}-\d{2}T/.test(t)) { el.style.display='none'; }
+      if (/^https:\/\/cfg-consulting-.*vercel\.app$/i.test(t)) { el.style.display='none'; }
+    });
+  }catch(e){ console.warn('self-test ui trim v3 err', e); }
 });
 </script>
 
