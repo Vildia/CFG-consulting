@@ -25,10 +25,10 @@ function allow(res:VercelResponse, origin:string){
 
 export default async function handler(req:VercelRequest, res:VercelResponse){
   const origin = String(req.headers.origin||'');
-  const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean);
+  const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean).map(s=>String(s).trim());
 
   if (req.method === 'GET'){
-    const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean);
+    const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean).map(s=>String(s).trim());
     const origin = String(req.headers.origin || ('https://' + (req.headers.host || '')));
     if (!isAllowedOrigin(origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
     allow(res, origin);
