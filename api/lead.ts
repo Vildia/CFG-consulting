@@ -27,6 +27,14 @@ export default async function handler(req:VercelRequest, res:VercelResponse){
   const origin = String(req.headers.origin||'');
   const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean);
 
+  if (req.method === 'GET'){
+    const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean);
+    const origin = String(req.headers.origin||'');
+    if (!isAllowedOrigin(origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
+    allow(res, origin);
+    return res.status(200).json({ ok:true, mode:'status', env:{ has_APPS_SCRIPT_URL: !!APPS_SCRIPT_URL, has_CFG_KEY: !!CFG_KEY }, origin, allowed });
+  }
+
   if (req.method === 'OPTIONS'){
     if (!isAllowedOrigin(origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
     allow(res, origin); return res.status(204).end();

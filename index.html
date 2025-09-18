@@ -863,7 +863,7 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
       form.reset();
       return data;
     }catch(err){
-      console.warn('CFG lead error', err); setState('Ошибка');
+      setState('Ошибка');
       document.dispatchEvent(new CustomEvent('cfg:form-error', {detail:{error: (err && err.message) || 'unknown', payload}}));
       throw err;
     }finally{
