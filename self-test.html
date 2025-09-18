@@ -590,18 +590,34 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   try{
-    // Hide share/channels panel if present
-    var texts=['Gmail','Outlook','Yandex Mail','Mail.ru','WhatsApp','Telegram','Позвонить','Форма на сайте','Скопировать шаблон'];
-    var candidates = Array.from(document.querySelectorAll('button,a')).filter(el=>texts.includes((el.textContent||'').trim()));
-    if (candidates.length){ var panel = candidates[0]; for(var i=0;i<4 && panel && panel.parentElement;i++){ if(panel.classList && (panel.classList.contains('menu')||panel.classList.contains('channels')||panel.classList.contains('share'))){ break;} panel = panel.parentElement; }
-      (panel||candidates[0].parentElement).style.display='none'; }
-    // Hide long debug chips (origin URL and ISO timestamp)
-    Array.from(document.querySelectorAll('*')).forEach(function(el){ var t=(el.textContent||'').trim(); if(/^https:\/\/cfg-consulting-.*vercel\.app$/i.test(t) || /^\d{4}-\d{2}-\d{2}T/.test(t)) el.style.display='none'; });
-  }catch(e){ console.warn('self-test ui trim err', e); }
+    // Hide only the share/channels panel with Gmail/Telegram/etc without touching other UI.
+    var labels = ['Gmail','Outlook','Yandex Mail','Mail.ru','WhatsApp','Telegram','Позвонить','Форма на сайте','Скопировать шаблон','Письмо (по умолчанию)'];
+    var btns = Array.from(document.querySelectorAll('button, a')).filter(el => labels.includes((el.textContent||'').trim()));
+    if (btns.length >= 3) {
+      // Find a common small ancestor that contains many of these buttons
+      function ancestors(el){
+        var arr=[]; var p=el;
+        for (var i=0;i<6 && p; i++){ arr.push(p); p=p.parentElement; }
+        return arr;
+      }
+      var common = null;
+      var maps = btns.map(ancestors);
+      for (var depth=0; depth<6; depth++){
+        var candidate = maps[0][depth];
+        if (!candidate) break;
+        // count how many label-buttons live inside this candidate
+        var count = btns.filter(b => candidate.contains(b)).length;
+        if (count >= Math.max(3, Math.floor(btns.length*0.6))) { common = candidate; break; }
+      }
+      if (common) { common.style.display = 'none'; }
+    }
+  }catch(e){ console.warn('self-test ui trim v2 err', e); }
 });
 </script>
+
 </body>
 </html>
