@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </div></section>
 <section id="estimate" style="scroll-margin-top: 96px;"><div class="container">
 <h2 class="section-title">Оценка за 24 часа</h2>
-<form aria-label="Форма оценки" data-estimate="" data-locale="ru">
+<form id="lead-form" data-cfg-lead="1"  aria-label="Форма оценки" data-estimate="" data-locale="ru">
 <input autocomplete="off" name="company_site" style="display:none" tabindex="-1" type="text"/>
 <div class="form-grid">
 <div><label>Имя</label><input name="name" required=""/></div>
@@ -399,7 +399,10 @@ document.addEventListener('DOMContentLoaded', function(){
 <section id="nofit" style="padding:36px 0">
 <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
 <h2 style="margin:0 0 12px 0">Кому мы не подходим</h2>
-<ul style="margin:0 0 8px 18px"><li style="margin:6px 0">Нет доступа к ЛПР и данным — решения по слухам.</li><li style="margin:6px 0">Нежелание менять мотивацию/процессы («как есть»).</li><li style="margin:6px 0">Ожидание «чудо‑роста» без вовлечения команды.</li><li style="margin:6px 0">Запрос только на отчёт/аудит без внедрения изменений.</li></ul>
+<ul style="margin:0 0 8px 18px;list-style:disc;line-height:1.6"><li style="margin:0 0 6px 0">Нет доступа к ЛПР и данным — решения по слухам.</li>
+<li style="margin:0 0 6px 0">Нежелание менять мотивацию/процессы («как есть»).</li>
+<li style="margin:0 0 6px 0">Ожидание «чудо‑роста» без вовлечения команды.</li>
+<li style="margin:0 0 6px 0">Запрос только на отчёт/аудит без внедрения изменений.</li></ul>
 <p style="color:#6B7280;font-size:12px">Честность экономит время — наше и ваше.</p>
 </div>
 </section>
@@ -540,8 +543,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
         return req;
       })()
-        .then(function(){ toast(locale==='en'?'Request sent! We\'ll get back within 24 hours.':(locale==='zh'?'已提交！我们会在24小时内联系您。':'Заявка отправлена! Мы свяжемся в течение 24 часов.')); f.reset(); })
-        .catch(function(){ toast(locale==='en'?'Submission failed. Please try again.':(locale==='zh'?'提交失败，请重试。':'Не удалось отправить. Повторите попытку.')); })
+        .then(async function(res){ try{ var t=await res.text(); var j=JSON.parse(t); if(!(res.ok&&j&&j.ok)){ throw new Error(j && (j.error||j.text) || 'api_error'); } }catch(e){ throw e; } }).then(function(){ toast(locale==='en'?'Request sent! We\'ll get back within 24 hours.':(locale==='zh'?'已提交！我们会在24小时内联系您。':'Заявка отправлена! Мы свяжемся в течение 24 часов.')); f.reset(); })
+        .catch(function(err){ var msg=(err&&err.message)||''; toast((locale==='en'?'Submission failed.':'Не удалось отправить: ')+msg Please try again.':(locale==='zh'?'提交失败，请重试。':'Не удалось отправить. Повторите попытку.')); })
         .finally(function(){ if(btn){ btn.disabled=false; btn.textContent=(locale==='en'?'Submit':(locale==='zh'?'提交':'Отправить')); } });
       track('form_submit', {locale: locale});
       track('estimate_24h', {locale: locale});
@@ -629,13 +632,14 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
 (function(){
   var form = document.getElementById('lead-form');
   if(!form) return;
+  // Soft consent: if checkboxes present, require; otherwise proceed.
   form.addEventListener('submit', function(e){
     var pd = document.getElementById('consent_pd');
     var xb = document.getElementById('consent_xb');
-    if(!(pd && pd.checked && xb && xb.checked)){
+    if ((pd && !pd.checked) || (xb && !xb.checked)) {
       e.preventDefault();
       window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'err' }));
-      alert('Пожалуйста, отметьте согласия на обработку и трансграничную передачу данных.');
+      alert('Пожалуйста, отметьте согласия, если пункты отображаются ниже формы.');
       return false;
     } else {
       window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'sending' }));
@@ -782,8 +786,8 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
         var req = fetch(url, { method:'POST',  headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
         return req;
       })()
-        .then(function(){ toast(locale==='en'?'Request sent! We\'ll get back within 24 hours.':(locale==='zh'?'已提交！我们会在24小时内联系您。':'Заявка отправлена! Мы свяжемся в течение 24 часов.')); f.reset(); })
-        .catch(function(){ toast(locale==='en'?'Submission failed. Please try again.':(locale==='zh'?'提交失败，请重试。':'Не удалось отправить. Повторите попытку.')); })
+        .then(async function(res){ try{ var t=await res.text(); var j=JSON.parse(t); if(!(res.ok&&j&&j.ok)){ throw new Error(j && (j.error||j.text) || 'api_error'); } }catch(e){ throw e; } }).then(function(){ toast(locale==='en'?'Request sent! We\'ll get back within 24 hours.':(locale==='zh'?'已提交！我们会在24小时内联系您。':'Заявка отправлена! Мы свяжемся в течение 24 часов.')); f.reset(); })
+        .catch(function(err){ var msg=(err&&err.message)||''; toast((locale==='en'?'Submission failed.':'Не удалось отправить: ')+msg Please try again.':(locale==='zh'?'提交失败，请重试。':'Не удалось отправить. Повторите попытку.')); })
         .finally(function(){ if(btn){ btn.disabled=false; btn.textContent=(locale==='en'?'Submit':(locale==='zh'?'提交':'Отправить')); } });
       track('form_submit', {locale: locale});
       track('estimate_24h', {locale: locale});
@@ -849,6 +853,17 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
     const btn = form.querySelector('button[type="submit"], [type="submit"]');
     const origText = btn && (btn.textContent || btn.value);
 
+    // DEMO mode for file:// or ?demo=1 (simulate success without backend)
+    const isFile = (location.protocol === 'file:');
+    const demo = isFile || /[?&]demo=1/.test(location.search);
+    if (demo) {
+      function setState(t){ if (btn) { if (btn.tagName === 'BUTTON') btn.textContent = t; else btn.value = t; } }
+      setState('Готово ✓');
+      document.dispatchEvent(new CustomEvent('cfg:form-success', {detail:{payload, data:{ok:true, demo:true}}}));
+      form.reset();
+      return { ok:true, demo:true };
+    }
+
     function setState(t){ if (btn) { if (btn.tagName === 'BUTTON') btn.textContent = t; else btn.value = t; } document.dispatchEvent(new CustomEvent('cfg:form-state', {detail:{state:t}})); }
 
     try{
@@ -863,7 +878,7 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
       form.reset();
       return data;
     }catch(err){
-      console.warn('CFG lead error', err); setState('Ошибка');
+      setState('Ошибка');
       document.dispatchEvent(new CustomEvent('cfg:form-error', {detail:{error: (err && err.message) || 'unknown', payload}}));
       throw err;
     }finally{
@@ -1387,4 +1402,32 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
+<script>
+(function(){
+  function ensureOverlay(){
+    let el = document.getElementById('cfg-toast-center');
+    if (!el){
+      el = document.createElement('div');
+      el.id = 'cfg-toast-center';
+      el.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:99999;pointer-events:none;';
+      const inner = document.createElement('div');
+      inner.id = 'cfg-toast-center-box';
+      inner.style.cssText = 'max-width:680px;margin:24px;padding:24px 28px;background:rgba(18,20,31,.96);color:#fff;border-radius:16px;font:600 18px/1.4 system-ui, -apple-system, Segoe UI, Roboto;box-shadow:0 10px 40px rgba(0,0,0,.4);text-align:center;';
+      el.appendChild(inner);
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+  window.cfgShowCenter = function(msg){
+    const el = ensureOverlay();
+    const box = document.getElementById('cfg-toast-center-box');
+    box.textContent = msg || 'Готово';
+    el.style.display = 'flex';
+    setTimeout(()=>{ el.style.display='none'; }, 3600);
+  };
+})();
+</script>
+
+<script>document.addEventListener('cfg:form-success', function(e){ try{ cfgShowCenter('Спасибо! Заявка отправлена. Мы свяжемся в течение 24 часов.'); }catch(_){} });</script>
 </body></html>

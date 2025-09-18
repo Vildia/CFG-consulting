@@ -589,5 +589,27 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 })();
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  try{
+    // Hide channels menu (contains many buttons inc. 'Письмо (по умолчанию)')
+    var menuBtn = Array.from(document.querySelectorAll('button')).find(b => (b.textContent||'').trim() === 'Письмо (по умолчанию)');
+    if (menuBtn){
+      var p = menuBtn.parentElement;
+      for (var i=0;i<4 && p;i++){ // go up a few levels to the menu container
+        if (p.querySelectorAll('button').length >= 6) { p.style.display='none'; break; }
+        p = p.parentElement;
+      }
+    }
+    // Hide chips with ENV/ORIGIN and long url/time
+    Array.from(document.querySelectorAll('span,code,div')).forEach(function(el){
+      var t=(el.textContent||'').trim();
+      if(/^ENV:/i.test(t) || /^ORIGIN:/i.test(t) || /^https:\/\/cfg-consulting-.*vercel\.app$/i.test(t) || /^\d{4}-\d{2}-\d{2}T/.test(t)) el.style.display='none';
+    });
+  }catch(e){ console.warn('self-test trim', e); }
+});
+</script>
+
 </body>
 </html>

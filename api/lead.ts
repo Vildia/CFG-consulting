@@ -9,7 +9,10 @@ const ORIGIN_PREVIEW = process.env.ORIGIN_PREVIEW || ''; // optional explicit pr
 const RATE = new Map<string,{count:number,ts:number}>();
 const WINDOW_MS = 60_000; const LIMIT = 30;
 
+function norm(u:string){ try{ return String(u||'').replace(/\/$/,'').trim(); }catch(_){ return String(u||''); } }
 function isAllowedOrigin(origin:string, allowed:string[]):boolean{
+  origin = norm(origin);
+  allowed = (allowed||[]).map(norm);
   if (!origin) return false;
   if (allowed.includes(origin)) return true;
   try{ const u = new URL(origin); if (u.hostname.endsWith('.vercel.app')) return true; }catch{}
@@ -24,8 +27,16 @@ function allow(res:VercelResponse, origin:string){
 }
 
 export default async function handler(req:VercelRequest, res:VercelResponse){
-  const origin = String(req.headers.origin||'');
-  const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean);
+  const origin = String(req.headers.origin || ('https://' + (req.headers.host || '')));
+    if (!isAllowedOrigin(origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
+    allow(res, origin);
+    return res.status(200).json({ ok:true, mode:'status', env:{ has_APPS_SCRIPT_URL: !!APPS_SCRIPT_URL, has_CFG_KEY: !!CFG_KEY }, origin, allowed });
+  }
+
+  (origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
+    allow(res, origin);
+    return res.status(200).json({ ok:true, mode:'status', env:{ has_APPS_SCRIPT_URL: !!APPS_SCRIPT_URL, has_CFG_KEY: !!CFG_KEY }, origin, allowed });
+  }
 
   if (req.method === 'OPTIONS'){
     if (!isAllowedOrigin(origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
@@ -47,6 +58,9 @@ export default async function handler(req:VercelRequest, res:VercelResponse){
 
   // parse body and attach HMAC
   let data:any = req.body || {};
+  if (typeof data === 'string' && data.includes('=') && !data.trim().startsWith('{')) {
+    try { data = Object.fromEntries(new URLSearchParams(data)); } catch(_){}
+  }
   if (typeof data === 'string'){ try { data = JSON.parse(data); } catch(e){} }
   if (!data || typeof data !== 'object') data = {};
   const payload = JSON.stringify(data);
