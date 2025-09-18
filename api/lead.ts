@@ -28,12 +28,54 @@ function allow(res:VercelResponse, origin:string){
 
 export default async function handler(req:VercelRequest, res:VercelResponse){
   const origin = String(req.headers.origin || ('https://' + (req.headers.host || '')));
+  const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean);
+
+  if (req.method === 'GET'){
+    // Compat GET proxy or status check
+    const q:any = (req.query||{});
+    if (q && (q['compat'] || q['action'])) {
+      if (!APPS_SCRIPT_URL || !CFG_KEY) return res.status(500).json({ok:false,error:'env_not_configured'});
+      if (!isAllowedOrigin(origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
+      allow(res, origin);
+      const data:any = {
+        action: q['action'] || 'estimate_24h',
+        locale: q['locale'] || 'ru',
+        name: q['name'] || '',
+        company: q['company'] || '',
+        inn: q['inn'] || '',
+        email: q['email'] || '',
+        phone: q['phone'] || '',
+        message: q['message'] || q['desc'] || q['task'] || '',
+        industry: q['industry'] || '',
+        revenue: q['revenue'] || '',
+        geo: q['geo'] || '',
+        urgency: q['urgency'] || '',
+        page_url: q['page_url'] || '',
+        referrer: q['referrer'] || '',
+        utm: {}
+      };
+      const payload = JSON.stringify(data);
+      const hmac = crypto.createHmac('sha256', CFG_KEY).update(payload).digest('hex');
+      const body = JSON.stringify({ ...data, _sig: hmac });
+      try{
+        const r = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body });
+        const text = await r.text(); let j:any; try{ j = JSON.parse(text); }catch(e){}
+        if (!r.ok) return res.status(502).json({ ok:false, error:'apps_script_http_'+r.status, text });
+        if (j) return res.status(200).json(j);
+        return res.status(200).send(text);
+      }catch(e:any){
+        return res.status(500).json({ ok:false, error:'proxy_error', message: String(e && e.message || e) });
+      }
+    }
     if (!isAllowedOrigin(origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
     allow(res, origin);
     return res.status(200).json({ ok:true, mode:'status', env:{ has_APPS_SCRIPT_URL: !!APPS_SCRIPT_URL, has_CFG_KEY: !!CFG_KEY }, origin, allowed });
   }
 
-  (origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
+  
+    const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean).map(s=>String(s).trim());
+    const origin = String(req.headers.origin || ('https://' + (req.headers.host || '')));
+    if (!isAllowedOrigin(origin, allowed)) return res.status(403).json({ok:false,error:'forbidden_origin'});
     allow(res, origin);
     return res.status(200).json({ ok:true, mode:'status', env:{ has_APPS_SCRIPT_URL: !!APPS_SCRIPT_URL, has_CFG_KEY: !!CFG_KEY }, origin, allowed });
   }
@@ -59,7 +101,7 @@ export default async function handler(req:VercelRequest, res:VercelResponse){
   // parse body and attach HMAC
   let data:any = req.body || {};
   if (typeof data === 'string' && data.includes('=') && !data.trim().startsWith('{')) {
-    try { data = Object.fromEntries(new URLSearchParams(data)); } catch(_){}
+    try { data = Object.fromEntries(new URLSearchParams(data as any)); } catch(_){}
   }
   if (typeof data === 'string'){ try { data = JSON.parse(data); } catch(e){} }
   if (!data || typeof data !== 'object') data = {};

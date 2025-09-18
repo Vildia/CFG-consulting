@@ -632,14 +632,13 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
 (function(){
   var form = document.getElementById('lead-form');
   if(!form) return;
-  // Soft consent: if checkboxes present, require; otherwise proceed.
   form.addEventListener('submit', function(e){
     var pd = document.getElementById('consent_pd');
     var xb = document.getElementById('consent_xb');
-    if ((pd && !pd.checked) || (xb && !xb.checked)) {
+    if(!(pd && pd.checked && xb && xb.checked)){
       e.preventDefault();
       window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'err' }));
-      alert('Пожалуйста, отметьте согласия, если пункты отображаются ниже формы.');
+      alert('Пожалуйста, отметьте согласия на обработку и трансграничную передачу данных.');
       return false;
     } else {
       window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'sending' }));
@@ -852,17 +851,11 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
 
     const btn = form.querySelector('button[type="submit"], [type="submit"]');
     const origText = btn && (btn.textContent || btn.value);
-
-    // DEMO mode for file:// or ?demo=1 (simulate success without backend)
+    // DEMO: simulate success on file:// or ?demo=1
     const isFile = (location.protocol === 'file:');
     const demo = isFile || /[?&]demo=1/.test(location.search);
-    if (demo) {
-      function setState(t){ if (btn) { if (btn.tagName === 'BUTTON') btn.textContent = t; else btn.value = t; } }
-      setState('Готово ✓');
-      document.dispatchEvent(new CustomEvent('cfg:form-success', {detail:{payload, data:{ok:true, demo:true}}}));
-      form.reset();
-      return { ok:true, demo:true };
-    }
+    if (demo) { if(btn){if(btn.tagName==='BUTTON')btn.textContent='Готово ✓';else btn.value='Готово ✓';}
+      document.dispatchEvent(new CustomEvent('cfg:form-success',{detail:{payload, data:{ok:true,demo:true}}})); form.reset(); return {ok:true,demo:true}; }
 
     function setState(t){ if (btn) { if (btn.tagName === 'BUTTON') btn.textContent = t; else btn.value = t; } document.dispatchEvent(new CustomEvent('cfg:form-state', {detail:{state:t}})); }
 
