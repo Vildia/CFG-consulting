@@ -10,7 +10,6 @@ jobs:
   sync-env:
     runs-on: ubuntu-latest
     env:
-      # ⬇️ Секреты из репозитория GitHub
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -42,8 +41,7 @@ jobs:
         run: |
           set -e
           curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN" \
-            "https://api.vercel.com/v2/user${{ steps.qs.outputs.value }}" \
-            > /dev/null
+            "https://api.vercel.com/v2/user${{ steps.qs.outputs.value }}" > /dev/null
 
       - name: Get project by ID (diagnostics)
         shell: bash
@@ -53,28 +51,35 @@ jobs:
             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.qs.outputs.value }}" \
             | jq -r '.id,.name' > /dev/null
 
-      - name: Upsert envs (write-only, tolerate 409)
+      - name: Upsert envs (write-only, show body on error)
         shell: bash
         env:
           QS: ${{ steps.qs.outputs.value }}
         run: |
           set -e
 
-          upsert () {
+          post_env () {
             local KEY="$1" VALUE="$2"
             if [[ -z "$VALUE" ]]; then
-              echo "::warning::secret $KEY is empty. skipping."
+              echo "::warning::Secret $KEY is empty. Skipping."
               return 0
             fi
 
-            # encrypted по умолчанию (type не указываем)
-            STATUS=$(
-              curl -sS -o /dev/null -w "%{http_code}" \
-                -X POST "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env$QS" \
-                -H "Authorization: Bearer $VERCEL_TOKEN" \
-                -H "Content-Type: application/json" \
-                --data "{\"key\":\"$KEY\",\"value\":\"$VALUE\",\"target\":[\"production\",\"preview\"]}"
-            )
+            # JSON аккуратно собираем через jq
+            local PAYLOAD
+            PAYLOAD=$(jq -n --arg k "$KEY" --arg v "$VALUE" \
+              '{key:$k, value:$v, target:["production","preview"], type:"encrypted"}')
+
+            # Забираем и тело, и статус
+            local RESP
+            RESP=$(curl -sS -X POST "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env$QS" \
+              -H "Authorization: Bearer $VERCEL_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data "$PAYLOAD" \
+              -w "\n%{http_code}")
+
+            local STATUS="${RESP##*$'\n'}"
+            local BODY="${RESP%$'\n'*}"
 
             if [[ "$STATUS" == "200" || "$STATUS" == "201" ]]; then
               echo "upsert $KEY: OK ($STATUS)"
@@ -86,16 +91,17 @@ jobs:
               return 0
             fi
 
-            echo "::error::upsert $KEY failed with HTTP $STATUS"
+            echo "::error::upsert $KEY failed. HTTP $STATUS"
+            echo "Response body:"
+            echo "$BODY"
             exit 1
           }
 
-          echo "VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID"
-          echo "VERCEL_ORG_ID=$VERCEL_ORG_ID"
+          echo "Project=$VERCEL_PROJECT_ID  Org=$VERCEL_ORG_ID"
 
-          upsert "ORIGIN" "$ORIGIN"
-          upsert "APPS_SCRIPT_URL" "$APPS_SCRIPT_URL"
-          upsert "CFG_KEY" "$CFG_KEY"
+          post_env "ORIGIN" "$ORIGIN"
+          post_env "APPS_SCRIPT_URL" "$APPS_SCRIPT_URL"
+          post_env "CFG_KEY" "$CFG_KEY"
 
       - name: Complete job
         run: echo "Done ✅"
