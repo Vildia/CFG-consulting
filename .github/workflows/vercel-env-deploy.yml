@@ -53,13 +53,13 @@ jobs:
           echo "$BODY" | jq .
           [ "$CODE" -lt 300 ]
 
-      - name: Fetch current env list
+      - name: Fetch current env list (no decrypt)
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
           set -e
-          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}/env?decrypt=true" -o env.json
+          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}/env" -o env.json
           jq -r '.envs[].key' env.json | sort -u || true
 
       - name: Delete old entries for managed keys
@@ -80,7 +80,6 @@ jobs:
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          # User's secret names from repository settings
           S_APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           S_CFG_KEY:        ${{ secrets.CFG_KEY }}
           S_ORIGIN_PROD:    ${{ secrets.ORIGIN_PROD }}
