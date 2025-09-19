@@ -1,0 +1,88 @@
+name: Vercel Env (guard + manual sync)
+
+on:
+  workflow_dispatch:
+    inputs:
+      sync:
+        description: "Sync GitHub Secrets -> Vercel env (true/false)"
+        required: true
+        default: "true"
+  push:
+    branches: [ main ]
+
+jobs:
+  sync-env:
+    if: github.event_name == 'workflow_dispatch' && inputs.sync == 'true' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Preflight
+        shell: bash
+        run: |
+          set -e
+          for k in VERCEL_TOKEN VERCEL_PROJECT_ID V_APPS_SCRIPT_URL V_CFG_KEY V_ORIGIN; do
+            if [ -z "${{ secrets[format('{0}', k)] }}" ]; then
+              echo "::error::Secret $k is missing"
+              exit 1
+            fi
+          done
+          echo "All required secrets present."
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Fetch current env list
+        id: pull
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          set -e
+          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN" "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env?decrypt=true" -o env.json
+          echo "pulled=true" >> $GITHUB_OUTPUT
+          echo "Current env keys:"
+          cat env.json | jq -r '.envs[].key' | sort -u
+
+      - name: Delete old entries for managed keys
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          set -e
+          for KEY in APPS_SCRIPT_URL CFG_KEY ORIGIN ORIGIN_PREVIEW; do
+            IDS=$(jq -r --arg K "$KEY" '.envs[] | select(.key==$K) | .id' env.json || true)
+            if [ -n "$IDS" ]; then
+              for ID in $IDS; do
+                echo "Deleting $KEY ($ID)"
+                curl -fsS -X DELETE -H "Authorization: Bearer $VERCEL_TOKEN" "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env/$ID" >/dev/null
+              done
+            fi
+          done
+
+      - name: Upsert new envs via Vercel API
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          APPS_SCRIPT_URL: ${{ secrets.V_APPS_SCRIPT_URL }}
+          CFG_KEY: ${{ secrets.V_CFG_KEY }}
+          ORIGIN: ${{ secrets.V_ORIGIN }}
+          ORIGIN_PREVIEW: ${{ secrets.V_ORIGIN_PREVIEW }}
+        run: |
+          set -euo pipefail
+          post() {
+            KEY="$1"; VAL="$2"; TARGETS="$3"
+            VAL="$(printf "%s" "$VAL" | tr -d '\r' | sed -e 's/[[:space:]]*$//')"
+            [ -z "$VAL" ] && echo "Skip $KEY (empty)" && return 0
+            JSON=$(jq -nc --arg key "$KEY" --arg val "$VAL" --argjson tgt "$TARGETS" '{type:"plain", key:$key, value:$val, target:$tgt}')
+            curl -fsS -X POST               -H "Authorization: Bearer $VERCEL_TOKEN"               -H "Content-Type: application/json"               -d "$JSON"               "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env" >/dev/null
+            echo "Upserted $KEY -> targets: $TARGETS"
+          }
+          post "APPS_SCRIPT_URL" "$APPS_SCRIPT_URL" '["production","preview"]'
+          post "CFG_KEY"        "$CFG_KEY"        '["production","preview"]'
+          post "ORIGIN"         "$ORIGIN"         '["production"]'
+          if [ -n "${ORIGIN_PREVIEW:-}" ]; then
+            post "ORIGIN_PREVIEW" "$ORIGIN_PREVIEW" '["preview"]'
+          fi
+          echo "Done"
