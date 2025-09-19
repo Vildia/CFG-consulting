@@ -10,10 +10,10 @@ jobs:
   sync-env:
     runs-on: ubuntu-latest
     env:
+      # ⬇️ Секреты из репозитория GitHub
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      # Managed keys (must exist as GitHub secrets)
       ORIGIN: ${{ secrets.ORIGIN }}
       APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
       CFG_KEY: ${{ secrets.CFG_KEY }}
@@ -23,50 +23,79 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
 
       - name: Define QS (teamId if provided)
         id: qs
         shell: bash
         run: |
           if [[ -n "$VERCEL_ORG_ID" ]]; then
-            echo "value=teamId=$VERCEL_ORG_ID" >> $GITHUB_OUTPUT
+            echo "value=?teamId=$VERCEL_ORG_ID" >> "$GITHUB_OUTPUT"
           else
-            echo "value=" >> $GITHUB_OUTPUT
+            echo "value=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Who am I? (diagnostics)
-        run: |
-          set -e
-          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN" https://api.vercel.com/v2/user | jq -r '.user.username + " (" + .user.email + ")"'
-
-      - name: Get project by ID (diagnostics)
-        run: |
-          set -e
-          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}?${{ steps.qs.outputs.value }}"             | jq -r '.name + " (" + .id + ")"'
-
-      # WRITE-ONLY UPSERT: no reading env list, no deletion; tolerate 409 (exists)
-      - name: Upsert envs (write-only, tolerate 409)
         shell: bash
         run: |
           set -e
+          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v2/user${{ steps.qs.outputs.value }}" \
+            > /dev/null
+
+      - name: Get project by ID (diagnostics)
+        shell: bash
+        run: |
+          set -e
+          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.qs.outputs.value }}" \
+            | jq -r '.id,.name' > /dev/null
+
+      - name: Upsert envs (write-only, tolerate 409)
+        shell: bash
+        env:
+          QS: ${{ steps.qs.outputs.value }}
+        run: |
+          set -e
+
           upsert () {
-            local KEY="$1"; local VAL="$2"
-            if [[ -z "$VAL" ]]; then
-              echo "::warning::Secret $KEY is empty. Skipping."
+            local KEY="$1" VALUE="$2"
+            if [[ -z "$VALUE" ]]; then
+              echo "::warning::secret $KEY is empty. skipping."
               return 0
             fi
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST               "https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/env?${{ steps.qs.outputs.value }}"               -H "Authorization: Bearer $VERCEL_TOKEN"               -H "Content-Type: application/json"               --data "{"key":"${KEY}","value":"${VAL}","type":"encrypted","target":["production","preview"]}")
+
+            # encrypted по умолчанию (type не указываем)
+            STATUS=$(
+              curl -sS -o /dev/null -w "%{http_code}" \
+                -X POST "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env$QS" \
+                -H "Authorization: Bearer $VERCEL_TOKEN" \
+                -H "Content-Type: application/json" \
+                --data "{\"key\":\"$KEY\",\"value\":\"$VALUE\",\"target\":[\"production\",\"preview\"]}"
+            )
+
             if [[ "$STATUS" == "200" || "$STATUS" == "201" ]]; then
-              echo "Upsert ${KEY}: OK ($STATUS)"
-            elif [[ "$STATUS" == "409" ]]; then
-              echo "Upsert ${KEY}: already exists (409) – OK"
-            else
-              echo "::error::Upsert ${KEY} failed with HTTP ${STATUS}"
-              exit 1
+              echo "upsert $KEY: OK ($STATUS)"
+              return 0
             fi
+
+            if [[ "$STATUS" == "409" ]]; then
+              echo "upsert $KEY: already exists (409) — OK"
+              return 0
+            fi
+
+            echo "::error::upsert $KEY failed with HTTP $STATUS"
+            exit 1
           }
 
-          upsert ORIGIN "$ORIGIN"
-          upsert APPS_SCRIPT_URL "$APPS_SCRIPT_URL"
-          upsert CFG_KEY "$CFG_KEY"
+          echo "VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID"
+          echo "VERCEL_ORG_ID=$VERCEL_ORG_ID"
+
+          upsert "ORIGIN" "$ORIGIN"
+          upsert "APPS_SCRIPT_URL" "$APPS_SCRIPT_URL"
+          upsert "CFG_KEY" "$CFG_KEY"
+
+      - name: Complete job
+        run: echo "Done ✅"
