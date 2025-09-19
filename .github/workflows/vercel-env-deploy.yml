@@ -47,8 +47,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
           set -e
-          RESP=$(curl -sS -w "\n%{http_code}" -H "Authorization: Bearer $VERCEL_TOKEN" \
-            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}")
+          RESP=$(curl -sS -w "\n%{http_code}" -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}")
           BODY=$(printf "%s" "$RESP" | head -n1); CODE=$(printf "%s" "$RESP" | tail -n1)
           echo "HTTP $CODE"
           echo "$BODY" | jq .
@@ -60,8 +59,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
           set -e
-          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN" \
-            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}/env?decrypt=true" -o env.json
+          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}/env?decrypt=true" -o env.json
           jq -r '.envs[].key' env.json | sort -u || true
 
       - name: Delete old entries for managed keys
@@ -74,8 +72,7 @@ jobs:
             IDS=$(jq -r --arg K "$KEY" '.envs[] | select(.key==$K) | .id' env.json || true)
             for ID in $IDS; do
               echo "Deleting $KEY ($ID)"
-              curl -sS -X DELETE -H "Authorization: Bearer $VERCEL_TOKEN" \
-                "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}/env/$ID" >/dev/null
+              curl -sS -X DELETE -H "Authorization: Bearer $VERCEL_TOKEN"                 "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}/env/$ID" >/dev/null
             done
           done
 
@@ -83,7 +80,7 @@ jobs:
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          # ваши имена секретов
+          # User's secret names from repository settings
           S_APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           S_CFG_KEY:        ${{ secrets.CFG_KEY }}
           S_ORIGIN_PROD:    ${{ secrets.ORIGIN_PROD }}
@@ -95,10 +92,7 @@ jobs:
             VAL="$(printf "%s" "$VAL" | tr -d '\r' | sed -e 's/[[:space:]]*$//')"
             [ -z "$VAL" ] && echo "Skip $KEY (empty)" && return 0
             JSON=$(jq -nc --arg key "$KEY" --arg val "$VAL" --argjson tgt "$TARGETS" '{type:"plain", key:$key, value:$val, target:$tgt}')
-            RESP=$(curl -sS -w "\n%{http_code}" -X POST \
-              -H "Authorization: Bearer $VERCEL_TOKEN" -H "Content-Type: application/json" \
-              -d "$JSON" \
-              "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}/env")
+            RESP=$(curl -sS -w "\n%{http_code}" -X POST               -H "Authorization: Bearer $VERCEL_TOKEN" -H "Content-Type: application/json"               -d "$JSON"               "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}/env")
             BODY=$(printf "%s" "$RESP" | head -n1); CODE=$(printf "%s" "$RESP" | tail -n1)
             echo "POST $KEY -> HTTP $CODE"
             echo "$BODY"
