@@ -1,20 +1,23 @@
-name: Vercel Env (guard + manual sync)
+name: Vercel Env (write-only)
 
 on:
   workflow_dispatch:
-    inputs:
-      sync:
-        description: "Sync GitHub Secrets -> Vercel env (true/false)"
-        required: true
-        default: "true"
-  push:
-    branches: [ main ]
+
+permissions:
+  contents: read
 
 jobs:
   sync-env:
-    if: github.event_name == 'workflow_dispatch' && inputs.sync == 'true' || github.event_name == 'push'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      # Managed keys (must exist as GitHub secrets)
+      ORIGIN: ${{ secrets.ORIGIN }}
+      APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+      CFG_KEY: ${{ secrets.CFG_KEY }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,84 +26,47 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Define QS (teamId if provided)
-        id: defs
+        id: qs
         shell: bash
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         run: |
-          if [ -n "${VERCEL_ORG_ID}" ]; then
-            echo "qs=?teamId=${VERCEL_ORG_ID}" >> $GITHUB_OUTPUT
+          if [[ -n "$VERCEL_ORG_ID" ]]; then
+            echo "value=teamId=$VERCEL_ORG_ID" >> $GITHUB_OUTPUT
           else
-            echo "qs=" >> $GITHUB_OUTPUT
+            echo "value=" >> $GITHUB_OUTPUT
           fi
 
       - name: Who am I? (diagnostics)
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           set -e
-          curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" https://api.vercel.com/v2/user | jq
+          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN" https://api.vercel.com/v2/user | jq -r '.user.username + " (" + .user.email + ")"'
 
       - name: Get project by ID (diagnostics)
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
           set -e
-          RESP=$(curl -sS -w "\n%{http_code}" -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}")
-          BODY=$(printf "%s" "$RESP" | head -n1); CODE=$(printf "%s" "$RESP" | tail -n1)
-          echo "HTTP $CODE"
-          echo "$BODY" | jq .
-          [ "$CODE" -lt 300 ]
+          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}?${{ steps.qs.outputs.value }}"             | jq -r '.name + " (" + .id + ")"'
 
-      - name: Fetch current env list (no decrypt)
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      # WRITE-ONLY UPSERT: no reading env list, no deletion; tolerate 409 (exists)
+      - name: Upsert envs (write-only, tolerate 409)
+        shell: bash
         run: |
           set -e
-          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}/env" -o env.json
-          jq -r '.envs[].key' env.json | sort -u || true
-
-      - name: Delete old entries for managed keys
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-        run: |
-          set -e
-          for KEY in APPS_SCRIPT_URL CFG_KEY ORIGIN ORIGIN_PREVIEW; do
-            IDS=$(jq -r --arg K "$KEY" '.envs[] | select(.key==$K) | .id' env.json || true)
-            for ID in $IDS; do
-              echo "Deleting $KEY ($ID)"
-              curl -sS -X DELETE -H "Authorization: Bearer $VERCEL_TOKEN"                 "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}/env/$ID" >/dev/null
-            done
-          done
-
-      - name: Upsert new envs (map secrets -> Vercel env names)
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          S_APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
-          S_CFG_KEY:        ${{ secrets.CFG_KEY }}
-          S_ORIGIN_PROD:    ${{ secrets.ORIGIN_PROD }}
-          S_ORIGIN_PREVIEW: ${{ secrets.ORIGIN_PREVIEW }}
-        run: |
-          set -euo pipefail
-          post() {
-            KEY="$1"; VAL="$2"; TARGETS="$3"
-            VAL="$(printf "%s" "$VAL" | tr -d '\r' | sed -e 's/[[:space:]]*$//')"
-            [ -z "$VAL" ] && echo "Skip $KEY (empty)" && return 0
-            JSON=$(jq -nc --arg key "$KEY" --arg val "$VAL" --argjson tgt "$TARGETS" '{type:"plain", key:$key, value:$val, target:$tgt}')
-            RESP=$(curl -sS -w "\n%{http_code}" -X POST               -H "Authorization: Bearer $VERCEL_TOKEN" -H "Content-Type: application/json"               -d "$JSON"               "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.defs.outputs.qs }}/env")
-            BODY=$(printf "%s" "$RESP" | head -n1); CODE=$(printf "%s" "$RESP" | tail -n1)
-            echo "POST $KEY -> HTTP $CODE"
-            echo "$BODY"
-            [ "$CODE" -lt 300 ]
+          upsert () {
+            local KEY="$1"; local VAL="$2"
+            if [[ -z "$VAL" ]]; then
+              echo "::warning::Secret $KEY is empty. Skipping."
+              return 0
+            fi
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST               "https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/env?${{ steps.qs.outputs.value }}"               -H "Authorization: Bearer $VERCEL_TOKEN"               -H "Content-Type: application/json"               --data "{"key":"${KEY}","value":"${VAL}","type":"encrypted","target":["production","preview"]}")
+            if [[ "$STATUS" == "200" || "$STATUS" == "201" ]]; then
+              echo "Upsert ${KEY}: OK ($STATUS)"
+            elif [[ "$STATUS" == "409" ]]; then
+              echo "Upsert ${KEY}: already exists (409) – OK"
+            else
+              echo "::error::Upsert ${KEY} failed with HTTP ${STATUS}"
+              exit 1
+            fi
           }
-          post "APPS_SCRIPT_URL" "$S_APPS_SCRIPT_URL" '["production","preview"]'
-          post "CFG_KEY"        "$S_CFG_KEY"        '["production","preview"]'
-          post "ORIGIN"         "$S_ORIGIN_PROD"    '["production"]'
-          if [ -n "${S_ORIGIN_PREVIEW:-}" ]; then
-            post "ORIGIN_PREVIEW" "$S_ORIGIN_PREVIEW" '["preview"]'
-          fi
-          echo "Done"
+
+          upsert ORIGIN "$ORIGIN"
+          upsert APPS_SCRIPT_URL "$APPS_SCRIPT_URL"
+          upsert CFG_KEY "$CFG_KEY"
