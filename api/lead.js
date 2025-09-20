@@ -18,7 +18,6 @@ function allow(res, origin){
 }
 
 async function doFetch(url, opts){
-  // Node 18+ has global fetch; fallback to node-fetch if needed
   if (typeof fetch === 'undefined') {
     const mod = await import('node-fetch');
     return mod.default(url, opts);
@@ -81,22 +80,18 @@ module.exports = async function handler(req, res){
       utm_medium:  data.utm_medium  || '',
       utm_campaign:data.utm_campaign|| '',
       utm_term:    data.utm_term    || '',
-      utm_content: data.utm_content || '',
-      hp:       data.hp || '',
-      is_spam:  Boolean(data.is_spam)
+      utm_content: data.utm_content || ''
     };
 
     // Proxy
     const out = await proxyToAppsScript(payload);
 
     if (out.ok) {
-      // If Apps Script returned JSON with ok, pass it through; otherwise return ok:true
       const body = (out.json && typeof out.json === 'object')
         ? out.json
         : { ok:true, status: out.status };
       return res.status(200).json(body);
     } else {
-      // Map Apps Script error codes to safe JSON
       return res.status(502).json({
         ok:false,
         error:'apps_script_http_'+out.status,
