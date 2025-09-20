@@ -16,10 +16,20 @@ function allow(res, origin){
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 }
 
-async function proxyToAppsScript(data){
+async async function proxyToAppsScript(data){
   const payload = JSON.stringify(data);
   const hmac = crypto.createHmac('sha256', CFG_KEY).update(payload).digest('hex');
   const body = JSON.stringify({ ...data, _sig: hmac });
+  const r = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body });
+  let text = '';
+  try { text = await r.text(); } catch(_) { text = ''; }
+  let j = null; try { j = JSON.parse(text); } catch(_) { j = null; }
+  if (r.ok){
+    if (j && typeof j.ok !== 'undefined') return { status: r.status, body: j };
+    return { status: r.status, body: j || { ok:true, text } };
+  }
+  return { status: 502, body: j || { ok:false, error:'apps_script_http_'+r.status, text } };
+});
   const r = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body });
   const text = await r.text();
   let j; try{ j = JSON.parse(text); }catch(_){}
@@ -62,7 +72,8 @@ module.exports = async (req, res) => {
         };
         const out = await proxyToAppsScript(data);
         allow(res, origin);
-        return res.status(out.status).json(out.body);
+        try{ if(out && out.status>=200 && out.status<300 && (!out.body || typeof out.body.ok==='undefined')) out.body = { ok:true }; }catch(_){}
+      return res.status(out.status).json(out.body || { ok:true });
       }
       // Just status
       allow(res, origin);
