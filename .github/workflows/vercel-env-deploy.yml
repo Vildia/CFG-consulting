@@ -24,7 +24,7 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Upsert envs (per target, tolerate 409 / ENV_ALREADY_EXISTS)
+      - name: Upsert envs (per target; tolerate 409 / env_already_exists)
         shell: bash
         run: |
           set -euo pipefail
@@ -43,11 +43,12 @@ jobs:
               return 0
             fi
 
+            # encrypted + target = один таргет за запрос
             local PAYLOAD
             PAYLOAD=$(jq -n --arg key "$KEY" --arg value "$VAL" --arg tgt "$TGT" \
               '{key:$key, value:$value, target:[$tgt], type:"encrypted"}')
 
-            # Запрашиваем код и тело отдельно; код приводим к цифрам
+            # вызов -> пишем тело в /tmp/body.json и отдельно берём http_code
             local HTTP_CODE
             HTTP_CODE=$(curl -sS -w '%{http_code}' -o /tmp/body.json \
               -X POST "$ENV_URL" \
@@ -55,22 +56,22 @@ jobs:
               -H "Content-Type: application/json" \
               --data "$PAYLOAD" | tr -dc '0-9')
 
+            # 200/201 — обычный успех
             if [[ "$HTTP_CODE" == "200" || "$HTTP_CODE" == "201" ]]; then
               echo "upsert ${KEY}@${TGT}: OK"
               return 0
             fi
 
-            # 409: засчитываем как успех, если это (env_)already_exists (регистронезависимо)
+            # Если где угодно в теле есть env_already_exists (любой регистр) — тоже успех
+            if grep -qi 'env[_ ]*already[_ ]*exists' /tmp/body.json; then
+              echo "upsert ${KEY}@${TGT}: already exists -> OK"
+              cat /tmp/body.json
+              return 0
+            fi
+
+            # На всякий случай: любой 409 трактуем как успех
             if [[ "$HTTP_CODE" == "409" ]]; then
-              if jq -r '.code // ""' /tmp/body.json \
-                | tr '[:upper:]' '[:lower:]' \
-                | grep -q 'env_already_exists'; then
-                echo "upsert ${KEY}@${TGT}: already exists (409) -> OK"
-                return 0
-              fi
-              # На практике других 409 от этого эндпоинта почти не бывает,
-              # но чтобы не стопориться, тоже считаем это успехом:
-              echo "upsert ${KEY}@${TGT}: 409 returned, treating as OK"
+              echo "upsert ${KEY}@${TGT}: 409 returned -> OK"
               cat /tmp/body.json
               return 0
             fi
