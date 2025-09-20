@@ -596,16 +596,8 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
   var form = document.getElementById('lead-form');
   if(!form) return;
   form.addEventListener('submit', function(e){
-    var pd = document.getElementById('consent_pd');
-    var xb = document.getElementById('consent_xb');
-    if(!(pd && pd.checked && xb && xb.checked)){
-      e.preventDefault();
-      window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'err' }));
-      alert('Пожалуйста, отметьте согласия на обработку и трансграничную передачу данных.');
-      return false;
-    } else {
-      window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'sending' }));
-    }
+    // Soft‑mode: do not block submission if consent checkboxes are absent or unchecked
+    window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'sending' }));
   }, true);
 })();
 </script>
@@ -788,22 +780,12 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
   }
   async function sendLead(form){
     const hp = getVal(form, 'company_site'); // honeypot
-    if (hp) return Promise.reject(new Error('honeypot_filled'));
-
-    // Basic payload (common names across pages)
-    const payload = {
-      name: getVal(form, 'name') || getVal(form, 'full_name') || '',
-      company: getVal(form, 'company') || '',
-      inn: getVal(form, 'inn') || '',
-      email: getVal(form, 'email') || '',
-      phone: getVal(form, 'phone') || '',
-      message: getVal(form, 'message') || getVal(form, 'task') || getVal(form, 'comment') || '',
-      // meta
-      locale: getLocale(),
-      page_url: location.href,
-      referrer: document.referrer || '',
-      utm: getUTM()
-    };
+// do not block submission; mark and continue
+if (hp) { try{ window.__cfg_hp=true; }catch(_){} }
+// Basic payload (common names across pages)
+    \1
+    // if honeypot was filled, include flag for server-side filtering
+    try { if (typeof hp !== 'undefined' && hp) { payload.hp = hp; payload.is_spam = true; } } catch(_){}
 
     const btn = form.querySelector('button[type="submit"], [type="submit"]');
     const origText = btn && (btn.textContent || btn.value);
@@ -1348,60 +1330,6 @@ document.addEventListener('DOMContentLoaded', function(){
       track('email_copy_'+kind);
     });
   });
-})();
-</script>
-
-
-<script>
-(function(){
-  function ensureSubmission(form, submitEvent){
-    // Ensure action/method point to backend
-    if(!form.getAttribute('action')) form.setAttribute('action','/api/lead');
-    if(!form.getAttribute('method')) form.setAttribute('method','post');
-
-    if (submitEvent && submitEvent.defaultPrevented) {
-      // If some earlier handler blocked submission, we send it ourselves.
-      try {
-        const fd = new FormData(form);
-        const data = {};
-        fd.forEach((v,k)=>{
-          if (data[k] !== undefined) {
-            // collect multiple values
-            if (Array.isArray(data[k])) data[k].push(v);
-            else data[k] = [data[k], v];
-          } else {
-            data[k] = v;
-          }
-        });
-        // Fallback required field aliases
-        if (!data.name && data['Имя']) data.name = data['Имя'];
-        if (!data.email && data['Email']) data.email = data['Email'];
-        if (!data.phone && (data['Телефон']||data['phone'])) data.phone = data['Телефон']||data['phone'];
-        data._source = data._source || 'site-form';
-
-        fetch('/api/lead', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          credentials: 'same-origin',
-          body: JSON.stringify(data)
-        }).then(r => r.ok ? r.json() : Promise.reject(r))
-          .then(function(){ form.reset(); })
-          .catch(function(){ setTimeout(function(){ form.submit(); }, 0); });
-      } catch(e){
-        setTimeout(function(){ form.submit(); }, 0);
-      }
-    }
-  }
-
-  function wire(selector){
-    var form = document.querySelector(selector);
-    if(!form) return;
-    // Capture & bubble to detect prevention by other handlers
-    form.addEventListener('submit', function(ev){ ensureSubmission(form, ev); }, true);
-    form.addEventListener('submit', function(ev){ ensureSubmission(form, ev); });
-  }
-
-  wire('form#estimate-form, form[data-estimate], form#partner-form, form[data-lead-form]');
 })();
 </script>
 
