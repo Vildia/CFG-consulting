@@ -780,12 +780,11 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
   }
   async function sendLead(form){
     const hp = getVal(form, 'company_site'); // honeypot
-// do not block submission; mark and continue
-if (hp) { try{ window.__cfg_hp=true; }catch(_){} }
+if (hp) { try { window.__cfg_hp = true; } catch(_) {} }
 // Basic payload (common names across pages)
     \1
-    // if honeypot was filled, include flag for server-side filtering
-    try { if (typeof hp !== 'undefined' && hp) { payload.hp = hp; payload.is_spam = true; } } catch(_){}
+try { if (typeof hp !== 'undefined' && hp) { payload.hp = hp; payload.is_spam = true; } } catch(_) {}
+
 
     const btn = form.querySelector('button[type="submit"], [type="submit"]');
     const origText = btn && (btn.textContent || btn.value);
