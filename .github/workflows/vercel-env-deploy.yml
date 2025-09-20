@@ -3,8 +3,102 @@ name: Vercel Env (write-only)
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  ping:
+  sync-env:
     runs-on: ubuntu-latest
+
+    env:
+      # GitHub repository secrets (обязательно создай их в Settings → Secrets and variables → Actions)
+      VERCEL_TOKEN:     ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_ORG_ID:    ${{ secrets.VERCEL_ORG_ID }} # можно пустым, если токен персональный без teamId
+      ORIGIN:           ${{ secrets.ORIGIN }}
+      APPS_SCRIPT_URL:  ${{ secrets.APPS_SCRIPT_URL }}
+      CFG_KEY:          ${{ secrets.CFG_KEY }}
+
     steps:
-      - run: echo "ok"
+      - uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Define QS (teamId if provided)
+        id: qs
+        shell: bash
+        run: |
+          if [[ -n "$VERCEL_ORG_ID" ]]; then
+            echo "qs=?teamId=$VERCEL_ORG_ID" >> "$GITHUB_OUTPUT"
+            echo "qs_upsert=?teamId=$VERCEL_ORG_ID&upsert=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "qs=" >> "$GITHUB_OUTPUT"
+            echo "qs_upsert=?upsert=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Who am I? (diagnostics)
+        run: |
+          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN" https://api.vercel.com/v2/user \
+          | jq '{user_id: .user.id, email: .user.email}'
+
+      - name: Get project by ID (diagnostics)
+        run: |
+          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.qs.outputs.qs }}" \
+          | jq '{project_id: .id, name: .name}'
+
+      - name: Upsert envs (write-only, tolerate 409 / ENV_ALREADY_EXISTS)
+        shell: bash
+        env:
+          QS_UPSERT: ${{ steps.qs.outputs.qs_upsert }}
+        run: |
+          set -euo pipefail
+
+          upsert () {
+            local KEY="$1"
+            local VAL="$2"
+
+            if [[ -z "$VAL" ]]; then
+              echo "warning: Secret $KEY is empty. Skipping."
+              return 0
+            fi
+
+            # Маскируем значение в логах
+            echo "::add-mask::$VAL"
+
+            # Готовим JSON-пэйлоад (Vercel сам зашифрует)
+            local PAYLOAD
+            PAYLOAD=$(jq -nc --arg k "$KEY" --arg v "$VAL" \
+              '{key:$k, value:$v, target:["production","preview"]}')
+
+            # Делаем вызов с upsert=true (идемпотентно)
+            local RESP STATUS BODY
+            RESP=$(curl -sS \
+              -H "Authorization: Bearer $VERCEL_TOKEN" \
+              -H "Content-Type: application/json" \
+              -X POST "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env${QS_UPSERT}" \
+              --data "$PAYLOAD" \
+              -w "\n%{http_code}")
+
+            STATUS="${RESP##*$'\n'}"
+            BODY="${RESP%$'\n'*}"
+
+            if [[ "$STATUS" == "200" || "$STATUS" == "201" ]]; then
+              echo "upsert $KEY: OK ($STATUS)"
+            elif [[ "$STATUS" == "409" ]]; then
+              echo "upsert $KEY: already exists (409) -> OK"
+            elif [[ "$STATUS" == "403" ]] && echo "$BODY" | grep -q 'ENV_ALREADY_EXISTS'; then
+              echo "upsert $KEY: already exists (ENV_ALREADY_EXISTS/403) -> OK"
+            else
+              echo "::error::upsert $KEY failed. HTTP $STATUS"
+              echo "Response body:"
+              echo "$BODY"
+              exit 1
+            fi
+          }
+
+          # Порядок неважен, но ORIGIN обычно первым
+          upsert "ORIGIN" "$ORIGIN"
+          upsert "APPS_SCRIPT_URL" "$APPS_SCRIPT_URL"
+          upsert "CFG_KEY" "$CFG_KEY"
