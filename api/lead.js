@@ -7,6 +7,10 @@ const CFG_KEY = String(process.env.CFG_KEY || '').trim();
 const ORIGIN_PROD = String(process.env.ORIGIN || '').trim();
 const ORIGIN_PREVIEW = String(process.env.ORIGIN_PREVIEW || '').trim();
 
+function bad(res, code, msg, extra){ try{ allow(res); }catch(_){ }
+  return res.status(code).json(Object.assign({ ok:false, error:msg }, extra||{})); }
+
+
 function norm(u){ try{ return String(u||'').trim().replace(/\/$/, ''); }catch(_){ return String(u||''); } }
 function isAllowedOrigin(origin, allowed){ origin = norm(origin); allowed = (allowed||[]).map(norm); return !origin || allowed.includes(origin); }
 function allow(res, origin){
@@ -116,7 +120,9 @@ module.exports = async (req, res) => {
         utm: data.utm || {}
       };
 
-      const out = await proxyToAppsScript(payload);
+      if(!APPS_SCRIPT_URL) return bad(res, 500, 'env_missing_apps_script_url');
+if(!CFG_KEY) return bad(res, 500, 'env_missing_cfg_key');
+const out = await proxyToAppsScript(payload);
       return res.status(out.status).json(out.body);
     }
 
