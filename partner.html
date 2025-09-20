@@ -620,6 +620,7 @@ document.addEventListener('DOMContentLoaded', function(){
         e.preventDefault();
         var btn=form.querySelector('button[type="submit"], [type="submit"]');
         if(btn){ btn.disabled=true; btn.dataset.origText = btn.textContent || btn.value || ''; if(btn.tagName==='BUTTON') btn.textContent='Отправка…'; else btn.value='Отправка…'; }
+        try{ var hpEl=form.querySelector('input[name="company_site"]'); if(hpEl){ hpEl.value=''; } }catch(_){}
         var fd=new FormData(form);
         var hp = fd.get('company_site');
         var payload={
@@ -642,7 +643,6 @@ document.addEventListener('DOMContentLoaded', function(){
           payload.referer = document.referrer || '';
           ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(function(k){ var v=params.get(k); if(v) payload[k]=v; });
         }catch(_){}
-        if(hp){ payload.hp = hp; payload.is_spam = true; }
         fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify(payload) })
           .then(function(r){ return r.json().then(function(b){ return {ok:r.ok, status:r.status, body:b}; }).catch(function(){ return {ok:r.ok, status:r.status, body:{}}; }); })
           .then(function(out){
