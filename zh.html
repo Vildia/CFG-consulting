@@ -1351,5 +1351,58 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
-<script defer src="assets/js/consent-neutral.js"></script>
+
+<script>
+(function(){
+  function ensureSubmission(form, submitEvent){
+    // Ensure action/method point to backend
+    if(!form.getAttribute('action')) form.setAttribute('action','/api/lead');
+    if(!form.getAttribute('method')) form.setAttribute('method','post');
+
+    if (submitEvent && submitEvent.defaultPrevented) {
+      // If some earlier handler blocked submission, we send it ourselves.
+      try {
+        const fd = new FormData(form);
+        const data = {};
+        fd.forEach((v,k)=>{
+          if (data[k] !== undefined) {
+            // collect multiple values
+            if (Array.isArray(data[k])) data[k].push(v);
+            else data[k] = [data[k], v];
+          } else {
+            data[k] = v;
+          }
+        });
+        // Fallback required field aliases
+        if (!data.name && data['Имя']) data.name = data['Имя'];
+        if (!data.email && data['Email']) data.email = data['Email'];
+        if (!data.phone && (data['Телефон']||data['phone'])) data.phone = data['Телефон']||data['phone'];
+        data._source = data._source || 'site-form';
+
+        fetch('/api/lead', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'same-origin',
+          body: JSON.stringify(data)
+        }).then(r => r.ok ? r.json() : Promise.reject(r))
+          .then(function(){ form.reset(); })
+          .catch(function(){ setTimeout(function(){ form.submit(); }, 0); });
+      } catch(e){
+        setTimeout(function(){ form.submit(); }, 0);
+      }
+    }
+  }
+
+  function wire(selector){
+    var form = document.querySelector(selector);
+    if(!form) return;
+    // Capture & bubble to detect prevention by other handlers
+    form.addEventListener('submit', function(ev){ ensureSubmission(form, ev); }, true);
+    form.addEventListener('submit', function(ev){ ensureSubmission(form, ev); });
+  }
+
+  wire('form#estimate-form, form[data-estimate], form#partner-form, form[data-lead-form]');
+})();
+</script>
+
 </body></html>
