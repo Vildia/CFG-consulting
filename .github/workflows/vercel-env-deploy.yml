@@ -10,46 +10,42 @@ jobs:
   sync-env:
     runs-on: ubuntu-latest
     env:
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_TOKEN:   ${{ secrets.VERCEL_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      ORIGIN: ${{ secrets.ORIGIN }}
-      APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
-      CFG_KEY: ${{ secrets.CFG_KEY }}
+      VERCEL_ORG_ID:  ${{ secrets.VERCEL_ORG_ID }}
+      ORIGIN:         ${{ secrets.ORIGIN }}
+      APPS_SCRIPT_URL:${{ secrets.APPS_SCRIPT_URL }}
+      CFG_KEY:        ${{ secrets.CFG_KEY }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Install jq
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Define QS (teamId if provided)
         id: qs
         shell: bash
         run: |
-          if [[ -n "$VERCEL_ORG_ID" ]]; then
-            echo "value=?teamId=$VERCEL_ORG_ID" >> "$GITHUB_OUTPUT"
+          if [[ -n "${VERCEL_ORG_ID}" ]]; then
+            echo "value=?teamId=${VERCEL_ORG_ID}" >> $GITHUB_OUTPUT
           else
-            echo "value=" >> "$GITHUB_OUTPUT"
+            echo "value=" >> $GITHUB_OUTPUT
           fi
 
       - name: Who am I? (diagnostics)
         shell: bash
         run: |
           set -e
-          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN" \
-            "https://api.vercel.com/v2/user${{ steps.qs.outputs.value }}" > /dev/null
+          curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" https://api.vercel.com/v2/user | jq -r '.user.username,.user.email'
 
       - name: Get project by ID (diagnostics)
         shell: bash
         run: |
           set -e
-          curl -fsSL -H "Authorization: Bearer $VERCEL_TOKEN" \
-            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.qs.outputs.value }}" \
-            | jq -r '.id,.name' > /dev/null
+          curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID${{ steps.qs.outputs.value }}" | jq -r '.name,.id'
 
       - name: Upsert envs (write-only, show body on error)
         shell: bash
@@ -65,12 +61,12 @@ jobs:
               return 0
             fi
 
-            # JSON аккуратно собираем через jq
+            # безопасно собираем JSON
             local PAYLOAD
             PAYLOAD=$(jq -n --arg k "$KEY" --arg v "$VALUE" \
               '{key:$k, value:$v, target:["production","preview"], type:"encrypted"}')
 
-            # Забираем и тело, и статус
+            # делаем запрос и забираем и тело, и статус
             local RESP
             RESP=$(curl -sS -X POST "https://api.vercel.com/v9/projects/$VERCEL_PROJECT_ID/env$QS" \
               -H "Authorization: Bearer $VERCEL_TOKEN" \
@@ -86,9 +82,12 @@ jobs:
               return 0
             fi
 
-            if [[ "$STATUS" == "409" ]]; then
-              echo "upsert $KEY: already exists (409) — OK"
-              return 0
+            # считать «дубликат» успехом (и для 409 и для 403)
+            if [[ "$STATUS" == "409" || "$STATUS" == "403" ]]; then
+              if echo "$BODY" | jq -e '.code=="ENV_ALREADY_EXISTS"' >/dev/null 2>&1; then
+                echo "upsert $KEY: already exists — treating as OK"
+                return 0
+              fi
             fi
 
             echo "::error::upsert $KEY failed. HTTP $STATUS"
@@ -99,9 +98,8 @@ jobs:
 
           echo "Project=$VERCEL_PROJECT_ID  Org=$VERCEL_ORG_ID"
 
-          post_env "ORIGIN" "$ORIGIN"
-          post_env "APPS_SCRIPT_URL" "$APPS_SCRIPT_URL"
-          post_env "CFG_KEY" "$CFG_KEY"
+          post_env "ORIGIN"           "$ORIGIN"
+          post_env "APPS_SCRIPT_URL"  "$APPS_SCRIPT_URL"
+          post_env "CFG_KEY"          "$CFG_KEY"
 
-      - name: Complete job
-        run: echo "Done ✅"
+          echo "Done"
