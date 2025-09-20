@@ -12,7 +12,7 @@ jobs:
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }} # teamId, можно пустым
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }} # teamId (может быть пустым)
       ORIGIN: ${{ secrets.ORIGIN }}              # https://cfg-consulting.vercel.app
       APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
       CFG_KEY: ${{ secrets.CFG_KEY }}
@@ -24,12 +24,12 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Upsert envs (write-only, tolerate 409 / ENV_ALREADY_EXISTS)
+      - name: Upsert envs (per-target, tolerate 409 / ENV_ALREADY_EXISTS)
         shell: bash
         run: |
           set -euo pipefail
 
-          # Сборка URL с teamId при наличии
+          # Базовый URL + teamId (если задан)
           BASE="https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/env"
           if [[ -n "${VERCEL_ORG_ID:-}" ]]; then
             ENV_URL="${BASE}?teamId=${VERCEL_ORG_ID}"
@@ -37,41 +37,52 @@ jobs:
             ENV_URL="${BASE}"
           fi
 
-          upsert () {
+          # апсерт ОДНОГО ключа в ОДИН tar get (preview|production)
+          upsert_one () {
             local KEY="$1"
             local VAL="$2"
+            local TGT="$3"   # preview | production
 
             if [[ -z "${VAL}" ]]; then
-              echo "warning: Secret $KEY is empty. Skipping."
+              echo "warning: '$KEY' is empty. Skip $TGT."
               return 0
             fi
 
-            # JSON-пейлоад. ВАЖНО: type обязателен для этого эндпоинта
-            PAYLOAD=$(jq -n \
-              --arg key "$KEY" \
-              --arg value "$VAL" \
-              '{key:$key, value:$value, target:["production","preview"], type:"encrypted"}')
+            local PAYLOAD
+            PAYLOAD=$(jq -n --arg key "$KEY" --arg value "$VAL" --arg tgt "$TGT" \
+              '{key:$key, value:$value, target:[$tgt], type:"encrypted"}')
 
-            # Выполняем запрос и собираем код/тело
-            HTTP_CODE=$(curl -sS -w '%{http_code}' -o /tmp/body.json -X POST "$ENV_URL" \
+            # Пишем тело в файл и берём ТОЛЬКО цифры кода
+            local HTTP_CODE
+            HTTP_CODE=$(curl -sS -w '%{http_code}' -o /tmp/body.json \
+              -X POST "$ENV_URL" \
               -H "Authorization: Bearer ${VERCEL_TOKEN}" \
               -H "Content-Type: application/json" \
-              --data "$PAYLOAD")
+              --data "$PAYLOAD" | tr -dc '0-9')
 
             if [[ "$HTTP_CODE" == "200" || "$HTTP_CODE" == "201" ]]; then
-              echo "upsert $KEY: OK"
-            elif [[ "$HTTP_CODE" == "409" ]]; then
-              if grep -q 'ENV_ALREADY_EXISTS' /tmp/body.json; then
-                echo "upsert $KEY: already exists (409) -> OK"
-              else
-                echo "upsert $KEY: 409 (not ENV_ALREADY_EXISTS). Body:"; cat /tmp/body.json; exit 1
-              fi
-            else
-              echo "upsert $KEY failed. HTTP $HTTP_CODE. Response body:"; cat /tmp/body.json; exit 1
+              echo "upsert ${KEY}@${TGT}: OK"
+              return 0
             fi
+
+            if [[ "$HTTP_CODE" == "409" ]] && grep -q 'ENV_ALREADY_EXISTS' /tmp/body.json; then
+              echo "upsert ${KEY}@${TGT}: already exists (409) -> OK"
+              return 0
+            fi
+
+            echo "upsert ${KEY}@${TGT} FAILED. HTTP ${HTTP_CODE}. Body:"; cat /tmp/body.json
+            return 1
+          }
+
+          # апсерт ключа в ОБА таргета последовательно
+          upsert_both () {
+            local KEY="$1"
+            local VAL="$2"
+            upsert_one "$KEY" "$VAL" "preview"
+            upsert_one "$KEY" "$VAL" "production"
           }
 
           echo "Project=${VERCEL_PROJECT_ID}  Team=${VERCEL_ORG_ID:-<none>}"
-          upsert ORIGIN "${ORIGIN}"
-          upsert APPS_SCRIPT_URL "${APPS_SCRIPT_URL}"
-          upsert CFG_KEY "${CFG_KEY}"
+          upsert_both ORIGIN "${ORIGIN}"
+          upsert_both APPS_SCRIPT_URL "${APPS_SCRIPT_URL}"
+          upsert_both CFG_KEY "${CFG_KEY}"
