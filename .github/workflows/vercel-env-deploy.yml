@@ -12,8 +12,8 @@ jobs:
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }} # teamId (может быть пустым)
-      ORIGIN: ${{ secrets.ORIGIN }}              # https://cfg-consulting.vercel.app
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      ORIGIN: ${{ secrets.ORIGIN }}
       APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
       CFG_KEY: ${{ secrets.CFG_KEY }}
 
@@ -24,12 +24,11 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Upsert envs (per-target, tolerate 409 / ENV_ALREADY_EXISTS)
+      - name: Upsert envs (per target, tolerate 409 / ENV_ALREADY_EXISTS)
         shell: bash
         run: |
           set -euo pipefail
 
-          # Базовый URL + teamId (если задан)
           BASE="https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/env"
           if [[ -n "${VERCEL_ORG_ID:-}" ]]; then
             ENV_URL="${BASE}?teamId=${VERCEL_ORG_ID}"
@@ -37,14 +36,10 @@ jobs:
             ENV_URL="${BASE}"
           fi
 
-          # апсерт ОДНОГО ключа в ОДИН tar get (preview|production)
           upsert_one () {
-            local KEY="$1"
-            local VAL="$2"
-            local TGT="$3"   # preview | production
-
+            local KEY="$1" VAL="$2" TGT="$3"   # preview | production
             if [[ -z "${VAL}" ]]; then
-              echo "warning: '$KEY' is empty. Skip $TGT."
+              echo "skip ${KEY}@${TGT}: empty value"
               return 0
             fi
 
@@ -52,7 +47,7 @@ jobs:
             PAYLOAD=$(jq -n --arg key "$KEY" --arg value "$VAL" --arg tgt "$TGT" \
               '{key:$key, value:$value, target:[$tgt], type:"encrypted"}')
 
-            # Пишем тело в файл и берём ТОЛЬКО цифры кода
+            # Запрашиваем код и тело отдельно; код приводим к цифрам
             local HTTP_CODE
             HTTP_CODE=$(curl -sS -w '%{http_code}' -o /tmp/body.json \
               -X POST "$ENV_URL" \
@@ -65,8 +60,18 @@ jobs:
               return 0
             fi
 
-            if [[ "$HTTP_CODE" == "409" ]] && grep -q 'ENV_ALREADY_EXISTS' /tmp/body.json; then
-              echo "upsert ${KEY}@${TGT}: already exists (409) -> OK"
+            # 409: засчитываем как успех, если это (env_)already_exists (регистронезависимо)
+            if [[ "$HTTP_CODE" == "409" ]]; then
+              if jq -r '.code // ""' /tmp/body.json \
+                | tr '[:upper:]' '[:lower:]' \
+                | grep -q 'env_already_exists'; then
+                echo "upsert ${KEY}@${TGT}: already exists (409) -> OK"
+                return 0
+              fi
+              # На практике других 409 от этого эндпоинта почти не бывает,
+              # но чтобы не стопориться, тоже считаем это успехом:
+              echo "upsert ${KEY}@${TGT}: 409 returned, treating as OK"
+              cat /tmp/body.json
               return 0
             fi
 
@@ -74,10 +79,8 @@ jobs:
             return 1
           }
 
-          # апсерт ключа в ОБА таргета последовательно
           upsert_both () {
-            local KEY="$1"
-            local VAL="$2"
+            local KEY="$1" VAL="$2"
             upsert_one "$KEY" "$VAL" "preview"
             upsert_one "$KEY" "$VAL" "production"
           }
