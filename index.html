@@ -1433,8 +1433,24 @@ document.addEventListener('DOMContentLoaded', function(){
 
       try{ form.setAttribute('autocomplete','off'); var hpEl=form.querySelector('input[name="company_site"]'); if(hpEl && hpEl.parentNode){ hpEl.parentNode.removeChild(hpEl); } }catch(_){}
 
-      var fd=new FormData(form);
-      function val(k){ return (fd.get(k)||'').toString().trim(); }
+      try{
+          var controls = form.querySelectorAll('input, textarea, select');
+          controls.forEach(function(el){
+            try{
+              el.dispatchEvent(new Event('input', {bubbles:true}));
+              el.dispatchEvent(new Event('change', {bubbles:true}));
+            }catch(_){}
+          });
+        }catch(_){}
+        var fd=new FormData(form);
+      function val(k){
+          var v = fd.get(k);
+          if(v==null){
+            var el = form.querySelector('[name="'+k+'"]');
+            if(el) v = el.value;
+          }
+          return (v||'').toString().trim();
+        }
 
       var payload={
         action: form.getAttribute('data-estimate') ? 'estimate_24h' : 'lead',
