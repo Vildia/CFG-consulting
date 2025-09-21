@@ -1,12 +1,29 @@
 // api/lead.js
-// ВЕРСИЯ ДЛЯ Vercel Functions (Node 18+)
+// Версия для Vercel Serverless (Node 18+). Без Edge API и без WebCrypto.
+// Подпись: HMAC-SHA256(payload) c ключом в hex, затем первые 12 символов.
 
 import { createHmac } from 'node:crypto';
 
 export const config = {
-  // Явно фиксируем рантайм Node на Vercel
+  // Явно просим Node-рантайм (а не Edge)
   runtime: 'nodejs18.x',
 };
+
+/** Нормализация входа: допускаем и «плоское» тело, и { action, data } */
+function normalizeInput(reqBody) {
+  const body = (reqBody && typeof reqBody === 'object') ? reqBody : {};
+  const isV2 = Object.prototype.hasOwnProperty.call(body, 'action');
+  const action = isV2 ? (body.action || 'lead') : 'lead';
+  const data   = isV2 ? (body.data   || {})       : body;
+  return { action, data };
+}
+
+/** Подпись payload строкой: HMAC-SHA256 по ключу (hex) → 12 hex символов */
+function signPayloadHex12(payloadStr, keyHex) {
+  const keyBuf = Buffer.from(keyHex, 'hex');
+  const full   = createHmac('sha256', keyBuf).update(payloadStr).digest('hex');
+  return full.slice(0, 12);
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -14,54 +31,38 @@ export default async function handler(req, res) {
     return res.status(405).json({ ok: false, error: 'method_not_allowed' });
   }
 
+  const APPS_URL = process.env.APPS_SCRIPT_URL;
+  const CFG_KEY  = process.env.CFG_KEY; // hex-ключ
+
+  if (!APPS_URL || !CFG_KEY) {
+    return res.status(500).json({
+      ok: false,
+      error: 'env_missing',
+      have: { APPS_URL: !!APPS_URL, CFG_KEY: !!CFG_KEY },
+    });
+  }
+
   try {
-    const APPS_URL = process.env.APPS_SCRIPT_URL;
-    const KEY_HEX  = process.env.CFG_KEY;
+    const normalized   = normalizeInput(req.body);
+    const payloadStr   = JSON.stringify(normalized);
+    const sig12        = signPayloadHex12(payloadStr, CFG_KEY);
 
-    if (!APPS_URL || !KEY_HEX) {
-      return res.status(500).json({ ok: false, error: 'env_missing', have: { APPS_URL: !!APPS_URL, KEY: !!KEY_HEX } });
-    }
-
-    // ---------- НОРМАЛИЗАЦИЯ ВХОДА ----------
-    // Поддерживаем оба варианта:
-    // A) плоское тело: {name, email, ...} => action='lead', data=<тело>
-    // B) явный:       {action:'lead', data:{...}}
-    const body = req.body || {};
-    const isV2 = typeof body === 'object' && body !== null && Object.prototype.hasOwnProperty.call(body, 'action');
-
-    const action = isV2 ? body.action : 'lead';
-    const data   = isV2 ? body.data   : body;
-
-    // Формируем ЕДИНЫЙ формат, который уйдёт в Apps Script
-    const normalized = { action, data };
-
-    // ---------- ПОДПИСЫВАЕМ РОВНО ЭТУ СТРОКУ ----------
-    const payloadStr = JSON.stringify(normalized); // важно: подписываем И отправляем одну и ту же строку!
-    const sigHex = signHexSha256(KEY_HEX, payloadStr);
-
-    // ---------- ШЛЁМ В Apps Script ----------
-    const upstream = await fetch(APPS_URL, {
+    const upstreamRes = await fetch(APPS_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CFG-SIG': sigHex,
+        'X-CFG-SIG': sig12,
       },
       body: payloadStr,
     });
 
-    // Пробуем читать как JSON, иначе — как текст
-    const text = await upstream.text();
+    // Пробуем отдать 1:1 то, что вернул скрипт
+    const text = await upstreamRes.text();
     let json;
-    try { json = JSON.parse(text); } catch { json = { ok: false, error: 'upstream_not_json', raw: text }; }
+    try { json = JSON.parse(text); } catch { json = { ok: false, error: 'upstream_non_json', text }; }
 
-    return res.status(200).json(json);
-  } catch (err) {
-    return res.status(500).json({ ok: false, error: String(err?.message || err) });
+    return res.status(upstreamRes.ok ? 200 : 500).json(json);
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: 'proxy_failed', message: String(e?.message || e) });
   }
-}
-
-// Подпись HMAC-SHA256 в hex
-function signHexSha256(keyHex, message) {
-  const key = Buffer.from(keyHex, 'hex');
-  return createHmac('sha256', key).update(message).digest('hex');
 }
