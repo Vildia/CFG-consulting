@@ -1,82 +1,58 @@
-// api/lead.js
-// Vercel Node.js function (CommonJS). Проверка подписи + прокси в Apps Script.
+// api/lead.js — canonical (v18)
+import crypto from 'node:crypto';
 
-const { createHmac, timingSafeEqual } = require('node:crypto');
+export const config = { runtime: 'nodejs' };
 
-function normalizeInput(body) {
-  // Поддерживаем оба формата:
-  // A) плоское тело: { name, email, ... }
-  // B) { action, data }  -> data = объект лида, action должно быть 'lead'
-  const isV2 = body && typeof body === 'object' && Object.prototype.hasOwnProperty.call(body, 'action');
-  const action = isV2 ? body.action : 'lead';
-  const data   = isV2 ? body.data   : body;
+const APPS_URL = process.env.APPS_SCRIPT_URL;
+const ORIGIN   = process.env.ORIGIN || '*';
+const KEY_HEX  = (process.env.CFG_KEY_V2 || process.env.CFG_KEY_HEX || process.env.CFG_KEY || '').trim();
 
-  if (action !== 'lead' || !data || typeof data !== 'object') {
-    return { ok: false, error: 'bad_request', action, data };
+function cors(res) {
+  res.setHeader('Access-Control-Allow-Origin', ORIGIN);
+  res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,x-cfg-sig');
+}
+
+function bad(res, status, error) {
+  cors(res);
+  res.status(status).json({ ok: false, error });
+}
+
+function hmacHex(hexKey, message) {
+  if (!/^[0-9a-fA-F]{64}$/.test(hexKey)) {
+    throw new Error('CFG_KEY_V2 must be 64 hex chars (SHA-256 key).');
   }
-  return { ok: true, normalized: { action, data } };
+  return crypto.createHmac('sha256', Buffer.from(hexKey, 'hex'))
+               .update(message, 'utf8')
+               .digest('hex');
 }
 
-function hmacHex(keyHex, payloadStr) {
-  // keyHex: 64 hex chars; payloadStr: строка JSON
-  const key = Buffer.from(keyHex, 'hex');
-  return createHmac('sha256', key).update(payloadStr).digest('hex');
-}
+export default async function handler(req, res) {
+  cors(res);
+  if (req.method === 'OPTIONS') { return res.status(204).end(); }
+  if (req.method !== 'POST') { return bad(res, 405, 'method_not_allowed'); }
 
-function safeEqualHex(a, b) {
   try {
-    const A = Buffer.from(a, 'hex');
-    const B = Buffer.from(b, 'hex');
-    if (A.length !== B.length) return false;
-    return timingSafeEqual(A, B);
-  } catch {
-    return false;
-  }
-}
+    if (!APPS_URL) return bad(res, 500, 'env_missing:APPS_SCRIPT_URL');
+    if (!KEY_HEX)  return bad(res, 500, 'env_missing:CFG_KEY_V2');
 
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
-    return res.status(405).json({ ok: false, error: 'method_not_allowed' });
-  }
+    const body = req.body || {};
+    const v2   = (typeof body === 'object' && body && Object.prototype.hasOwnProperty.call(body, 'action'));
+    const data = v2 ? body.data : body;
+    const action = v2 ? body.action : 'lead';
 
-  const APPS_URL = process.env.APPS_SCRIPT_URL;
-  const KEY_HEX  = process.env.CFG_KEY_V2;
+    const normalized = { action, data };
+    const payload = JSON.stringify(normalized);
 
-  if (!APPS_URL || !KEY_HEX) {
-    return res.status(500).json({
-      ok: false,
-      error: 'env_missing',
-      have: { APPS_URL: !!APPS_URL, CFG_KEY_V2: !!KEY_HEX }
-    });
-  }
+    const sig = hmacHex(KEY_HEX, payload);
 
-  // --- Нормализуем вход ---
-  const check = normalizeInput(req.body || {});
-  if (!check.ok) {
-    return res.status(400).json(check);
-  }
-  const { normalized } = check;
-
-  // --- Формируем каноническую строку (именно её подписываем и шлём дальше) ---
-  const payloadStr = JSON.stringify(normalized);
-
-  // --- Проверка подписи (требуем заголовок x-cfg-sig) ---
-  const incomingSig = (req.headers['x-cfg-sig'] || '').toString().trim().toLowerCase();
-  if (!incomingSig) {
-    return res.status(400).json({ ok: false, error: 'missing_signature' });
-  }
-  const expectedSig = hmacHex(KEY_HEX, payloadStr);
-  if (!safeEqualHex(incomingSig, expectedSig)) {
-    return res.status(401).json({ ok: false, error: 'bad_signature' });
-  }
-
-  // --- Проксируем в Apps Script ---
-  try {
     const upstream = await fetch(APPS_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: payloadStr
+      headers: {
+        'Content-Type': 'application/json',
+        'x-cfg-sig': sig,
+      },
+      body: payload,
     });
 
     const text = await upstream.text();
@@ -86,9 +62,9 @@ module.exports = async (req, res) => {
     return res.status(200).json({
       ok: true,
       upstream_status: upstream.status,
-      upstream_body: json
+      upstream_body: json,
     });
   } catch (e) {
-    return res.status(502).json({ ok: false, error: 'upstream_fail', detail: String(e) });
+    return bad(res, 500, String(e && e.message || e));
   }
-};
+}
