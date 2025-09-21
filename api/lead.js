@@ -1,87 +1,140 @@
 // api/lead.js
-// Воркеры Vercel (Node runtime 18+)
+// Vercel Node.js Function (2nd gen). Совместимо с Node 18+
 
-import { createHmac } from 'node:crypto';
+import { createHmac, createHash } from 'node:crypto';
 
-// Явно фиксируем runtime (ВАЖНО: без ".x" в версии)
-export const config = { runtime: 'nodejs' };
+export const config = {
+  runtime: 'nodejs', // поддерживается Vercel: ["edge","experimental-edge","nodejs"]
+};
 
-// Помощь: читаем JSON безопасно
-async function readJson(req) {
-  try { return await new Promise((res, rej) => {
-    let b=''; req.on('data', c=>b+=c);
-    req.on('end', ()=>{ try { res(JSON.parse(b||'{}')); } catch(e){ rej(e);} });
-    req.on('error', rej);
-  }); } catch { return null; }
+// ---- вспомогательные утилиты ----
+function readJson(req) {
+  return new Promise((resolve, reject) => {
+    let raw = '';
+    req.on('data', (c) => (raw += c));
+    req.on('end', () => {
+      try {
+        resolve(raw ? JSON.parse(raw) : {});
+      } catch (e) {
+        reject(e);
+      }
+    });
+    req.on('error', reject);
+  });
 }
 
-// Нормализация входа (поддержка 2 форматов)
-function normalizeIncoming(body) {
-  // вариант А: плоский {name,email,...} => action:'lead'
-  if (body && typeof body === 'object' && !('action' in body)) {
-    return { action: 'lead', data: body };
+function hexToBytes(hex) {
+  if (!/^[0-9a-fA-F]+$/.test(hex) || hex.length % 2 !== 0) {
+    throw new Error('CFG_KEY_V2 must be even-length hex');
   }
-  // вариант Б: {action, data}
-  const action = typeof body?.action === 'string' ? body.action : 'lead';
-  const data   = (body && typeof body.data === 'object') ? body.data : (body || {});
-  return { action, data };
+  const out = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < out.length; i++) {
+    out[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+  }
+  return out;
 }
 
-// HMAC (hex)
-function hmacHex(keyHex, str) {
-  const key = Buffer.from(keyHex, 'hex');
-  return createHmac('sha256', key).update(str, 'utf8').digest('hex');
+function keyIdFromHex(hex) {
+  // короткий id ключа (как вы уже сверяли в консоли)
+  const id = createHash('sha256').update(Buffer.from(hexToBytes(hex))).digest('hex');
+  return id.slice(0, 12);
 }
 
+// ---- основная функция ----
 export default async function handler(req, res) {
+  // CORS на всякий случай
+  res.setHeader('Access-Control-Allow-Origin', process.env.ORIGIN || '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-CFG-SIG, X-CFG-KEY-ID');
+  if (req.method === 'OPTIONS') return res.status(204).end();
+
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ ok: false, error: 'method_not_allowed' });
   }
 
-  const APPS_URL = process.env.APPS_SCRIPT_URL; // URL веб-приложения Apps Script
-  const KEY_HEX  = process.env.CFG_KEY_V2 || process.env.CFG_KEY;
-
+  const APPS_URL = process.env.APPS_SCRIPT_URL;
+  const KEY_HEX  = process.env.CFG_KEY_V2 || process.env.CFG_KEY; // подстрахуемся
   if (!APPS_URL || !KEY_HEX) {
-    return res.status(500).json({ ok: false, error: 'env_missing', have: { APPS_URL: !!APPS_URL, KEY: !!KEY_HEX } });
+    return res.status(500).json({ ok: false, error: 'env_missing' });
   }
 
-  // читаем вход
-  const raw = await readJson(req);
-  const { action, data } = normalizeIncoming(raw);
+  let body;
+  try {
+    body = await readJson(req);
+  } catch {
+    return res.status(400).json({ ok: false, error: 'bad_json' });
+  }
 
-  // нормализуем полезную нагрузку и подписываем
-  const normalized = { action, data };
-  const payloadStr = JSON.stringify(normalized);
-  const sig = hmacHex(KEY_HEX, payloadStr);
+  // ---- нормализация входа ----
+  // А) плоское тело {name, email, ...}
+  // Б) { action: 'lead', data: {...} }
+  let action = 'lead';
+  let data   = {};
 
-  // ключ-идентификатор (чтобы GAS мог понимать, каким ключом проверять; можно выдрать 8–12 символов из key)
-  const key_id = (KEY_HEX || '').slice(0, 12);
+  const looksFlat =
+    body &&
+    typeof body === 'object' &&
+    !Array.isArray(body) &&
+    Object.prototype.hasOwnProperty.call(body, 'name');
 
-  // собираем тело для Apps Script — ВАЖНО: подпись внутри body
-  const upstreamBody = JSON.stringify({ ...normalized, sig, key_id });
+  if (looksFlat) {
+    data = body;
+  } else if (body && typeof body === 'object' && Object.prototype.hasOwnProperty.call(body, 'action')) {
+    action = body.action || 'lead';
+    data   = body.data || {};
+  } else {
+    // пусто — допустим
+    data = {};
+  }
 
-  let upstreamResp, upstreamJson;
+  const normalized = { action, data }; // ВАЖНО: подписываем ровно эту строку
+
+  // ---- считаем подпись ----
+  let signature, key_id;
+  try {
+    const payload = JSON.stringify(normalized);
+    signature = createHmac('sha256', Buffer.from(hexToBytes(KEY_HEX)))
+      .update(payload)
+      .digest('hex');
+    key_id = keyIdFromHex(KEY_HEX);
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: 'sign_failed' });
+  }
+
+  // ---- отправка в Apps Script ----
+  // Дадим все варианты — и в заголовке, и в теле, и key_id и там и там.
+  const upstreamBody = {
+    ...normalized,
+    sig: signature,
+    key_id,
+  };
+
+  let upstreamResp;
   try {
     upstreamResp = await fetch(APPS_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // дублируем в заголовок — вдруг когда-нибудь переедете с GAS
-        'X-CFG-SIG': sig,
+        // оба заголовка — чтобы точно дошло в GAS
+        'X-CFG-SIG': signature,
         'X-CFG-KEY-ID': key_id,
       },
-      body: upstreamBody,
+      body: JSON.stringify(upstreamBody),
     });
-
-    // пробуем прочитать JSON, но не падаем, если там пусто
-    const txt = await upstreamResp.text();
-    upstreamJson = txt ? JSON.parse(txt) : {};
   } catch (e) {
-    return res.status(502).json({ ok: false, error: 'upstream_failed', detail: String(e) });
+    return res.status(502).json({ ok: false, error: 'upstream_fetch_failed' });
   }
 
-  // прокидываем ответ
+  let upstreamJson = null;
+  try {
+    // Apps Script часто возвращает JSON; если пусто — не падаем
+    upstreamJson = await upstreamResp.json().catch(() => null);
+  } catch {
+    upstreamJson = null;
+  }
+
+  // Возвращаем вам всё как есть, плюс статус — для простого дебага в консоли
   return res.status(200).json({
     ok: true,
     upstream_status: upstreamResp.status,
