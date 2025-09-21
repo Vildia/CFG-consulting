@@ -1,19 +1,29 @@
-CFG consulting — canonical release (v18)
+# CFG - Canonical drop-in
 
-Что внутри
-- api/lead.js — серверная функция Vercel (Node 18). Подписывает JSON и проксирует в Apps Script.
-- assets/js/sendLead.js — клиентский помощник для отправки формы. Подпись на клиенте НЕ нужна.
+Готовый комплект файлов:
+- `api/lead.js` — сервер: нормализует `{action:'lead', data}`, подписывает HMAC и шлёт в Apps Script.
+- `assets/js/sendLead.js` — клиент: отправляет данные формы; подпись не нужна.
 
-Требуемые переменные окружения в Vercel (Project → Settings → Environment Variables):
-- APPS_SCRIPT_URL = ваш текущий URL деплоя Apps Script (из документа «Развёртывание.docx»).
-- CFG_KEY_V2      = 64‑символьный hex ключ (тот же, что и в Apps Script свойстве CFG_KEY_V2).
-- ORIGIN          = https://cfg-consulting.vercel.app  (или ваш домен/поддомен).
+## Что нужно в окружении Vercel
+- `APPS_SCRIPT_URL` — exec URL вашего Apps Script
+- `CFG_KEY_V2` — 64-символьный hex-ключ (тот же в Script Properties как `CFG_KEY_V2`)
+- `ORIGIN` — домен для CORS, напр. `https://cfg-consulting.vercel.app`
 
-Важно
-- Сервер ВСЕГДА отправляет в Apps Script РОВНО JSON.stringify({action:'lead', data}).
-- Подпись считается именно от этой строки. На клиенте ничего подписывать не надо.
-- Если в ответе из /api/lead вы видите { ok:true, upstream_status:200, upstream_body:{ ok:false, error:'missing_signature' } }
-  — это значит, что сервер НЕ приложил подпись. Проверьте переменную CFG_KEY_V2 (ровно 64 hex) и APPS_SCRIPT_URL.
+(Если `CFG_KEY_V2` не задан, будет fallback на `CFG_KEY`, но лучше всегда задавать V2.)
 
-GA
-- В документе «GA.docx» указан GA ID: G-D7QRTPW2F3. Подключайте его в разметке страницы.
+## Быстрый старт
+1. Скопируйте эти файлы в репозиторий (папки сохраняем).
+2. Убедитесь, что переменные окружения заданы в Vercel.
+3. Деплой → на странице можно использовать:
+
+```html
+<script type="module">
+  import { connectLeadForm } from '/assets/js/sendLead.js';
+  connectLeadForm(document.querySelector('#lead-form'));
+</script>
+```
+или
+```js
+import { sendLead } from '/assets/js/sendLead.js';
+sendLead({ name:'Тест', email:'test@example.com' });
+```

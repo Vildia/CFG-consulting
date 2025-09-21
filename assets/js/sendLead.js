@@ -1,34 +1,28 @@
-// assets/js/sendLead.js — client; no signature required.
+// assets/js/sendLead.js
+// Клиентский helper. Подпись НЕ требуется — всё делает /api/lead.
 export async function sendLead(data) {
-  const resp = await fetch('/api/lead', {
+  const r = await fetch('/api/lead', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'lead', data }),
+    body: JSON.stringify(data || {})
   });
-  const json = await resp.json().catch(() => ({}));
-  return json;
+  try {
+    return await r.json();
+  } catch {
+    return { ok: false, error: 'bad_json', status: r.status };
+  }
 }
 
-export function connectLeadForm(form, beforeSend = () => {}, onDone = () => {}) {
-  form.addEventListener('submit', async (ev) => {
-    ev.preventDefault();
-    const fd = new FormData(form);
+// Удобная привязка формы
+export function connectLeadForm(formEl, beforeSend, onDone) {
+  if (!formEl) return;
+  formEl.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(formEl);
     const data = Object.fromEntries(fd.entries());
-    beforeSend();
-    try {
-      const ans = await sendLead(data);
-      onDone(ans);
-    } catch (e) {
-      onDone({ ok:false, error:String(e) });
-    }
-  });
-}
-
-export function sendLeadFromForm(form) {
-  connectLeadForm(form, () => {
-    console.log('Sending...');
-  }, (ans) => {
-    console.log('API answer:', ans);
-    alert(ans.ok ? 'Заявка отправлена' : ('Ошибка: ' + (ans.error || 'unknown')));
+    if (typeof beforeSend === 'function') beforeSend(data);
+    const resp = await sendLead(data);
+    if (typeof onDone === 'function') onDone(resp);
+    else console.log('Lead API answer:', resp);
   });
 }
