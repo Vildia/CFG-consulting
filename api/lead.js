@@ -1,5 +1,4 @@
 // api/lead.js — Vercel Serverless Function (Node.js)
-
 import crypto from 'node:crypto';
 
 function hmacHex(secret, msg) {
@@ -13,26 +12,40 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { action, data } = req.body || {};
+    const body = req.body || {};
+
+    // 1) Достаём action и данные, поддерживая ДВА варианта входа:
+    //    а) { action, data: {...} }
+    //    б) { action, name, company, ... } (плоский)
+    const action = body.action;
+    let data = body.data;
+
+    if (!data) {
+      const { action: _a, _sig: _s, ...rest } = body;
+      if (Object.keys(rest).length) data = rest; // плоский формат → считаем это "data"
+    }
+
     if (action !== 'lead' || !data) {
       res.status(400).json({ ok: false, error: 'bad_payload' });
       return;
     }
 
-    // 1) Подписываем РОВНО JSON.stringify(data) — этого ждёт Apps Script
+    // 2) Подписываем РОВНО JSON.stringify(data) — именно это ждёт Apps Script
     const sig = hmacHex(process.env.CFG_KEY, JSON.stringify(data));
 
-    // 2) Отправляем в Apps Script подписанные данные
+    // 3) Формируем нормализованное тело, которое всегда одинаково для скрипта
+    const payload = { action, data, _sig: sig };
+
+    // 4) Отправляем в Apps Script и дублируем подпись в заголовке
     const resp = await fetch(process.env.APPS_SCRIPT_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CFG-Sig': sig,              // дублируем в заголовке
+        'X-CFG-Sig': sig,
       },
-      body: JSON.stringify({ action, data, _sig: sig }), // и в теле
+      body: JSON.stringify(payload),
     });
 
-    // 3) Пробрасываем ответ клиенту (и возможные ошибки)
     const json = await resp.json().catch(() => ({}));
     res.status(200).json(json);
   } catch (e) {
