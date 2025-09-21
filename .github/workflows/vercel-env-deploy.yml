@@ -3,90 +3,75 @@ name: Vercel Env (write-only)
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
   sync-env:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      ORIGIN: ${{ secrets.ORIGIN }}
-      APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       CFG_KEY: ${{ secrets.CFG_KEY }}
-
+      APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+      ORIGIN: ${{ secrets.ORIGIN }}
+      ORIGIN_PREVIEW: ${{ secrets.ORIGIN_PREVIEW }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Upsert envs (per target; tolerate 409 / env_already_exists)
-        shell: bash
+      - name: Install vercel & jq & python3
         run: |
-          set -euo pipefail
+          npm i -g vercel@latest
+          sudo apt-get update -y
+          sudo apt-get install -y jq python3
 
-          BASE="https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/env"
-          if [[ -n "${VERCEL_ORG_ID:-}" ]]; then
-            ENV_URL="${BASE}?teamId=${VERCEL_ORG_ID}"
-          else
-            ENV_URL="${BASE}"
+      - name: Link Vercel project
+        run: |
+          vercel link --project "$VERCEL_PROJECT_ID" --yes --scope "$VERCEL_ORG_ID"
+
+      # -------- PRODUCTION --------
+      - name: Remove existing envs (production)
+        run: |
+          vercel env rm CFG_KEY         production --yes || true
+          vercel env rm APPS_SCRIPT_URL production --yes || true
+          vercel env rm ORIGIN          production --yes || true
+          vercel env rm ORIGIN_PREVIEW  production --yes || true
+
+      - name: Add envs (production)
+        run: |
+          printf '%s' "$CFG_KEY"         | vercel env add CFG_KEY         production --force
+          printf '%s' "$APPS_SCRIPT_URL" | vercel env add APPS_SCRIPT_URL production --force
+          if [ -n "$ORIGIN" ]; then
+            printf '%s' "$ORIGIN"        | vercel env add ORIGIN          production --force
+          fi
+          if [ -n "$ORIGIN_PREVIEW" ]; then
+            printf '%s' "$ORIGIN_PREVIEW" | vercel env add ORIGIN_PREVIEW production --force
           fi
 
-          upsert_one () {
-            local KEY="$1" VAL="$2" TGT="$3"   # preview | production
-            if [[ -z "${VAL}" ]]; then
-              echo "skip ${KEY}@${TGT}: empty value"
-              return 0
-            fi
+      # -------- PREVIEW (опционально) --------
+      - name: Remove existing envs (preview)
+        if: env.ORIGIN_PREVIEW != ''
+        run: |
+          vercel env rm CFG_KEY         preview --yes || true
+          vercel env rm APPS_SCRIPT_URL preview --yes || true
+          vercel env rm ORIGIN          preview --yes || true
+          vercel env rm ORIGIN_PREVIEW  preview --yes || true
 
-            # encrypted + target = один таргет за запрос
-            local PAYLOAD
-            PAYLOAD=$(jq -n --arg key "$KEY" --arg value "$VAL" --arg tgt "$TGT" \
-              '{key:$key, value:$value, target:[$tgt], type:"encrypted"}')
+      - name: Add envs (preview)
+        if: env.ORIGIN_PREVIEW != ''
+        run: |
+          printf '%s' "$CFG_KEY"         | vercel env add CFG_KEY         preview --force
+          printf '%s' "$APPS_SCRIPT_URL" | vercel env add APPS_SCRIPT_URL preview --force
+          printf '%s' "$ORIGIN_PREVIEW"  | vercel env add ORIGIN_PREVIEW  preview --force
 
-            # вызов -> пишем тело в /tmp/body.json и отдельно берём http_code
-            local HTTP_CODE
-            HTTP_CODE=$(curl -sS -w '%{http_code}' -o /tmp/body.json \
-              -X POST "$ENV_URL" \
-              -H "Authorization: Bearer ${VERCEL_TOKEN}" \
-              -H "Content-Type: application/json" \
-              --data "$PAYLOAD" | tr -dc '0-9')
-
-            # 200/201 — обычный успех
-            if [[ "$HTTP_CODE" == "200" || "$HTTP_CODE" == "201" ]]; then
-              echo "upsert ${KEY}@${TGT}: OK"
-              return 0
-            fi
-
-            # Если где угодно в теле есть env_already_exists (любой регистр) — тоже успех
-            if grep -qi 'env[_ ]*already[_ ]*exists' /tmp/body.json; then
-              echo "upsert ${KEY}@${TGT}: already exists -> OK"
-              cat /tmp/body.json
-              return 0
-            fi
-
-            # На всякий случай: любой 409 трактуем как успех
-            if [[ "$HTTP_CODE" == "409" ]]; then
-              echo "upsert ${KEY}@${TGT}: 409 returned -> OK"
-              cat /tmp/body.json
-              return 0
-            fi
-
-            echo "upsert ${KEY}@${TGT} FAILED. HTTP ${HTTP_CODE}. Body:"; cat /tmp/body.json
-            return 1
-          }
-
-          upsert_both () {
-            local KEY="$1" VAL="$2"
-            upsert_one "$KEY" "$VAL" "preview"
-            upsert_one "$KEY" "$VAL" "production"
-          }
-
-          echo "Project=${VERCEL_PROJECT_ID}  Team=${VERCEL_ORG_ID:-<none>}"
-          upsert_both ORIGIN "${ORIGIN}"
-          upsert_both APPS_SCRIPT_URL "${APPS_SCRIPT_URL}"
-          upsert_both CFG_KEY "${CFG_KEY}"
+      - name: Print key_id (diagnostic, не секрет)
+        run: |
+          KEY_ID=$(python3 - <<'PY'
+import os, hashlib
+v=os.environ.get('CFG_KEY','').encode()
+print(hashlib.sha256(v).hexdigest()[:12])
+PY
+)
+          echo "key_id=${KEY_ID}"
