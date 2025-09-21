@@ -1,53 +1,67 @@
-// /api/lead.js  — ВЕРСИЯ ДЛЯ NODE RUNTIME (Vercel serverless по умолчанию)
-import crypto from 'crypto';
+// api/lead.js
+// ВЕРСИЯ ДЛЯ Vercel Functions (Node 18+)
+
+import { createHmac } from 'node:crypto';
+
+export const config = {
+  // Явно фиксируем рантайм Node на Vercel
+  runtime: 'nodejs18.x',
+};
 
 export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
+    return res.status(405).json({ ok: false, error: 'method_not_allowed' });
+  }
+
   try {
-    if (req.method !== 'POST') {
-      return res.status(405).json({ ok: false, error: 'method_not_allowed' });
+    const APPS_URL = process.env.APPS_SCRIPT_URL;
+    const KEY_HEX  = process.env.CFG_KEY;
+
+    if (!APPS_URL || !KEY_HEX) {
+      return res.status(500).json({ ok: false, error: 'env_missing', have: { APPS_URL: !!APPS_URL, KEY: !!KEY_HEX } });
     }
 
-    const { APPS_SCRIPT_URL, CFG_KEY } = process.env;
-    if (!APPS_SCRIPT_URL || !CFG_KEY) {
-      return res.status(500).json({ ok: false, error: 'server_misconfigured' });
-    }
+    // ---------- НОРМАЛИЗАЦИЯ ВХОДА ----------
+    // Поддерживаем оба варианта:
+    // A) плоское тело: {name, email, ...} => action='lead', data=<тело>
+    // B) явный:       {action:'lead', data:{...}}
+    const body = req.body || {};
+    const isV2 = typeof body === 'object' && body !== null && Object.prototype.hasOwnProperty.call(body, 'action');
 
-    // 1) Читаем и нормализуем тело: поддерживаем и плоский формат, и {action, data}
-    const raw = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-    let action, data;
+    const action = isV2 ? body.action : 'lead';
+    const data   = isV2 ? body.data   : body;
 
-    if (raw && typeof raw === 'object' && 'action' in raw && 'data' in raw) {
-      action = raw.action || 'lead';
-      data   = raw.data   || {};
-    } else {
-      action = raw.action || 'lead';
-      const { action: _drop, sig: _sig, __sig: _s2, signature: _s3, ...rest } = raw || {};
-      data = rest;
-    }
+    // Формируем ЕДИНЫЙ формат, который уйдёт в Apps Script
+    const normalized = { action, data };
 
-    // 2) Считаем подпись по JSON.stringify(data) с ключом CFG_KEY (HEX!)
-    const sig = crypto
-      .createHmac('sha256', Buffer.from(CFG_KEY, 'hex'))
-      .update(JSON.stringify(data))
-      .digest('hex');
+    // ---------- ПОДПИСЫВАЕМ РОВНО ЭТУ СТРОКУ ----------
+    const payloadStr = JSON.stringify(normalized); // важно: подписываем И отправляем одну и ту же строку!
+    const sigHex = signHexSha256(KEY_HEX, payloadStr);
 
-    // 3) Отправляем на Apps Script уже нормализованное тело с подписью
-    const payload = { action, data, sig };
-
-    const r = await fetch(APPS_SCRIPT_URL, {
+    // ---------- ШЛЁМ В Apps Script ----------
+    const upstream = await fetch(APPS_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CFG-SIG': sigHex,
+      },
+      body: payloadStr,
     });
 
-    // Возвращаем то, что ответил Apps Script (JSON или текст — без разницы)
-    const text = await r.text();
-    try {
-      return res.status(200).json(JSON.parse(text));
-    } catch {
-      return res.status(200).send(text);
-    }
+    // Пробуем читать как JSON, иначе — как текст
+    const text = await upstream.text();
+    let json;
+    try { json = JSON.parse(text); } catch { json = { ok: false, error: 'upstream_not_json', raw: text }; }
+
+    return res.status(200).json(json);
   } catch (err) {
-    return res.status(500).json({ ok: false, error: String(err) });
+    return res.status(500).json({ ok: false, error: String(err?.message || err) });
   }
+}
+
+// Подпись HMAC-SHA256 в hex
+function signHexSha256(keyHex, message) {
+  const key = Buffer.from(keyHex, 'hex');
+  return createHmac('sha256', key).update(message).digest('hex');
 }
