@@ -1,7 +1,7 @@
 name: Vercel Env (write-only)
 
 on:
-  workflow_dispatch: {}            # ← Кнопка "Run workflow" появится
+  workflow_dispatch: {}
   push:
     paths:
       - .github/workflows/vercel-env-deploy.yml
@@ -12,60 +12,87 @@ jobs:
     timeout-minutes: 7
 
     env:
-      VERCEL_TOKEN:       ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_ORG_ID:      ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID:  ${{ secrets.VERCEL_PROJECT_ID }}
-      CFG_KEY:            ${{ secrets.CFG_KEY }}
-      APPS_SCRIPT_URL:    ${{ secrets.APPS_SCRIPT_URL }}
-      ORIGIN:             ${{ secrets.ORIGIN }}
-      ORIGIN_PREVIEW:     ${{ secrets.ORIGIN_PREVIEW }}
+      VERCEL_TOKEN:        ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID:       ${{ secrets.VERCEL_ORG_ID }}
+      # Укажите хотя бы ОДНО из двух (если есть оба, приоритет у имени):
+      VERCEL_PROJECT_NAME: ${{ secrets.VERCEL_PROJECT_NAME }}
+      VERCEL_PROJECT_ID:   ${{ secrets.VERCEL_PROJECT_ID }}
+
+      CFG_KEY:             ${{ secrets.CFG_KEY }}
+      APPS_SCRIPT_URL:     ${{ secrets.APPS_SCRIPT_URL }}
+      ORIGIN:              ${{ secrets.ORIGIN }}
+      ORIGIN_PREVIEW:      ${{ secrets.ORIGIN_PREVIEW }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install vercel & jq & python3
+      - name: Install vercel CLI & python3
         run: |
           npm i -g vercel@latest
           sudo apt-get update -y
-          sudo apt-get install -y jq python3
+          sudo apt-get install -y python3
+
+      - name: Resolve project flag (prefer NAME, fallback to ID)
+        id: proj
+        shell: bash
+        run: |
+          if [ -n "$VERCEL_PROJECT_NAME" ]; then
+            echo "flag=--project \"$VERCEL_PROJECT_NAME\"" >> $GITHUB_OUTPUT
+          elif [ -n "$VERCEL_PROJECT_ID" ]; then
+            echo "flag=--project \"$VERCEL_PROJECT_ID\"" >> $GITHUB_OUTPUT
+          else
+            echo "Neither VERCEL_PROJECT_NAME nor VERCEL_PROJECT_ID provided" >&2
+            exit 1
+          fi
 
       # ---------- PRODUCTION ----------
       - name: Remove envs (production)
+        shell: bash
         run: |
-          vercel env rm CFG_KEY         production --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID" || true
-          vercel env rm APPS_SCRIPT_URL production --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID" || true
-          vercel env rm ORIGIN          production --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID" || true
-          vercel env rm ORIGIN_PREVIEW  production --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID" || true
+          set -e
+          for K in CFG_KEY APPS_SCRIPT_URL ORIGIN ORIGIN_PREVIEW; do
+            vercel env rm "$K" production --yes \
+              --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" ${{ steps.proj.outputs.flag }} || true
+          done
 
       - name: Add envs (production)
+        shell: bash
         run: |
-          printf '%s' "$CFG_KEY"         | vercel env add CFG_KEY         production --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID"
-          printf '%s' "$APPS_SCRIPT_URL" | vercel env add APPS_SCRIPT_URL production --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID"
+          set -e
+          # обязательные
+          printf '%s' "$CFG_KEY"         | vercel env add CFG_KEY         production --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" ${{ steps.proj.outputs.flag }}
+          printf '%s' "$APPS_SCRIPT_URL" | vercel env add APPS_SCRIPT_URL production --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" ${{ steps.proj.outputs.flag }}
+          # опциональные
           if [ -n "$ORIGIN" ]; then
-            printf '%s' "$ORIGIN"        | vercel env add ORIGIN          production --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID"
+            printf '%s' "$ORIGIN"        | vercel env add ORIGIN          production --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" ${{ steps.proj.outputs.flag }}
           fi
           if [ -n "$ORIGIN_PREVIEW" ]; then
-            printf '%s' "$ORIGIN_PREVIEW" | vercel env add ORIGIN_PREVIEW production --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID"
+            printf '%s' "$ORIGIN_PREVIEW" | vercel env add ORIGIN_PREVIEW production --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" ${{ steps.proj.outputs.flag }}
           fi
 
       # ---------- PREVIEW (опционально) ----------
       - name: Remove envs (preview)
         if: env.ORIGIN_PREVIEW != ''
+        shell: bash
         run: |
-          vercel env rm CFG_KEY         preview --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID" || true
-          vercel env rm APPS_SCRIPT_URL preview --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID" || true
-          vercel env rm ORIGIN          preview --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID" || true
-          vercel env rm ORIGIN_PREVIEW  preview --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID" || true
+          set -e
+          for K in CFG_KEY APPS_SCRIPT_URL ORIGIN ORIGIN_PREVIEW; do
+            vercel env rm "$K" preview --yes \
+              --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" ${{ steps.proj.outputs.flag }} || true
+          done
 
       - name: Add envs (preview)
         if: env.ORIGIN_PREVIEW != ''
+        shell: bash
         run: |
-          printf '%s' "$CFG_KEY"         | vercel env add CFG_KEY         preview --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID"
-          printf '%s' "$APPS_SCRIPT_URL" | vercel env add APPS_SCRIPT_URL preview --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID"
-          printf '%s' "$ORIGIN_PREVIEW"  | vercel env add ORIGIN_PREVIEW  preview --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" --project "$VERCEL_PROJECT_ID"
+          set -e
+          printf '%s' "$CFG_KEY"         | vercel env add CFG_KEY         preview --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" ${{ steps.proj.outputs.flag }}
+          printf '%s' "$APPS_SCRIPT_URL" | vercel env add APPS_SCRIPT_URL preview --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" ${{ steps.proj.outputs.flag }}
+          printf '%s' "$ORIGIN_PREVIEW"  | vercel env add ORIGIN_PREVIEW  preview --force --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" ${{ steps.proj.outputs.flag }}
 
       - name: Print key_id (diagnostic only)
+        shell: bash
         run: |
           KEY_ID=$(python3 - <<'PY'
 import os, hashlib
