@@ -1,15 +1,13 @@
 // api/lead.js
-// Версия для Vercel Serverless (Node 18+). Без Edge API и без WebCrypto.
-// Подпись: HMAC-SHA256(payload) c ключом в hex, затем первые 12 символов.
+// CommonJS-версия для Vercel Serverless (Node 18+), без ESM.
+// Подпись: HMAC-SHA256(payload) по hex-ключу → первые 12 hex символов.
 
-import { createHmac } from 'node:crypto';
+const { createHmac } = require('crypto');
 
-export const config = {
-  // Явно просим Node-рантайм (а не Edge)
-  runtime: 'nodejs18.x',
-};
+/** Явно просим Node-рантайм (не Edge) */
+exports.config = { runtime: 'nodejs18.x' };
 
-/** Нормализация входа: допускаем и «плоское» тело, и { action, data } */
+/** Нормализация входа: допускаем плоское тело и { action, data } */
 function normalizeInput(reqBody) {
   const body = (reqBody && typeof reqBody === 'object') ? reqBody : {};
   const isV2 = Object.prototype.hasOwnProperty.call(body, 'action');
@@ -25,14 +23,14 @@ function signPayloadHex12(payloadStr, keyHex) {
   return full.slice(0, 12);
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ ok: false, error: 'method_not_allowed' });
   }
 
   const APPS_URL = process.env.APPS_SCRIPT_URL;
-  const CFG_KEY  = process.env.CFG_KEY; // hex-ключ
+  const CFG_KEY  = process.env.CFG_KEY; // hex
 
   if (!APPS_URL || !CFG_KEY) {
     return res.status(500).json({
@@ -43,9 +41,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const normalized   = normalizeInput(req.body);
-    const payloadStr   = JSON.stringify(normalized);
-    const sig12        = signPayloadHex12(payloadStr, CFG_KEY);
+    const normalized = normalizeInput(req.body);
+    const payloadStr = JSON.stringify(normalized);
+    const sig12      = signPayloadHex12(payloadStr, CFG_KEY);
 
     const upstreamRes = await fetch(APPS_URL, {
       method: 'POST',
@@ -56,7 +54,6 @@ export default async function handler(req, res) {
       body: payloadStr,
     });
 
-    // Пробуем отдать 1:1 то, что вернул скрипт
     const text = await upstreamRes.text();
     let json;
     try { json = JSON.parse(text); } catch { json = { ok: false, error: 'upstream_non_json', text }; }
@@ -65,4 +62,4 @@ export default async function handler(req, res) {
   } catch (e) {
     return res.status(500).json({ ok: false, error: 'proxy_failed', message: String(e?.message || e) });
   }
-}
+};
