@@ -611,11 +611,22 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 
 <script>
-// === CFG override submit handler (capture, stopImmediatePropagation, autofill-safe) ===
 (function(){
   try{
     var form = document.querySelector('[data-cfg-lead]');
     if(!form) return;
+    // Neutralize inline submit/click handlers that may bypass our flow
+    try{ form.removeAttribute('onsubmit'); }catch(_){};
+    try{
+      var sbtns = form.querySelectorAll('button[type="submit"], [type="submit"]');
+      sbtns.forEach(function(b){
+        try{ b.removeAttribute('onclick'); }catch(_){};
+        b.addEventListener('click', function(ev){
+          ev.preventDefault(); ev.stopImmediatePropagation();
+          try{ form.requestSubmit ? form.requestSubmit(b) : form.dispatchEvent(new Event('submit', {bubbles:true,cancelable:true})); }catch(_){}
+        }, {capture:true, passive:false});
+      });
+    }catch(_){}
 
     form.addEventListener('submit', function(e){
       if(window.__cfg_sending){ e.preventDefault(); e.stopImmediatePropagation(); return; }
@@ -625,45 +636,35 @@ document.addEventListener('DOMContentLoaded', function(){
       var btn=form.querySelector('button[type="submit"], [type="submit"]');
       if(btn){ btn.disabled=true; btn.dataset.origText = btn.textContent || btn.value || ''; if(btn.tagName==='BUTTON') btn.textContent='Отправка…'; else btn.value='Отправка…'; }
 
-      try{ form.setAttribute('autocomplete','off'); var hpEl=form.querySelector('input[name="company_site"]'); if(hpEl && hpEl.parentNode){ hpEl.parentNode.removeChild(hpEl); } }catch(_){}
+      try{ form.setAttribute('autocomplete','off'); form.setAttribute('novalidate',''); var hpEl=form.querySelector('input[name="company_site"]'); if(hpEl && hpEl.parentNode){ hpEl.parentNode.removeChild(hpEl); } }catch(_){}
 
       try{
-          var controls = form.querySelectorAll('input, textarea, select');
-          controls.forEach(function(el){
-            try{
-              el.dispatchEvent(new Event('input', {bubbles:true}));
-              el.dispatchEvent(new Event('change', {bubbles:true}));
-            }catch(_){}
-          });
-        }catch(_){}
-        var fd=new FormData(form);
+        var controls = form.querySelectorAll('input, textarea, select');
+        controls.forEach(function(el){
+          try{
+            el.dispatchEvent(new Event('input', {bubbles:true}));
+            el.dispatchEvent(new Event('change', {bubbles:true}));
+          }catch(_){}
+        });
+      }catch(_){}
+
+      var fd=new FormData(form);
       function val(k){
-          var v = fd.get(k);
-          if(v==null){
-            var el = form.querySelector('[name="'+k+'"]');
-            if(el) v = el.value;
-          }
-          return (v||'').toString().trim();
-        }
+        var v = fd.get(k);
+        if(v==null){ var el = form.querySelector('[name="'+k+'"]'); if(el) v = el.value; }
+        return (v||'').toString().trim();
+      }
 
       var payload={
         action: form.getAttribute('data-estimate') ? 'estimate_24h' : 'lead',
         locale: form.getAttribute('data-locale') || 'ru',
-        name: val('name'),
-        company: val('company'),
-        inn: val('inn'),
-        email: val('email'),
-        phone: val('phone'),
-        note: val('note') || val('desc'),
-        industry: val('industry'),
-        revenue: val('revenue'),
-        geo: val('geo'),
-        urgency: val('urgency')
+        name: val('name'), company: val('company'), inn: val('inn'),
+        email: val('email'), phone: val('phone'), note: val('note') || val('desc'),
+        industry: val('industry'), revenue: val('revenue'), geo: val('geo'), urgency: val('urgency')
       };
       try{
         var params=new URLSearchParams(location.search);
-        payload.url = location.href;
-        payload.referer = document.referrer || '';
+        payload.url = location.href; payload.referer = document.referrer || '';
         ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(function(k){ var v=params.get(k); if(v) payload[k]=v; });
       }catch(_){}
 
@@ -693,7 +694,7 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     }, {capture:true, passive:false});
 
-    // Single-toast wrapper to avoid double "Спасибо"
+    // Single-toast wrapper
     try{
       var origToast = window.cfgShowCenter;
       window.__cfg_toast_shown = false;
