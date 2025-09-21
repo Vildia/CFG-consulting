@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <section id="estimate" style="scroll-margin-top: 96px;"><div class="container">
 <h2 class="section-title">Оценка за 24 часа</h2>
 <form id="lead-form" data-cfg-lead="1"  aria-label="Форма оценки" data-estimate="" data-locale="ru">
-<input autocomplete="off" name="company_site" style="display:none" tabindex="-1" type="text"/ autocomplete="new-password" aria-hidden="true" tabindex="-1" inputmode="none" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;opacity:0" >
+<input autocomplete="off" name="company_site" style="display:none" tabindex="-1" type="text"/>
 <div class="form-grid">
 <div><label>Имя</label><input name="name" required=""/></div>
 <div><label>Компания</label><input name="company"/></div>
@@ -1415,104 +1415,4 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 
 <script>document.addEventListener('cfg:form-success', function(e){ try{ cfgShowCenter('Спасибо! Заявка отправлена. Мы свяжемся в течение 24 часов.'); }catch(_){} });</script>
-
-<script>
-(function(){
-  try{
-    var form = document.querySelector('[data-cfg-lead]');
-    if(!form) return;
-    // Neutralize inline submit/click handlers that may bypass our flow
-    try{ form.removeAttribute('onsubmit'); }catch(_){};
-    try{
-      var sbtns = form.querySelectorAll('button[type="submit"], [type="submit"]');
-      sbtns.forEach(function(b){
-        try{ b.removeAttribute('onclick'); }catch(_){};
-        b.addEventListener('click', function(ev){
-          ev.preventDefault(); ev.stopImmediatePropagation();
-          try{ form.requestSubmit ? form.requestSubmit(b) : form.dispatchEvent(new Event('submit', {bubbles:true,cancelable:true})); }catch(_){}
-        }, {capture:true, passive:false});
-      });
-    }catch(_){}
-
-    form.addEventListener('submit', function(e){
-      if(window.__cfg_sending){ e.preventDefault(); e.stopImmediatePropagation(); return; }
-      window.__cfg_sending = true;
-      try{ e.preventDefault(); e.stopImmediatePropagation(); }catch(_){}
-
-      var btn=form.querySelector('button[type="submit"], [type="submit"]');
-      if(btn){ btn.disabled=true; btn.dataset.origText = btn.textContent || btn.value || ''; if(btn.tagName==='BUTTON') btn.textContent='Отправка…'; else btn.value='Отправка…'; }
-
-      try{ form.setAttribute('autocomplete','off'); form.setAttribute('novalidate',''); var hpEl=form.querySelector('input[name="company_site"]'); if(hpEl && hpEl.parentNode){ hpEl.parentNode.removeChild(hpEl); } }catch(_){}
-
-      try{
-        var controls = form.querySelectorAll('input, textarea, select');
-        controls.forEach(function(el){
-          try{
-            el.dispatchEvent(new Event('input', {bubbles:true}));
-            el.dispatchEvent(new Event('change', {bubbles:true}));
-          }catch(_){}
-        });
-      }catch(_){}
-
-      var fd=new FormData(form);
-      function val(k){
-        var v = fd.get(k);
-        if(v==null){ var el = form.querySelector('[name="'+k+'"]'); if(el) v = el.value; }
-        return (v||'').toString().trim();
-      }
-
-      var payload={
-        action: form.getAttribute('data-estimate') ? 'estimate_24h' : 'lead',
-        locale: form.getAttribute('data-locale') || 'ru',
-        name: val('name'), company: val('company'), inn: val('inn'),
-        email: val('email'), phone: val('phone'), note: val('note') || val('desc'),
-        industry: val('industry'), revenue: val('revenue'), geo: val('geo'), urgency: val('urgency')
-      };
-      try{
-        var params=new URLSearchParams(location.search);
-        payload.url = location.href; payload.referer = document.referrer || '';
-        ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(function(k){ var v=params.get(k); if(v) payload[k]=v; });
-      }catch(_){}
-
-      fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify(payload) })
-        .then(function(r){ return r.text().then(function(t){ var j=null; try{ j=JSON.parse(t);}catch(_){j=null;} return { ok:r.ok, status:r.status, body:j, text:t }; }); })
-        .then(function(out){
-          console.log('lead_resp', out);
-          if(out && out.status>=200 && out.status<300){
-            try{ window.gtag && gtag('event','form_submit_ok'); }catch(_){}
-            if(btn){ if(btn.tagName==='BUTTON') btn.textContent='Готово ✓'; else btn.value='Готово ✓'; }
-            try{ cfgShowCenter('Заявка отправлена! Мы свяжемся в течение 24 часов.'); }catch(_){}
-            try{ form.reset(); }catch(_){}
-          }else{
-            try{ window.gtag && gtag('event','form_submit_fail', {status: out && out.status}); }catch(_){}
-            try{ cfgShowCenter('Не удалось отправить. Повторите попытку.'); }catch(_){}
-            console.error('lead_fail', out);
-          }
-        })
-        .catch(function(err){
-          try{ window.gtag && gtag('event','form_submit_error'); }catch(_){}
-          try{ cfgShowCenter('Ошибка сети. Попробуйте ещё раз.'); }catch(_){}
-          console.error(err);
-        })
-        .finally(function(){
-          if(btn){ if(btn.tagName==='BUTTON') btn.textContent = btn.dataset.origText || 'Отправить'; else btn.value = btn.dataset.origText || 'Отправить'; btn.disabled=false; }
-          window.__cfg_sending = false;
-        });
-    }, {capture:true, passive:false});
-
-    // Single-toast wrapper
-    try{
-      var origToast = window.cfgShowCenter;
-      window.__cfg_toast_shown = false;
-      window.cfgShowCenter = function(msg){
-        if (window.__cfg_toast_shown) return;
-        window.__cfg_toast_shown = true;
-        try { origToast && origToast(msg); } catch(_){}
-        setTimeout(function(){ window.__cfg_toast_shown = false; }, 1800);
-      };
-    }catch(_){}
-  }catch(e){ console.error(e); }
-})();
-</script>
-
 </body></html>
