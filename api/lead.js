@@ -1,110 +1,81 @@
+// api/lead.js  (ВЕРСИЯ С ДИАГНОСТИКОЙ и поддержкой CFG_KEY_V2)
+import crypto from 'crypto';
 
-'use strict';
-const crypto = require('crypto');
-
-const APPS_SCRIPT_URL = String(process.env.APPS_SCRIPT_URL || '').trim();
-const CFG_KEY         = String(process.env.CFG_KEY || '').trim();
-const ORIGIN_PROD     = String(process.env.ORIGIN || '').trim();
-const ORIGIN_PREVIEW  = String(process.env.ORIGIN_PREVIEW || '').trim();
-
-function norm(u){ try{ return String(u||'').trim().replace(/\/$/, ''); }catch(_){ return String(u||''); } }
-function isAllowedOrigin(origin, allowed){ origin = norm(origin); allowed = (allowed||[]).map(norm).filter(Boolean); return !origin || allowed.includes(origin); }
-function allow(res, origin){
-  res.setHeader('Access-Control-Allow-Origin', origin || '*');
-  res.setHeader('Vary', 'Origin');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+function hmacHex(hexKey, msg) {
+  // hexKey — 64-символьная hex-строка
+  const keyBuf = Buffer.from(hexKey, 'hex');
+  return crypto.createHmac('sha256', keyBuf).update(msg).digest('hex');
 }
 
-async function doFetch(url, opts){
-  if (typeof fetch === 'undefined') {
-    const mod = await import('node-fetch');
-    return mod.default(url, opts);
+function sha256Hex(input) {
+  return crypto.createHash('sha256').update(input).digest('hex');
+}
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
+    return res.status(405).json({ ok: false, error: 'method_not_allowed' });
   }
-  return fetch(url, opts);
-}
 
-async function proxyToAppsScript(data){
-  const payload = JSON.stringify(data || {});
-  const sig = crypto.createHmac('sha256', CFG_KEY).update(payload).digest('hex');
-  const body = JSON.stringify({ ...JSON.parse(payload), _sig: sig });
-  const r = await doFetch(APPS_SCRIPT_URL, { method:'POST', headers:{ 'Content-Type':'application/json' }, body });
-  const text = await r.text().catch(()=>'');
-  let json = null; try{ json = text ? JSON.parse(text) : null; }catch(_){ json = null; }
-  return { ok: r.ok, status: r.status, text, json, sig_server: sig, body };
-}
+  res.setHeader('Cache-Control', 'no-store, max-age=0');
 
-module.exports = async function handler(req, res){
-  try{
-    const origin = req.headers['origin'] || '';
-    const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean);
-    allow(res, isAllowedOrigin(origin, allowed) ? origin : '*');
-
-    if (req.method === 'OPTIONS') { res.statusCode = 204; return res.end(); }
-    if (req.method !== 'POST') return res.status(405).json({ ok:false, error:'method_not_allowed' });
-
-    if (!APPS_SCRIPT_URL) return res.status(500).json({ ok:false, error:'env_missing_apps_script_url' });
-    if (!CFG_KEY)         return res.status(500).json({ ok:false, error:'env_missing_cfg_key' });
-
-    let data = req.body;
-    if (typeof data === 'string'){
-      data = data.trim();
-      if (data.startsWith('{')) { try{ data = JSON.parse(data); }catch(_){ data = {}; } }
-      else { try{ data = Object.fromEntries(new URLSearchParams(data)); }catch(_){ data = {}; } }
-    }
-    data = data && typeof data === 'object' ? data : {};
-
-    if (data.action === 'env') {
-      const key_id = require('crypto').createHash('sha256').update(CFG_KEY).digest('hex').slice(0,12);
-      return res.status(200).json({
-        ok: true,
-        env: {
-          key_id,
-          apps_script_url: APPS_SCRIPT_URL,
-          vercel_env: process.env.VERCEL_ENV || null,
-          node_env: process.env.NODE_ENV || null
-        }
-      });
-    }
-
-    const payload = {
-      action:  data.action || (req.url.includes('estimate') ? 'estimate_24h' : 'lead'),
-      locale:  data.locale || 'ru',
-      name:    data.name   || '',
-      company: data.company|| '',
-      inn:     data.inn    || '',
-      email:   data.email  || '',
-      phone:   data.phone  || '',
-      note:    data.note   || data.desc || '',
-      industry:data.industry|| '',
-      revenue: data.revenue || '',
-      geo:     data.geo     || '',
-      urgency: data.urgency || '',
-      url:     data.url     || '',
-      referer: data.referer || '',
-      utm_source:  data.utm_source  || '',
-      utm_medium:  data.utm_medium  || '',
-      utm_campaign:data.utm_campaign|| '',
-      utm_term:    data.utm_term    || '',
-      utm_content: data.utm_content || ''
-    };
-
-    const out = await proxyToAppsScript(payload);
-
-    if (out.ok) {
-      const body = (out.json && typeof out.json === 'object') ? out.json : { ok:true, status: out.status };
-      return res.status(200).json(body);
-    } else {
-      return res.status(200).json({
-        ok:false,
-        error:'apps_script_http_'+out.status,
-        text: out.text || null,
-        sig_server: out.sig_server,
-        body: payload
-      });
-    }
-  } catch (e){
-    try{ allow(res, '*'); }catch(_){}
-    return res.status(500).json({ ok:false, error:'server_crash', message: String(e && e.message || e) });
+  let body;
+  try {
+    body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+  } catch (e) {
+    return res.status(400).json({ ok: false, error: 'bad_json' });
   }
-};
+
+  // 1) Берём НОВУЮ переменную, если есть; иначе старую
+  const KEY_HEX = process.env.CFG_KEY_V2 || process.env.CFG_KEY || '';
+  const KEY_VAR = process.env.CFG_KEY_V2 ? 'CFG_KEY_V2' : (process.env.CFG_KEY ? 'CFG_KEY' : 'NONE');
+  const key_id = KEY_HEX ? sha256Hex(KEY_HEX).slice(0, 12) : null;
+
+  // 2) Диагностика окружения (помогает понять, что реально на рантайме)
+  if (body.action === 'env' || body.action === 'diag') {
+    return res.json({
+      ok: true,
+      env: {
+        var_used: KEY_VAR,
+        key_id,
+        vercel_env: process.env.VERCEL_ENV || null,
+        node_env: process.env.NODE_ENV || null,
+        has_apps_url: Boolean(process.env.APPS_SCRIPT_URL),
+      },
+    });
+  }
+
+  // 3) Обычная прокладка до Apps Script — подписываем пейлоад
+  const APPS_URL = process.env.APPS_SCRIPT_URL;
+  if (!APPS_URL) {
+    return res.status(500).json({ ok: false, error: 'no_apps_script_url' });
+  }
+  if (!KEY_HEX || KEY_HEX.length !== 64) {
+    return res.status(500).json({ ok: false, error: 'bad_or_missing_key' });
+  }
+
+  // То, что вы реально отправляете на Apps Script:
+  const payload = {
+    action: body.action || 'lead',
+    data: body.data || body, // оставляем совместимость со старым фронтом
+  };
+
+  const msg = JSON.stringify(payload);
+  const sig = hmacHex(KEY_HEX, msg);
+
+  try {
+    const r = await fetch(APPS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...payload, sig }),
+    });
+
+    const text = await r.text();
+    const json = (() => { try { return JSON.parse(text); } catch { return { raw: text }; } })();
+
+    // отдадим как есть; статус пробросим
+    return res.status(r.ok ? 200 : 500).json(json);
+  } catch (err) {
+    return res.status(502).json({ ok: false, error: 'apps_fetch_failed', detail: String(err) });
+  }
+}
