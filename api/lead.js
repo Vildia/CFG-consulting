@@ -1,65 +1,92 @@
 // api/lead.js
-// CommonJS-версия для Vercel Serverless (Node 18+), без ESM.
-// Подпись: HMAC-SHA256(payload) по hex-ключу → первые 12 hex символов.
+// Edge-функция для Vercel (Node 18+)
 
-const { createHmac } = require('crypto');
+import { createHmac } from 'node:crypto';
 
-/** Явно просим Node-рантайм (не Edge) */
-exports.config = { runtime: 'nodejs18.x' };
+export const config = {
+  // Явно фиксируем рантайм под Vercel
+  runtime: 'nodejs18.x',
+};
 
-/** Нормализация входа: допускаем плоское тело и { action, data } */
-function normalizeInput(reqBody) {
-  const body = (reqBody && typeof reqBody === 'object') ? reqBody : {};
-  const isV2 = Object.prototype.hasOwnProperty.call(body, 'action');
-  const action = isV2 ? (body.action || 'lead') : 'lead';
-  const data   = isV2 ? (body.data   || {})       : body;
-  return { action, data };
-}
-
-/** Подпись payload строкой: HMAC-SHA256 по ключу (hex) → 12 hex символов */
-function signPayloadHex12(payloadStr, keyHex) {
-  const keyBuf = Buffer.from(keyHex, 'hex');
-  const full   = createHmac('sha256', keyBuf).update(payloadStr).digest('hex');
-  return full.slice(0, 12);
-}
-
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ ok: false, error: 'method_not_allowed' });
   }
 
-  const APPS_URL = process.env.APPS_SCRIPT_URL;
-  const CFG_KEY  = process.env.CFG_KEY; // hex
-
-  if (!APPS_URL || !CFG_KEY) {
-    return res.status(500).json({
-      ok: false,
-      error: 'env_missing',
-      have: { APPS_URL: !!APPS_URL, CFG_KEY: !!CFG_KEY },
-    });
-  }
-
   try {
-    const normalized = normalizeInput(req.body);
-    const payloadStr = JSON.stringify(normalized);
-    const sig12      = signPayloadHex12(payloadStr, CFG_KEY);
+    const APPS_URL = process.env.APPS_SCRIPT_URL;
+    const KEY_HEX  = process.env.CFG_KEY_V2 || process.env.CFG_KEY;
 
-    const upstreamRes = await fetch(APPS_URL, {
+    if (!APPS_URL || !KEY_HEX) {
+      return res
+        .status(500)
+        .json({ ok: false, error: 'env_missing', have: { APPS_URL: !!APPS_URL, KEY: !!KEY_HEX } });
+    }
+
+    // ---------- Нормализация входа ----------
+    // Принимаем оба варианта:
+    // 1) плоское тело { name, email, ... }
+    // 2) { action: 'lead', data: {...} }
+    const body = await safeJson(req);
+    const isV2  = body && typeof body === 'object' && Object.prototype.hasOwnProperty.call(body, 'action');
+
+    const action = isV2 ? String(body.action || 'lead') : 'lead';
+    const data   = isV2 ? (body.data || {}) : (body || {});
+
+    // Единый объект для подписи/отправки
+    const normalized = { action, data };
+
+    // ---------- Считаем подпись (клиент НЕ подписывает) ----------
+    const payload = JSON.stringify(normalized);
+    const keyBuf  = Buffer.from(KEY_HEX, 'hex');
+    const sig     = createHmac('sha256', keyBuf).update(payload).digest('hex');
+
+    // ---------- Проксируем в Apps Script ----------
+    const upstream = await fetch(APPS_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CFG-SIG': sig12,
+        // это и есть то, чего не хватало:
+        'X-CFG-SIG': sig,
+        // по желанию можно проставить origin для логов
+        'X-Origin': process.env.ORIGIN || '',
       },
-      body: payloadStr,
+      body: payload,
     });
 
-    const text = await upstreamRes.text();
-    let json;
-    try { json = JSON.parse(text); } catch { json = { ok: false, error: 'upstream_non_json', text }; }
+    const text = await upstream.text();
 
-    return res.status(upstreamRes.ok ? 200 : 500).json(json);
-  } catch (e) {
-    return res.status(500).json({ ok: false, error: 'proxy_failed', message: String(e?.message || e) });
+    // Попробуем отдать JSON, если это JSON; иначе — сырой текст
+    try {
+      const json = JSON.parse(text);
+      return res.status(upstream.ok ? 200 : 500).json(json);
+    } catch {
+      return res.status(upstream.ok ? 200 : 500).send(text);
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ ok: false, error: 'internal', detail: String(err?.message || err) });
   }
-};
+}
+
+// Безопасный разбор JSON-тела
+async function safeJson(req) {
+  try {
+    const raw = await getRawBody(req);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+// Считываем сырой body (Edge/Node18)
+function getRawBody(req) {
+  return new Promise((resolve, reject) => {
+    let data = '';
+    req.setEncoding('utf8');
+    req.on('data', (c) => (data += c));
+    req.on('end', () => resolve(data));
+    req.on('error', reject);
+  });
+}
