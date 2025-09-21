@@ -1,54 +1,79 @@
-// api/lead.js — Vercel Serverless Function (Node.js)
-import crypto from 'node:crypto';
+// pages/api/lead.js
+import crypto from "node:crypto";
 
-function hmacHex(secret, msg) {
-  return crypto.createHmac('sha256', secret).update(msg, 'utf8').digest('hex');
+// чтение ENV из Vercel
+const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL; // .../exec
+const CFG_KEY_HEX     = process.env.CFG_KEY;         // hex-ключ
+
+function cors(res) {
+  res.setHeader("Access-Control-Allow-Origin", process.env.ORIGIN || "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-cfg-sig");
+}
+
+function hmacHex(hexKey, payload) {
+  return crypto.createHmac("sha256", Buffer.from(hexKey, "hex"))
+               .update(payload, "utf8")
+               .digest("hex");
 }
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    res.status(405).json({ ok: false, error: 'method_not_allowed' });
-    return;
+  cors(res);
+
+  if (req.method === "OPTIONS") {
+    res.status(204).end(); return;
+  }
+  if (req.method !== "POST") {
+    res.status(405).json({ ok: false, error: "method_not_allowed" }); return;
   }
 
+  // 1) Н О Р М А Л И З А Ц И Я  В Х О Д А
+  //    принимаем и плоское тело, и { action, data }
+  const raw = req.body ?? {};
+  let action;
+  let data;
+
+  if (raw && typeof raw === "object" && "action" in raw && "data" in raw) {
+    action = raw.action || "lead";
+    data   = raw.data || {};
+  } else {
+    // «плоское» тело – забираем action из него (если есть), остальное считаем данными
+    action = raw.action || "lead";
+    // клон без action (чтобы не попадал в подпись)
+    const { action: _drop, ...rest } = raw || {};
+    data = rest;
+  }
+
+  // Удалим возможные поля подписи, чтобы они не попали в payload для HMAC
+  if (data && typeof data === "object") {
+    delete data.sig;
+    delete data.__sig;
+    delete data.signature;
+  }
+
+  // 2) П О Д П И С Ь
+  const payload = JSON.stringify(data);
+  const expectedSig = hmacHex(CFG_KEY_HEX, payload).toLowerCase();
+
+  // можно принять подпись из хедера (если вы решите слать её с клиента)
+  const gotSig =
+    (req.headers["x-cfg-sig"] || "").toString().toLowerCase();
+
+  // если подписи нет в хедере — добавим свою в тело при проксировании
+  const sig = gotSig || expectedSig;
+
+  // 3) Проксируем на Apps Script (в формате { action, data, sig })
   try {
-    const body = req.body || {};
-
-    // 1) Достаём action и данные, поддерживая ДВА варианта входа:
-    //    а) { action, data: {...} }
-    //    б) { action, name, company, ... } (плоский)
-    const action = body.action;
-    let data = body.data;
-
-    if (!data) {
-      const { action: _a, _sig: _s, ...rest } = body;
-      if (Object.keys(rest).length) data = rest; // плоский формат → считаем это "data"
-    }
-
-    if (action !== 'lead' || !data) {
-      res.status(400).json({ ok: false, error: 'bad_payload' });
-      return;
-    }
-
-    // 2) Подписываем РОВНО JSON.stringify(data) — именно это ждёт Apps Script
-    const sig = hmacHex(process.env.CFG_KEY, JSON.stringify(data));
-
-    // 3) Формируем нормализованное тело, которое всегда одинаково для скрипта
-    const payload = { action, data, _sig: sig };
-
-    // 4) Отправляем в Apps Script и дублируем подпись в заголовке
-    const resp = await fetch(process.env.APPS_SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CFG-Sig': sig,
-      },
-      body: JSON.stringify(payload),
+    const rsp = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, data, sig }),
     });
 
-    const json = await resp.json().catch(() => ({}));
-    res.status(200).json(json);
+    const json = await rsp.json().catch(() => ({}));
+    // Пробросим ответ как есть
+    res.status(rsp.ok ? 200 : 500).json(json);
   } catch (e) {
-    res.status(500).json({ ok: false, error: 'server_error', detail: String(e?.message || e) });
+    res.status(500).json({ ok: false, error: "apps_script_fetch_failed", detail: String(e) });
   }
 }
