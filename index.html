@@ -853,7 +853,7 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
 
     try{
       setState('Отправка…');
-      const res = await fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const res = await fetch((window.__CFG&&window.__CFG.APPS_SCRIPT_URL)||'https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
       const ok = res.ok;
       let data = {};
       try { data = await res.json(); } catch(e){}
