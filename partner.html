@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ru"><head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>CFG Partner Program — агентское вознаграждение за сделки</title>
+<meta content="Партнёрская программа CFG: приводите клиентов на консалтинг — платим за сделку. SLA 24 часа." name="description"/>
+<link href="https://cfg-consulting.vercel.app/" hreflang="ru" rel="alternate"/>
+<link href="https://cfg-consulting.vercel.app/en.html" hreflang="en" rel="alternate"/>
+<link href="https://cfg-consulting.vercel.app/zh.html" hreflang="zh" rel="alternate"/>
+<link href="https://cfg-consulting.vercel.app/" hreflang="x-default" rel="alternate"/>
+<link href="/assets/favicon.ico" rel="icon"/><link href="/assets/apple-touch-icon.png" rel="apple-touch-icon"/>
+<meta content="website" property="og:type"/>
+<meta content="CFG Partner Program — платим за сделки" property="og:title"/>
+<meta content="Комиссия 10–15% от сделки + 5% ретеншн при продлении. SLA 24 ч." property="og:description"/>
+<meta content="https://cfg-consulting.vercel.app/partner.html" property="og:url"/>
+<meta content="https://cfg-consulting.vercel.app/assets/og.jpg" property="og:image"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<link as="image" fetchpriority="high" href="/assets/hero-1200.jpg" rel="preload"/>
+<script defer="" src="/analytics/ga-init.js"></script><script defer="" src="/analytics/ux-metrics.js"></script>
+<style>:root{--bg:#0b1020;--card:#121833;--mut:#9fb0ff;--pri:#3b82f6;--ok:#10B981;--err:#ef4444;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{margin:0;background:var(--bg);color:#e7ebff}.wrap{max-width:960px;margin:auto;padding:24px}
+.card{background:var(--card);border:1px solid #273057;border-radius:16px;padding:20px;margin:16px 0}
+h1{margin:0 0 12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:block;margin:8px 0 4px}input,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #273057;background:#0e142b;color:#e7ebff}
+button{border:0;border-radius:12px;padding:12px 16px;background:var(--pri);color:#fff;font-weight:700;cursor:pointer}
+small.mut{color:var(--mut)}.ok{color:var(--ok)}.err{color:var(--err)}footer{margin:24px 0;color:#9fb0ff}
+/* Modal for channel selection (partner page) */
+.slot-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(1px);display:none;z-index:999;}
+.slot-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:16px;z-index:1000;}
+.slot-modal[hidden], .slot-backdrop[hidden]{display:none;}
+.slot-modal .card{background:var(--card);border:1px solid #273057;border-radius:16px;padding:16px;min-width:280px;max-width:360px}
+.slot-modal header{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.slot-modal .grid{display:grid;grid-template-columns:1fr;gap:10px}
+.slot-modal .btn{display:block;text-align:center;padding:10px 12px;border-radius:12px;background:#0e142b;color:#e7ebff;border:1px solid #273057}
+.slot-modal .btn.primary{background:var(--pri);color:#fff;border-color:var(--pri)}
+</style>
+<!-- CFG GA4 init v3 -->
+<script>
+(function(){
+  window.CFG_SLOT = window.CFG_SLOT || {};
+  window.cfgOpenSlot = function(e){ try{ e && e.preventDefault && e.preventDefault(); }catch(_e){}; try{ if(window.CFG_SLOT && typeof window.CFG_SLOT.open==="function"){ window.CFG_SLOT.open(); return false;} }catch(_e){}; try{ var md=document.getElementById("slot-modal"); if(md){ md.style.display="block"; md.removeAttribute("hidden"); return false;} }catch(_e){}; return false; };
+  var GA_ID = 'G-D7QRTPW2F3';
+  function hasConsent(){
+    try {
+      if (localStorage.getItem('cfg_analytics') === '1') return true;
+      return document.cookie.split('; ').some(p => p.trim() === 'cfg_analytics=1');
+    } catch(e){ return false; }
+  }
+  function grantConsent(){
+    try {
+      localStorage.setItem('cfg_analytics','1');
+      var d = new Date(); d.setFullYear(d.getFullYear()+1);
+      document.cookie = 'cfg_analytics=1; path=/; expires='+d.toUTCString();
+    } catch(e){}
+    loadGA();
+  }
+  function loadGA(){
+    if (window.__ga_loaded) return;
+    window.__ga_loaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id='+GA_ID;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', GA_ID, { anonymize_ip: true, transport_type: 'beacon' });
+  }
+  // Wire up common accept buttons & custom events
+  function hookButtons(){
+    var selectors = ['[data-analytics-consent]','[data-cookie-accept]','#cookie-accept','[data-cc="accept"]','.cookie-accept'];
+    selectors.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(btn){
+        btn.addEventListener('click', grantConsent, {once:true});
+      });
+    });
+  }
+  document.addEventListener('cfg:consent-granted', grantConsent);
+  document.addEventListener('DOMContentLoaded', function(){
+    hookButtons();
+    if (hasConsent()) loadGA();
+  });
+})();
+</script>
+<style id="cfg-lang-style">
+/* CFG v5 language chips (force override) */
+.lang-chip{ 
+  display:inline-block; padding:6px 10px; border-radius:999px;
+  border:1px solid #93C5FD !important; 
+  background:transparent !important;
+  color:#E5E7EB !important; 
+  text-decoration:none !important; 
+}
+.lang-chip.active, .lang-chip[aria-current="true"], .lang-chip[data-active="1"]{
+  border-color:transparent !important;
+  background:linear-gradient(135deg, #4F46E5, #06B6D4) !important;
+  color:#FFFFFF !important;
+}
+</style>
+<style id="cfg-cookie-style">
+#cookie-banner{position:fixed;left:16px;right:16px;bottom:16px;background:#0B1220DD;color:#E5E7EB;border:1px solid #374151;padding:12px 16px;border-radius:14px;display:none;z-index:9999;backdrop-filter:saturate(140%) blur(6px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+#cookie-banner p{margin:0 0 8px 0;line-height:1.4;font-size:14px}
+#cookie-banner .row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+#cookie-banner button{padding:8px 12px;border-radius:10px;border:none;cursor:pointer}
+#cookie-banner .primary{background:#10B981;color:#fff}
+#cookie-banner .secondary{background:#111827;color:#E5E7EB;border:1px solid #374151}
+#cookie-banner a{color:#93C5FD}
+</style>
+<style id="cfg-slot-style">
+.slot-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(2px);display:none;z-index:10000}
+
+.slot-modal header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #1F2937}
+.slot-modal header h3{margin:0;font-size:18px}
+.slot-modal .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;padding:14px 16px}
+.slot-modal .btn{display:flex;align-items:center;gap:8px;justify-content:center;padding:10px;border:1px solid #374151;border-radius:12px;background:#0F172A;color:#E5E7EB;text-decoration:none;cursor:pointer}
+.slot-modal .btn.primary{background:linear-gradient(135deg,#4F46E5,#06B6D4);border-color:transparent;color:#fff}
+.slot-modal footer{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid #1F2937}
+.slot-modal .muted{opacity:.8;font-size:12px}
+.slot-close{background:transparent;border:none;color:#9CA3AF;font-size:22px;cursor:pointer}
+@media (max-width:480px){ .slot-modal .grid{grid-template-columns:1fr} }
+</style>
+<style id="cfg-slot-fix">
+/* Robust modal fix */
+.slot-modal[hidden]{display:none !important;}
+.slot-modal{position:fixed; inset:0; display:flex !important; align-items:flex-start; justify-content:center; padding:8vh 16px; z-index:3000 !important; background:transparent !important;}
+.slot-modal__backdrop{position:absolute; inset:0; background:rgba(0,0,0,.45) !important; z-index:0;}
+.slot-modal__dialog{position:relative; z-index:1; background:#0B1220; color:#E5E7EB; max-width:720px; width:100%; border-radius:16px; border:1px solid #1F2937; box-shadow:0 20px 48px rgba(0,0,0,.35);}
+.slot-modal__grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; padding:14px 16px;}
+.slot-modal__actions{display:flex; justify-content:flex-end; padding:12px 16px; border-top:1px solid #1F2937;}
+.slot-modal__title{margin:0; padding:14px 16px; border-bottom:1px solid #1F2937; font-size:18px;}
+</style>
+<style id="cfg-slot-fix-strong">
+/* CFG strong modal overrides */
+body.modal-open{overflow:hidden !important;}
+.slot-modal[hidden]{display:none !important;}
+.slot-modal{
+  position:fixed !important; inset:0 !important; 
+  display:flex !important; align-items:flex-start !important; justify-content:center !important;
+  padding:8vh 16px !important; z-index:4000 !important; background:transparent !important;
+}
+.slot-modal__backdrop{
+  position:absolute !important; inset:0 !important; 
+  background:rgba(0,0,0,.45) !important; z-index:4000 !important;
+}
+.slot-modal__dialog{
+  position:relative !important; z-index:4001 !important; 
+  background:#0B1220 !important; color:#E5E7EB !important;
+  max-width:720px !important; width:100% !important; 
+  border-radius:16px !important; border:1px solid #1F2937 !important; 
+  box-shadow:0 20px 48px rgba(0,0,0,.35) !important;
+  margin:0 auto !important; transform:none !important; 
+  max-height:calc(100vh - 16vh) !important; overflow:auto !important;
+}
+.slot-modal__title{margin:0 !important; padding:14px 16px !important; border-bottom:1px solid #1F2937 !important; font-size:18px !important;}
+.slot-modal__grid{display:grid !important; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)) !important; gap:10px !important; padding:14px 16px !important;}
+.slot-modal__actions{display:flex !important; justify-content:flex-end !important; padding:12px 16px !important; border-top:1px solid #1F2937 !important;}
+</style>
+</head><body>
+<div class="wrap">
+<h1>Партнёрская программа CFG</h1>
+<div class="card">
+<p><b>Что платим:</b> 10–15% от суммы оплаченной сделки + <b>5% ретеншн</b> при продлении договора. Выплата — в течение 5 рабочих дней после поступления оплаты на расчётный счёт ИП.</p>
+<p><b>Что считаем сделкой:</b> первый оплаченный договор на консалтинг/аудит/внедрение. Учёт по договорам и актам. Закрывашки — со стороны ИП Чапурин Е.А. (УСН 6%).</p>
+<p><b>SLA по лиду:</b> свяжемся в течение 24 часов. Статусы сделки доступны по запросу партнёра.</p>
+<p><b>НДА:</b> по заявке отправим двухсторонний НДА; вступает в силу после обмена сканами.</p>
+</div>
+<div class="grid">
+<div class="card">
+<h2 id="terms">Условия и правила</h2>
+<ul>
+<li>Оплачиваем за сделку (не за лид).</li><li>Привязка лида — по времени первой заявки.</li>
+<li>Спорные кейсы — решаем по таймштампам формы/почты/мессенджера.</li>
+<li>Участие бесплатно, требований к обороту нет.</li>
+</ul>
+<p class="mut">Агентский договор — по запросу, либо акцепт публичной оферты для партнёров.</p>
+</div>
+<div class="card">
+<h2 id="apply">Стать партнёром</h2>
+<form data-lead-form="" data-locale="ru" id="partner-form"><input autocomplete="off" name="company_site" style="display:none" tabindex="-1" type="text"/>
+<input name="type" type="hidden" value="partner"/>
+<input aria-hidden="true" autocomplete="off" name="website" style="position:absolute;left:-9999px" tabindex="-1" type="text"/>
+<label>Имя</label><input minlength="2" name="name" placeholder="Иван Иванов" required=""/>
+<label>Компания / ИП</label><input name="company" placeholder="ООО «Партнёр»"/>
+<label>Телефон</label><input name="phone" pattern="^\+?\d[\d\-\s\(\)]{6,}$" placeholder="+7 999 000-00-00" required=""/>
+<label>E-mail</label><input name="email" placeholder="name@example.com" type="email"/>
+<label>Комментарий</label><textarea name="message" placeholder="Регион, отрасли клиентов, формат сотрудничества" rows="4"></textarea>
+<label style="display:flex;gap:8px;align-items:center;margin-top:8px">
+<input id="consent" name="consent" required="" type="checkbox" value="1"/> <span>Согласен на обработку персональных данных (152‑ФЗ)</span>
+</label>
+<div style="display:flex;gap:12px;align-items:center;margin-top:10px">
+<button type="submit">Отправить заявку</button>
+<small class="mut" id="status">Ответим в течение 24 часов.</small>
+</div>
+</form>
+</div>
+</div>
+<div class="card">
+<h3>Контакты</h3>
+<p><a href="tel:+79025683529">+7 902 568‑35‑29</a> • <a href="mailto:C.F.G.consulting@bk.ru">C.F.G.consulting@bk.ru</a> • WhatsApp <a href="https://wa.me/79025683529" rel="noopener" target="_blank">написать</a> • Telegram <a href="https://t.me/Evgeniy_Chapurin" rel="noopener" target="_blank">@Evgeniy_Chapurin</a></p>
+</div>
+<footer>ИП Чапурин Евгений Александрович • ОГРНИП 318384600010408 • ИНН 381115124105 • УСН 6% • <a href="/offer.html">Оферта</a> • <a href="/privacy.html">Политика</a> • <a href="/terms.html">Условия</a></footer>
+</div>
+<script>
+(function(){
+  const form=document.getElementById('partner-form'); const status=document.getElementById('status'); if(!form) return;
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    if(!document.getElementById('consent').checked){ status.textContent='Поставьте галочку согласия'; status.className='err'; return; }
+    const fd = new FormData(form); const data = Object.fromEntries(fd.entries()); data.type='partner'; data.locale='ru';
+    let btn=form.querySelector('button[type="submit"]'); btn.disabled=true; status.textContent='Отправляем…'; status.className='mut';
+    try{
+      const res=await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+      const t=await res.text(); let j; try{j=JSON.parse(t)}catch{}
+      if(res.ok && j && j.ok){ status.textContent='Заявка отправлена. Спасибо!'; status.className='ok'; try{ cfgShowCenter('Спасибо! Заявка отправлена. Мы на связи в течение 24 часов.'); }catch(_){} }
+      else { status.textContent='Ошибка: '+(j && (j.error||j.text) || ('http_'+res.status)); status.className='err'; }
+    }catch(err){
+      try{
+        var pr = new URLSearchParams(data); pr.set('compat','1');
+        var r = await fetch('/api/lead?'+pr.toString(), { method:'GET' });
+        var tt = await r.text(); var jj; try{ jj=JSON.parse(tt); }catch(_){}
+        if(r.ok && jj && jj.ok){ status.textContent='Заявка отправлена.'; status.className='ok'; }
+        else { status.textContent='Ошибка: '+(jj && (jj.error||jj.text) || ('http_'+r.status)); status.className='err'; }
+      }catch(_){ status.textContent='Сеть недоступна.'; status.className='err'; }
+    }
+    btn.disabled=false;
+  });
+})();
+</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"CFG consulting","url":"https://cfg-consulting.vercel.app/","areaServed":["Irkutsk Oblast","Krasnoyarsk Krai","Russia"],"serviceType":["Diagnostics 10 days","12-week operating program"],"telephone":"+7-902-568-35-29","email":"C.F.G.consulting@bk.ru","sameAs":["https://t.me/Evgeniy_Chapurin"],"address":{"@type":"PostalAddress","addressCountry":"RU"},"logo":"https://cfg-consulting.vercel.app/assets/favicon-512.png","image":"https://cfg-consulting.vercel.app/assets/og.jpg"}</script>
+<script>
+// CFG unified lead sender v3 — injected
+(function(){
+  function qs(form, name){ return form.querySelector('[name="'+name+'"]'); }
+  function getVal(form, name){ const el = qs(form, name); return el ? el.value.trim() : ''; }
+  function getLocale(){ try { return document.documentElement.lang || (window.CFG_LOCALE || '').toString() || ''; } catch(e){ return ''; } }
+  function getUTM(){
+    const params = new URLSearchParams(location.search);
+    const keys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+    const out = {};
+    keys.forEach(k => { if (params.get(k)) out[k] = params.get(k); });
+    return out;
+  }
+  async function sendLead(form){
+    const hp = getVal(form, 'company_site'); // honeypot
+    if (hp) return Promise.reject(new Error('honeypot_filled'));
+
+    // Basic payload (common names across pages)
+    const payload = {
+      name: getVal(form, 'name') || getVal(form, 'full_name') || '',
+      company: getVal(form, 'company') || '',
+      inn: getVal(form, 'inn') || '',
+      email: getVal(form, 'email') || '',
+      phone: getVal(form, 'phone') || '',
+      message: getVal(form, 'message') || getVal(form, 'task') || getVal(form, 'comment') || '',
+      // meta
+      locale: getLocale(),
+      page_url: location.href,
+      referrer: document.referrer || '',
+      utm: getUTM()
+    };
+
+    const btn = form.querySelector('button[type="submit"], [type="submit"]');
+    const origText = btn && (btn.textContent || btn.value);
+
+    function setState(t){ if (btn) { if (btn.tagName === 'BUTTON') btn.textContent = t; else btn.value = t; } document.dispatchEvent(new CustomEvent('cfg:form-state', {detail:{state:t}})); }
+
+    try{
+      setState('Отправка…');
+      const res = await fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const ok = res.ok;
+      let data = {};
+      try { data = await res.json(); } catch(e){}
+      if (!ok) throw new Error('bad_status_'+res.status);
+      setState('Готово ✓');
+      document.dispatchEvent(new CustomEvent('cfg:form-success', {detail:{payload, data}}));
+      form.reset();
+      return data;
+    }catch(err){
+      setState('Ошибка');
+      document.dispatchEvent(new CustomEvent('cfg:form-error', {detail:{error: (err && err.message) || 'unknown', payload}}));
+      throw err;
+    }finally{
+      setTimeout(()=> setState(origText || 'Отправить'), 1400);
+    }
+  }
+
+  // Attach to all forms that carry data-cfg-lead or id matches known ids
+  function wireForm(form){
+    if (form.__cfg_wired) return;
+    form.__cfg_wired = true;
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      sendLead(form).catch(()=>{});
+    });
+  }
+
+  document.querySelectorAll('form[data-cfg-lead], form#lead-form, form#partner-form').forEach(wireForm);
+  // If forms injected later
+  const mo = new MutationObserver(() => {
+    document.querySelectorAll('form[data-cfg-lead], form#lead-form, form#partner-form').forEach(wireForm);
+  });
+  mo.observe(document.documentElement, {subtree:true, childList:true});
+})();
+</script>
+<script id="cfg-lang-active">
+// Enforce active language chip based on <html lang>
+document.addEventListener('DOMContentLoaded', function(){
+  // strip conflicting inline styles
+  document.querySelectorAll('.lang-chip').forEach(function(el){ el.style.background=''; el.style.color=''; el.style.border=''; });
+
+  var lang = (document.documentElement.getAttribute('lang')||'').toLowerCase();
+  if (!lang) {"ru"}
+  var map = {'ru':'index.html','en':'en.html','zh':'zh.html','zh-cn':'zh.html','zh-hans':'zh.html','zh-hant':'zh.html'};
+  var lc = lang.split('-')[0];
+  document.querySelectorAll('.lang-chip').forEach(function(el){
+    el.classList.remove('active');
+    var loc = (el.getAttribute('data-locale')||'').toLowerCase();
+    if (loc === lc) { el.classList.add('active'); el.setAttribute('aria-current','true'); el.setAttribute('data-active','1'); } else { el.removeAttribute('aria-current'); el.setAttribute('data-active','0'); }
+  });
+});
+</script>
+<script id="cfg-cookie-banner">
+(function(){
+  function t(lang){
+    var ru = {
+      text: 'Мы используем только аналитические cookie для улучшения работы сайта.',
+      accept: 'Принять',
+      decline: 'Отклонить',
+      policy: 'Политика'
+    };
+    var en = {
+      text: 'We use analytics-only cookies to improve the site experience.',
+      accept: 'Accept',
+      decline: 'Decline',
+      policy: 'Privacy'
+    };
+    var zh = {
+      text: '我们仅使用分析类 cookie 以改进网站体验。',
+      accept: '同意',
+      decline: '拒绝',
+      policy: '隐私政策'
+    };
+    var map = {ru:ru,en:en,zh:zh};
+    var lc = (lang||'ru').split('-')[0];
+    return map[lc] || ru;
+  }
+  function hasConsent(){
+    try {
+      if (localStorage.getItem('cfg_analytics') === '1') return true;
+      return document.cookie.split('; ').some(p => p.trim() === 'cfg_analytics=1');
+    } catch(e){ return false; }
+  }
+  function markDeclined(){
+    try {
+      localStorage.setItem('cfg_analytics','0');
+      var d = new Date(); d.setFullYear(d.getFullYear()+1);
+      document.cookie = 'cfg_analytics=0; path=/; expires='+d.toUTCString();
+    }catch(e){}
+  }
+  function grantConsent(){
+    try {
+      localStorage.setItem('cfg_analytics','1');
+      var d = new Date(); d.setFullYear(d.getFullYear()+1);
+      document.cookie = 'cfg_analytics=1; path=/; expires='+d.toUTCString();
+    }catch(e){}
+    document.dispatchEvent(new CustomEvent('cfg:consent-granted'));
+  }
+  function inject(){
+    if (document.getElementById('cookie-banner')) return;
+    var lang = (document.documentElement.getAttribute('lang')||'').toLowerCase();
+    var i18n = t(lang);
+    var div = document.createElement('div');
+    div.id = 'cookie-banner';
+    div.innerHTML = '<p>'+i18n.text+' <a href="/privacy.html" target="_blank" rel="noopener">'+i18n.policy+'</a>.</p>' +
+      '<div class="row">' +
+      '<button type="button" class="secondary" data-cookie-decline>'+i18n.decline+'</button>' +
+      '<button type="button" class="primary" data-cookie-accept>'+i18n.accept+'</button>' +
+      '</div>';
+    document.body.appendChild(div);
+    div.style.display = 'block';
+    div.querySelector('[data-cookie-accept]').addEventListener('click', function(){
+      grantConsent();
+      div.remove();
+    }, {once:true});
+    div.querySelector('[data-cookie-decline]').addEventListener('click', function(){
+      markDeclined();
+      div.remove();
+    }, {once:true});
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    if (!hasConsent()) inject();
+  });
+})();
+</script>
+<div class="slot-backdrop" hidden="" id="slot-backdrop"></div>
+<div aria-labelledby="slot-title" aria-modal="true" class="slot-modal" hidden="" id="slot-modal" role="dialog">
+<header>
+<h3 id="slot-title">Выберите канал связи</h3>
+<button aria-label="Закрыть" class="slot-close" data-slot-close="" type="button">×</button>
+</header>
+<div class="grid">
+<a class="btn primary" data-slot="mailto">Письмо (по умолчанию)</a>
+<a class="btn" data-slot="gmail">Gmail</a>
+<a class="btn" data-slot="outlook">Outlook</a>
+<a class="btn" data-slot="yandex">Yandex Mail</a>
+<a class="btn" data-slot="mailru">Mail.ru</a>
+<a class="btn" data-slot="wa">WhatsApp</a>
+<a class="btn" data-slot="tg">Telegram</a>
+<a class="btn" data-slot="call">Позвонить</a>
+<a class="btn" data-slot="form">Форма на сайте</a>
+<a class="btn" data-slot="copy">Скопировать шаблон</a>
+</div>
+<footer>
+<div class="muted">Мы подготовим тему и текст; добавим ссылку на эту страницу и UTM.</div>
+<div class="muted">Получатель: C.F.G.consulting@bk.ru</div>
+</footer>
+</div>
+<script id="cfg-slot-script">
+(function(){
+  var EMAIL = "C.F.G.consulting@bk.ru";
+  var WA = "79025683529";
+  var TG = "Evgeniy_Chapurin";
+
+  function enc(s){ try { return encodeURIComponent(s); } catch(e){ return s; } }
+
+  function utmString() {
+    try {
+      var p = new URLSearchParams(location.search);
+      var keys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+      var parts = [];
+      keys.forEach(function(k){ if(p.get(k)) parts.push(k+'='+p.get(k)); });
+      return parts.join('&');
+    } catch(e){ return ''; }
+  }
+
+  function template() {
+    var lang = (document.documentElement.getAttribute('lang')||'ru').toLowerCase();
+    var lc = lang.split('-')[0];
+    var subjMap = {
+      ru: 'Запрос консультации — C|F|G (с сайта)',
+      en: 'Consulting request — C|F|G (from site)',
+      zh: '咨询请求 — C|F|G（来自网站）'
+    };
+    var subj = subjMap[lc] || subjMap.en;
+    var lines = [];
+    if(lc==='ru') {
+      lines.push('Здравствуйте! Хочу предложить слот/получить консультацию.');
+      lines.push('Кратко о задаче: ');
+      lines.push('');
+      lines.push('— Страница: ' + location.href);
+      var u = utmString(); if (u) lines.push('— UTM: ' + u);
+      lines.push('— Язык: ' + lang);
+      lines.push('— Время: ' + new Date().toLocaleString());
+    } else if(lc==='zh') {
+      lines.push('您好！我想预约时间/获取咨询。');
+      lines.push('简要说明：');
+      lines.push('');
+      lines.push('— 页面：' + location.href);
+      var u2 = utmString(); if (u2) lines.push('— UTM：' + u2);
+      lines.push('— 语言：' + lang);
+      lines.push('— 时间：' + new Date().toLocaleString());
+    } else {
+      lines.push('Hello! I\'d like to propose a time slot / request a consultation.');
+      lines.push('Short context:');
+      lines.push('');
+      lines.push('— Page: ' + location.href);
+      var u3 = utmString(); if (u3) lines.push('— UTM: ' + u3);
+      lines.push('— Lang: ' + lang);
+      lines.push('— Time: ' + new Date().toLocaleString());
+    }
+    return { subj: subj, body: lines.join('
+') };
+  }
+
+  function show(el){
+    if (!el) return;
+    el.style.display = 'block';
+    el.removeAttribute('hidden');
+  }
+  function hide(el){
+    if (!el) return;
+    el.style.display = 'none';
+    el.setAttribute('hidden','');
+  }
+
+  function openModal() {
+    var md = document.getElementById('slot-modal');
+    if (!md) return;
+    try{ document.body.classList.add('modal-open'); }catch(_e){}
+    md.style.display = 'flex';
+    md.removeAttribute('hidden');
+  }catch(_e){}
+    var md = document.getElementById('slot-modal');
+    if (!md) return;
+    show(md);
+  }
+  function closeModal() {
+    var md = document.getElementById('slot-modal');
+    if (!md) return;
+    md.style.display = 'none';
+    md.setAttribute('hidden', '');
+    try{ document.body.classList.remove('modal-open'); }catch(_e){}
+  }catch(_e){}
+    var md = document.getElementById('slot-modal');
+    if (!md) return;
+    hide(md);
+  }
+
+  function handleChannel(kind, t, el){
+    var url = null;
+    if (kind === 'mailto') {
+      url = 'mailto:' + EMAIL + '?subject=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.location.href = url;
+    } else if (kind === 'gmail') {
+      url = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + enc(EMAIL) + '&su=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'outlook') {
+      url = 'https://outlook.office.com/mail/deeplink/compose?to=' + enc(EMAIL) + '&subject=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'yandex') {
+      url = 'https://mail.yandex.ru/compose?to=' + enc(EMAIL) + '&subject=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'mailru') {
+      url = 'https://e.mail.ru/compose/?to=' + enc(EMAIL) + '&subject=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'wa' || kind === 'whatsapp') {
+      url = 'https://wa.me/' + "79025683529" + '?text=' + enc(t.subj + '
+
+' + t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'tg' || kind === 'telegram') {
+      var deep = 'tg://resolve?domain=' + "Evgeniy_Chapurin" + '&text=' + enc(t.subj + '
+
+' + t.body);
+      var web = 'https://t.me/' + "Evgeniy_Chapurin";
+      try { window.location.href = deep; setTimeout(function(){ window.open(web, '_blank'); }, 600); }
+      catch(_err) { window.open(web, '_blank'); }
+    } else if (kind === 'call' || kind === 'phone') {
+      url = 'tel:+7' + "79025683529"; window.location.href = url;
+    } else if (kind === 'form') {
+      closeModal();
+      var f = document.querySelector('form[data-cfg-lead], form#lead-form');
+      if (f) {
+        f.scrollIntoView({behavior:'smooth', block:'start'});
+        var msg = f.querySelector('[name="message"], textarea, [name="task"], [name="comment"]');
+        var tplt = template();
+        if (msg) msg.value = tplt.body;
+        try { msg && msg.focus(); } catch(_e){}
+      } else {
+        window.location.hash = '#contacts';
+      }
+    } else if (kind === 'copy') {
+      var text = t.subj + '
+
+' + t.body;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ if(el){ el.textContent='Скопировано ✓'; setTimeout(function(){ el.textContent='Скопировать шаблон'; }, 1200);} });
+      }
+    }
+  }
+
+  function wire(){
+    // Delegated open
+    document.addEventListener('click', function(e){
+      var trigger = e.target.closest('[data-slot="open"], [data-slot-open]');
+      if (trigger) {
+        // block default only for our CTA
+        e.preventDefault();
+        openModal();
+        return;
+      }
+      // Close handlers (supports old markup data-slot="close" and backdrop click)
+      var cls = e.target.closest('[data-slot="close"], .slot-modal__backdrop');
+      if (cls) {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+      // Inside modal: channels (support both data-slot and legacy data-slot-open values)
+      var btn = e.target.closest('#slot-modal [data-slot], #slot-modal [data-slot-open], #slot-modal [data-slot-copy]');
+      if (btn) {
+        e.preventDefault();
+        var kind = btn.getAttribute('data-slot') || btn.getAttribute('data-slot-open') || '';
+        var t = template();
+        if (btn.hasAttribute('data-slot-copy')) kind = 'copy';
+        handleChannel(kind, t, btn);
+        return;
+      }
+    }, true);
+
+    // Ensure modal exists: if none, create minimal container
+    if (!document.getElementById('slot-modal')) {
+      var md = document.createElement('div');
+      md.id = 'slot-modal';
+      md.setAttribute('hidden','');
+      md.innerHTML = '<div class="slot-modal__backdrop" data-slot="close"></div><div class="slot-modal__dialog"><h3 class="slot-modal__title">Связаться</h3><div class="slot-modal__grid"><a class="btn" data-slot="mailto">Письмо</a><a class="btn" data-slot="wa">WhatsApp</a><a class="btn" data-slot="tg">Telegram</a><a class="btn" data-slot="form">Форма на сайте</a><a class="btn" data-slot="copy">Скопировать шаблон</a></div><div class="slot-modal__actions"><button class="btn" data-slot="close">Закрыть</button></div></div>';
+      document.body.appendChild(md);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', wire);
+  } else {
+    wire();
+  }
+})();
+</script>
+<script src="/assets/js/cfg-env.js"></script><script defer="" src="/assets/js/lead-submit.js"></script></body></html>

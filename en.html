@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>CFG consulting — Operating profit in 12 weeks. Fractional COO/CGO</title><meta content="Аудит, стратегия, продажи, команды, аналитика. Запуски подразделений под ключ за 30–60 дней." name="description"/><link href="assets/favicon-512.png" rel="icon" type="image/png"/>
+<style>
+:root{--navy:#0A1F44;--indigo:#4F46E5;--slate:#0F172A;--accent:#22C55E;--ring:#3B82F6;}
+*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a;scroll-behavior:smooth}
+:focus-visible{outline:3px solid var(--ring);outline-offset:2px;border-radius:10px}
+.container{max-width:1160px;margin:0 auto;padding:0 20px}
+.btn{display:inline-block;padding:14px 20px;border-radius:12px;font-weight:600;text-decoration:none;cursor:pointer;border:none}
+.btn-primary{background:linear-gradient(90deg,var(--slate),var(--indigo));color:#fff}
+.btn-secondary{border:2px solid #e2e8f0;color:var(--slate);background:#fff}
+nav{position:sticky;top:0;background:#ffffffd6;z-index:10}
+nav .row{display:flex;align-items:center;justify-content:space-between;min-height:64px}
+nav .brand{display:flex;align-items:center;gap:12px;font-weight:800;color:var(--navy)}
+nav .brand svg{border-radius:10px}
+.hero{background:linear-gradient(135deg,var(--slate),var(--indigo));color:#fff;padding:28px 0 24px;position:relative;overflow:hidden}
+.hero .content{display:grid;grid-template-columns:1.15fr 1fr;gap:28px;align-items:center}
+.hero h1{font-size:44px;line-height:1.15;margin:6px 0 12px}
+.hero p.lead{font-size:18px;opacity:.9;margin:0 0 16px}
+section{padding:56px 0;}
+.section-title{font-size:28px;margin:0 0 18px;color:var(--navy)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;box-shadow:0 10px 24px rgba(2,6,23,.06)}
+ul.tick{padding:0;margin:0;list-style:none}
+ul.tick li{margin:10px 0;padding-left:28px;position:relative}
+ul.tick li:before{content:'✔';position:absolute;left:0;top:0;color:var(--accent)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{text-align:center;padding:14px;background:#fff;border:1px solid #e5e7eb;border-radius:14px}
+.badge{display:inline-block;padding:6px 10px;border:1px solid #e5e7eb;border-radius:999px;background:#fff;color:#334155;margin-right:8px;margin-bottom:8px}
+.process{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.step{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.cta{background:#0b1220;color:#fff;text-align:center;padding:48px 18px;border-radius:16px}
+footer{background:#0b1220;color:#cbd5e1;padding:26px 0}footer a{color:#e2e8f0;text-decoration:none}
+input,textarea,select{font:inherit;border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;background:#fff;width:100%}
+label{font-weight:600;display:block;margin:8px 0 6px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.small{font-size:12px;color:#64748b}
+@media(max-width:980px){.hero .content{grid-template-columns:1fr;gap:10px}.cards{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.process{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}}
+.lang-toggle{display:inline-flex;align-items:center;background:#f1f5f9;border:1px solid #e5e7eb;border-radius:999px;padding:2px;margin:0 10px}
+.lang-toggle a{padding:6px 10px;border-radius:999px;text-decoration:none;color:#334155;font-weight:600;min-width:42px;text-align:center}
+.lang-toggle a.active{background:linear-gradient(90deg,var(--slate),var(--indigo));color:#fff}
+.modal{position:fixed;inset:0;background:rgba(2,6,23,.65);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal.open{display:flex}
+.modal .box{background:#fff;border-radius:16px;max-width:560px;width:100%;padding:22px;border:1px solid #e5e7eb;box-shadow:0 20px 40px rgba(2,6,23,.2)}
+.modal .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#f8fafc}
+.toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#111827;color:#fff;padding:12px 16px;border-radius:14px;display:none;z-index:60;max-width:90%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.toast.show{display:block}
+.industry{display:flex;align-items:center;gap:10px;border:1px dashed #e5e7eb;border-radius:12px;padding:10px 12px;background:#fff}
+
+.pills-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.pill{display:inline-block;background:#e2e8f0;color:#0f172a;padding:6px 10px;border-radius:999px;font-weight:600;font-size:12px}
+.pill-outline{background:#fff;border:1px solid #e5e7eb}
+
+.pill-lg{font-size:14px;padding:10px 14px}
+.pill,.pill-outline{border-width:1.5px}
+
+/* Ensure 'Materials' block is readable on light backgrounds */
+#downloads .card{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  box-shadow:0 6px 18px rgba(2,6,23,0.06);
+}
+#downloads .card h2{ color: var(--navy); }
+#downloads .card a{ color:#1f2937; text-decoration: underline; font-weight:600; }
+#downloads .card li{ color:#0f172a; }
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"C|F|G consulting","url":"https://cfg-consulting.vercel.app","logo":"https://cfg-consulting.vercel.app/assets/favicon-512.png","email":"C.F.G.consulting@bk.ru","telephone":"<a href="tel:+79025683529">+7 902 568‑35‑29</a>","sameAs":["https://t.me/Evgeniy_Chapurin"]}
+</script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);};gtag('js', new Date());</script> <!-- analytics gated via consent -->
+<link href="https://cfg-consulting.vercel.app/" rel="canonical"/>
+<link href="https://cfg-consulting.vercel.app/" hreflang="en" rel="alternate"/>
+<link href="https://cfg-consulting.vercel.app/en.html" hreflang="en" rel="alternate"/>
+<link href="https://cfg-consulting.vercel.app/zh.html" hreflang="zh" rel="alternate"/>
+<meta content="Fractional COO: 12 weeks to controllable profit. Data discipline, incentive design, commercial relaunch." name="description"/>
+<meta content="CFG consulting — 12 weeks to controllable profit" property="og:title"/>
+<meta content="Фракционный COO: данные → мотивация → продажи. 3–5 инициатив — без тяжёлого IT." property="og:description"/>
+<meta content="/assets/hero-1200.jpg" property="og:image"/>
+<meta content="website" property="og:type"/>
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"ProfessionalService",
+ "name":"C | F | G consulting",
+ "image":"/assets/hero-1200.jpg",
+ "url":"https://cfg-consulting.vercel.app/",
+ "areaServed":"RU",
+ "founder":{"@type":"Person","name":"Evgeniy Chapurin"},
+ "telephone":"+7-902-568-35-29",
+ "email":"C.F.G.consulting@bk.ru",
+ "sameAs":["https://t.me/Evgeniy_Chapurin"]
+}
+</script>
+<script>
+window.CFG_I18N = {
+  ru: { submitted: "Заявка направлена", sending: "Отправляем...", error: "Ошибка. Попробуйте ещё раз." },
+  en: { submitted: "Request sent",    sending: "Sending...",     error: "Error. Please try again." },
+  zh: { submitted: "请求已发送",        sending: "正在发送…",         error: "出错了，请重试。" }
+};
+</script>
+<style>
+#cookie-banner{position:fixed;left:16px;right:16px;bottom:16px;background:#111827;color:#fff;padding:12px 16px;border-radius:12px;display:none;z-index:9999}
+#cookie-banner button{margin-left:8px;padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+#cookie-banner .primary{background:#10B981;color:#fff}
+#cookie-banner .secondary{background:#374151;color:#fff}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Service", "name": "Operational & Growth Consulting (DPPM-12)", "provider": {"@type": "Organization", "name": "C|F|G consulting"}, "areaServed": "RU", "offers": {"@type": "Offer", "availability": "https://schema.org/InStock"}}</script>
+<meta content="ru_RU" property="og:locale"/>
+<meta content="en_US" property="og:locale:alternate"/>
+<meta content="zh_CN" property="og:locale:alternate"/>
+<style>.disclaimer{margin-top:16px;color:#6B7280;font-size:12px;line-height:1.5}</style>
+<style>
+:root{ --section-gap: 56px; }
+#logos{ padding-bottom: 12px; }
+#cases{ margin-top: var(--section-gap); }
+#cases h2{ margin-top: 0; }
+#cases .cards{ margin-top: 12px; }
+</style>
+<style>
+/* Cases section spacing refinements */
+#cases{ margin-top:64px; }
+#cases .cards{ margin-top:24px; gap:20px; }
+#cases .card{ padding:20px 22px; border-radius:14px; }
+#cases .card h3{ margin:0 0 10px 0; }
+#cases .card p{ margin:0; }
+#cases .disclaimer{ margin-top:16px; }
+</style>
+<style>
+#cases .container{ padding-left:20px; padding-right:20px; }
+#cases{ margin-top:40px; }
+#cases h2{ margin:0; }
+#cases .cards{ margin-top:18px; gap:20px; }
+</style>
+<style>.container .disclaimer{margin-left:0;margin-right:0;}</style>
+<style>
+:root{ --header-offset: 96px; }
+section[id]{ scroll-margin-top: var(--header-offset); }
+/* Fallback for browsers that ignore scroll-margin: */
+:target::before{ content: ""; display: block; height: var(--header-offset); margin-top: calc(-1 * var(--header-offset)); }
+</style>
+<style>
+#site-header .container{display:flex;align-items:center;justify-content:space-between;gap:24px}
+#site-header nav{display:flex;align-items:center;gap:20px;flex:1;justify-content:flex-end;flex-wrap:wrap;row-gap:10px}
+#site-header .nav-links{display:flex;gap:16px;margin-right:auto}
+#site-header .header-tools{display:flex;align-items:center;gap:12px}
+#site-header .lang{display:flex;gap:8px}
+</style>
+<script defer="" src="/analytics/ux-metrics.js"></script>
+<link as="image" fetchpriority="high" href="assets/hero-1200.jpg" rel="preload"/>
+<style id="cfg-lang-style">
+/* CFG v5 language chips (force override) */
+.lang-chip{ 
+  display:inline-block; padding:6px 10px; border-radius:999px;
+  border:1px solid #93C5FD !important; 
+  background:transparent !important;
+  color:#E5E7EB !important; 
+  text-decoration:none !important; 
+}
+.lang-chip.active, .lang-chip[aria-current="true"], .lang-chip[data-active="1"]{
+  border-color:transparent !important;
+  background:linear-gradient(135deg, #4F46E5, #06B6D4) !important;
+  color:#FFFFFF !important;
+}
+</style>
+<style id="cfg-cookie-style">
+#cookie-banner{position:fixed;left:16px;right:16px;bottom:16px;background:#0B1220DD;color:#E5E7EB;border:1px solid #374151;padding:12px 16px;border-radius:14px;display:none;z-index:9999;backdrop-filter:saturate(140%) blur(6px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+#cookie-banner p{margin:0 0 8px 0;line-height:1.4;font-size:14px}
+#cookie-banner .row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+#cookie-banner button{padding:8px 12px;border-radius:10px;border:none;cursor:pointer}
+#cookie-banner .primary{background:#10B981;color:#fff}
+#cookie-banner .secondary{background:#111827;color:#E5E7EB;border:1px solid #374151}
+#cookie-banner a{color:#93C5FD}
+</style>
+<style id="cfg-slot-style">
+.slot-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(2px);display:none;z-index:10000}
+
+.slot-modal header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #1F2937}
+.slot-modal header h3{margin:0;font-size:18px}
+.slot-modal .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;padding:14px 16px}
+.slot-modal .btn{display:flex;align-items:center;gap:8px;justify-content:center;padding:10px;border:1px solid #374151;border-radius:12px;background:#0F172A;color:#E5E7EB;text-decoration:none;cursor:pointer}
+.slot-modal .btn.primary{background:linear-gradient(135deg,#4F46E5,#06B6D4);border-color:transparent;color:#fff}
+.slot-modal footer{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid #1F2937}
+.slot-modal .muted{opacity:.8;font-size:12px}
+.slot-close{background:transparent;border:none;color:#9CA3AF;font-size:22px;cursor:pointer}
+@media (max-width:480px){ .slot-modal .grid{grid-template-columns:1fr} }
+</style>
+<style id="cfg-slot-fix">
+/* Robust modal fix */
+.slot-modal[hidden]{display:none !important;}
+.slot-modal{position:fixed; inset:0; display:flex !important; align-items:flex-start; justify-content:center; padding:8vh 16px; z-index:3000 !important; background:transparent !important;}
+.slot-modal__backdrop{position:absolute; inset:0; background:rgba(0,0,0,.45) !important; z-index:0;}
+.slot-modal__dialog{position:relative; z-index:1; background:#0B1220; color:#E5E7EB; max-width:720px; width:100%; border-radius:16px; border:1px solid #1F2937; box-shadow:0 20px 48px rgba(0,0,0,.35);}
+.slot-modal__grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; padding:14px 16px;}
+.slot-modal__actions{display:flex; justify-content:flex-end; padding:12px 16px; border-top:1px solid #1F2937;}
+.slot-modal__title{margin:0; padding:14px 16px; border-bottom:1px solid #1F2937; font-size:18px;}
+</style>
+<style id="cfg-slot-fix-strong">
+/* CFG strong modal overrides */
+body.modal-open{overflow:hidden !important;}
+.slot-modal[hidden]{display:none !important;}
+.slot-modal{
+  position:fixed !important; inset:0 !important; 
+  display:flex !important; align-items:flex-start !important; justify-content:center !important;
+  padding:8vh 16px !important; z-index:4000 !important; background:transparent !important;
+}
+.slot-modal__backdrop{
+  position:absolute !important; inset:0 !important; 
+  background:rgba(0,0,0,.45) !important; z-index:4000 !important;
+}
+.slot-modal__dialog{
+  position:relative !important; z-index:4001 !important; 
+  background:#0B1220 !important; color:#E5E7EB !important;
+  max-width:720px !important; width:100% !important; 
+  border-radius:16px !important; border:1px solid #1F2937 !important; 
+  box-shadow:0 20px 48px rgba(0,0,0,.35) !important;
+  margin:0 auto !important; transform:none !important; 
+  max-height:calc(100vh - 16vh) !important; overflow:auto !important;
+}
+.slot-modal__title{margin:0 !important; padding:14px 16px !important; border-bottom:1px solid #1F2937 !important; font-size:18px !important;}
+.slot-modal__grid{display:grid !important; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)) !important; gap:10px !important; padding:14px 16px !important;}
+.slot-modal__actions{display:flex !important; justify-content:flex-end !important; padding:12px 16px !important; border-top:1px solid #1F2937 !important;}
+</style>
+<style>
+/* partner-link style */
+.partner-link{font-weight:600;color:#2563EB;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
+.partner-link:hover{opacity:.9}
+</style>
+<style>
+/* contrast fix for dark cards */
+section#vff .card, section#downloads .card,
+section#vff, section#downloads {
+  color:#E5E7EB;
+}
+section#vff h2, section#downloads h2,
+section#vff h3, section#downloads h3 { color:#FFFFFF; }
+section#vff a, section#downloads a { color:#93C5FD; }
+section#vff .muted, section#downloads .muted { color:#CBD5E1; }
+</style>
+<script defer="" src="/analytics/ga-init.js"></script><script defer="" src="/analytics/ux-metrics.js"></script></head><body>
+<header id="site-header" style="position:sticky;top:0;left:0;right:0;z-index:2000;background:#0B1020;">
+<div class="container" style="max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between">
+<div style="font-weight:700;color:#E5E7EB">C|F|G consulting</div>
+<nav style="position:relative;z-index:2050;background:transparent;"><div class="nav-links"><a href="#services">Services</a><a href="#cases">Case studies</a><a href="#partners">For partners</a><a href="#contacts">Contacts</a></div>
+<div class="header-tools"><div class="lang" style="display:flex;gap:8px;margin-left:12px"><a class="lang-chip" data-locale="ru" href="/index.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;background:linear-gradient(135deg,#6D28D9,#3B82F6);color:#fff;">RU</a><a class="lang-chip active" data-locale="en" href="/en.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">EN</a><a class="lang-chip" data-locale="zh" href="/zh.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">中文</a></div><a class="btn btn-secondary" data-body="Здравствуйте!
+Хочу назначить 20-минутный звонок.
+Удобный слот: ____ (дата/время, часовой пояс).
+Name/Company:
+Phone/Telegram:" data-ev="cta_slot" data-slot="open" data-subject="CFG Intro Call" href="https://mail.google.com/mail/?view=cm&amp;to=C.F.G.consulting%40bk.ru&amp;su=CFG%20Intro%20Call&amp;body=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%0A%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B8%D1%82%D1%8C%2020-%D0%BC%D0%B8%D0%BD%D1%83%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA.%0A%D0%A3%D0%B4%D0%BE%D0%B1%D0%BD%D1%8B%D0%B9%20%D1%81%D0%BB%D0%BE%D1%82%3A%20____%20%28%D0%B4%D0%B0%D1%82%D0%B0/%D0%B2%D1%80%D0%B5%D0%BC%D1%8F%2C%20%D1%87%D0%B0%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D0%BE%D1%8F%D1%81%29.%0A%D0%98%D0%BC%D1%8F/%D0%9A%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%3A%0A%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD/Telegram%3A" rel="noopener" style="margin-left:10px;position:relative;z-index:2100;pointer-events:auto" target="_blank">Propose a slot</a></div><a class="nav-link" href="#pricing" style="margin-left:10px">Pricing</a></nav>
+</div>
+</header>
+<script>
+(function(){
+  window.CFG_SLOT = window.CFG_SLOT || {};
+  window.cfgOpenSlot = function(e){ try{ e && e.preventDefault && e.preventDefault(); }catch(_e){}; try{ if(window.CFG_SLOT && typeof window.CFG_SLOT.open==="function"){ window.CFG_SLOT.open(); return false;} }catch(_e){}; try{ var md=document.getElementById("slot-modal"); if(md){ md.style.display="block"; md.removeAttribute("hidden"); return false;} }catch(_e){}; return false; };var h=document.getElementById('site-header'); if(!h) return;
+  function sc(){ var y=window.scrollY||document.documentElement.scrollTop; }
+  window.addEventListener('scroll', sc, {passive:true}); sc();
+})();
+</script>
+<section class="hero" id="hero" style="padding:56px 0;background:linear-gradient(180deg,#2A2C7C 0%, #151835 100%);">
+<div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:36px"><div class="hero__text">
+<h1>12 weeks to controllable profit</h1>
+<p>Мы работаем как операционный офис собственника и доводим 3–5 инициатив до денег: отчётность, мотивация, продажи — без тяжёлого IT.</p>
+<div class="hero__cta" style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap">
+<a class="btn btn-primary" data-ev="cta_diagnostic" href="#estimate">Request 10‑day diagnostics</a>
+<a class="btn btn-secondary" data-ev="cta_partner" href="#partners">Partner program</a>
+</div>
+</div></div>
+<div class="hero__img" style="max-width:420px"><img alt="Evgeniy Chapurin" loading="eager" src="/assets/portrait.png"/></div>
+</section>
+<section class="trustbar" id="logos" style="padding:20px 0;">
+<div class="container">
+<h2 style="margin:0 0 8px 0">Companies &amp; projects</h2>
+<ul style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap"><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">ADEO / Leroy Merlin</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Альфа-Банк</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">ВТБ</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Росбанк</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Траст Банк</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Этажи</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Маяк Отель</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Tachki.pro</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Моё дело</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Wildberries</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Банк Союз</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Laboramed</li></ul>
+<p style="color:#6B7280;font-size:12px;margin-top:6px">*Names are used for illustration. All trademarks belong to their owners.</p>
+<p class="disclaimer">Employers/projects are listed. Logos are for reference and do not imply endorsement.</p></div>
+</section><section class="section" id="cases"><div class="container"><h2>Case studies</h2><div class="cards grid-3"><article class="card"><h3>Банковский B2B — доля 33%</h3><p>Segmentation, partner‑channel relaunch, sales &amp; reporting rituals. 12 management teams, churn down to 2%.</p></article><article class="card"><h3>DIY-ритейл — запуск B2B с нуля</h3><p>Audit of 3 years of receipts, market capacity by city, standards, team, agreements with factories, logistics. Launched nationwide.</p></article><article class="card"><h3>Автодилер — конверсия 8% → 26%</h3><p>Management reporting without heavy IT, new funnel, KPIs &amp; incentives, “facts board” design, plus meeting processes.</p></article></div><p class="disclaimer">Company names under NDA; figures confirmed on a call.</p></div></section>
+<section class="cfg-hero" style="padding:48px 0;"><div class="container"><h1>12 weeks to controllable profit</h1><p class="lead">Fractional COO: data → motivation → sales. I drive 3–5 initiatives to revenue — without heavy IT.</p><div class="pills-row" style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;"><span class="pill">CFG Network • expert network</span><span class="pill">SLA &amp; 'facts board' on Fridays</span><span class="pill">Irkutsk • Krasnoyarsk • Russia</span></div><div class="cta" style="display:flex;gap:12px;flex-wrap:wrap;"><a class="btn btn-primary" href="#estimate">10‑day diagnostics</a><a class="btn btn-outline" href="#cases">Case portfolio</a><a class="btn btn-outline" data-slot="open" href="#">20‑min intro call</a></div></div></section>
+<section class="cfg-partners" style="padding:28px 0;"><div class="container"><h2>Partner program</h2><p>Diagnostics for your client is free. We handle the “dirty” operations and take responsibility for the measurable result. You earn a percentage of the paid invoice.</p><a class="btn btn-primary" href="#partners">Send lead</a></div></section><section id="downloads" style="padding:24px 0;"><div class="container card"><h2>Downloads</h2><ul><li><a data-evt="case_download" download="" href="downloads/CFG_OnePager.docx" rel="noopener" target="_blank">One‑pager (DOCX)</a></li><li><a data-evt="case_download" download="" href="downloads/CFG_PitchDeck.pptx" rel="noopener" target="_blank">Pitch‑дека (PPTX)</a></li></ul></div></section><section class="cfg-dppm" id="method" style="padding:40px 0;"><div class="container"><h2>DPPM‑12: Data → People → Process → Market</h2><ul><li><b>DATA:</b> единый слой данных и 5–7 управленческих дашбордов</li><li><b>PEOPLE:</b> KPI + мотивация, карьерные треки, замена/найм</li><li><b>PROCESS:</b> регламенты, цикл встреч; Пн цели — Пт «борд фактов»</li><li><b>MARKET:</b> воронка, офферы, партнёрский канал</li></ul></div></section>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('form[data-estimate]').forEach(function(f){
+    f.addEventListener('submit', function(e){
+      var root = document.documentElement.lang || 'ru';
+      this.setAttribute('data-locale', this.getAttribute('data-locale') || root);
+    });
+  });
+});
+</script>
+<nav><div class="container row"><div class="brand"><svg aria-hidden="true" height="28" viewbox="0 0 256 256" width="28" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0B1220"></stop><stop offset="1" stop-color="#4F46E5"></stop></lineargradient></defs><rect fill="url(#g)" height="256" rx="40" ry="40" width="256"></rect><text dominant-baseline="middle" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="800" text-anchor="middle" x="50%" y="55%">CFG</text></svg><span>C|F|G consulting</span></div><div><a class="badge" href="#services">Services</a><a class="badge" href="#industries">Industries</a><a class="badge" href="#cases">Case studies</a><a class="badge" href="#process">Process</a><a class="badge" href="#partners">For partners</a><span aria-label="Language" class="lang-toggle" role="group"><a aria-current="page" class="" data-locale="ru" href="/">RU</a><a class="lang-chip active" data-locale="en" href="en.html">EN</a><a class="lang-chip" data-locale="zh" href="zh.html">中文</a></span><a class="btn btn-primary" data-slot="open" href="#">Propose a slot</a></div></div></nav>
+<header class="hero"><div class="container content">
+<div>
+<h1>We help companies grow and launch faster</h1>
+<p class="lead">Аудит, стратегия, продажи, команды, аналитика. Запуски подразделений <b>под ключ</b> за 30–60 дней. <span style="white-space:nowrap">Международный уровень</span> исполнения — локальная скорость.</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
+<a class="btn btn-primary" data-scroll="#contacts" href="#contacts">Discuss the project</a>
+<a class="btn btn-secondary" data-scroll="#estimate" href="#estimate">Get an estimate in 24 hours</a>
+<a class="btn btn-secondary" data-slot="open" href="https://mail.google.com/mail/?view=cm&amp;to=C.F.G.consulting%40bk.ru&amp;su=CFG%20Intro%20Call&amp;body=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%0A%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B8%D1%82%D1%8C%2020-%D0%BC%D0%B8%D0%BD%D1%83%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA.%0A%D0%A3%D0%B4%D0%BE%D0%B1%D0%BD%D1%8B%D0%B9%20%D1%81%D0%BB%D0%BE%D1%82%3A%20____%20%28%D0%B4%D0%B0%D1%82%D0%B0/%D0%B2%D1%80%D0%B5%D0%BC%D1%8F%2C%20%D1%87%D0%B0%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D0%BE%D1%8F%D1%81%29.%0A%D0%98%D0%BC%D1%8F/%D0%9A%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%3A%0A%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD/Telegram%3A" rel="noopener" style=";position:relative;z-index:2100;pointer-events:auto" target="_blank">Propose a slot</a>
+</div>
+<div class="pills-row"><a class="pill pill-outline pill-lg" data-scroll="#partner" href="#partners">Partner program</a></div>
+<div class="pills-row"><span class="pill">Основано в Иркутске</span><span class="pill">Работаем по РФ и СНГ</span><span class="pill">Сеть экспертов</span></div>
+</div>
+<div><img alt="Evgeniy Chapurin — C|F|G consulting" fetchpriority="high" onerror="this.onerror=null; this.src='assets/hero.jpg';" sizes="(max-width: 980px) 100vw, 560px" src="assets/hero-1200.jpg" srcset="assets/hero-800.jpg 800w, assets/hero-1200.jpg 1200w, assets/hero-1600.jpg 1600w" style="width:100%;border-radius:16px;border:1px solid #1f2937;box-shadow:0 20px 40px rgba(2,6,23,.4)"/></div>
+</div></header>
+<section id="kpis"><div class="container">
+<div class="kpis">
+<div class="kpi"><div style="font-size:28px;font-weight:800">15+ лет</div><div>в управлении и продажах</div></div>
+<div class="kpi"><div style="font-size:28px;font-weight:800">2600+</div><div>собеседований / 1000+ наймов</div></div>
+<div class="kpi"><div style="font-size:28px;font-weight:800">33%</div><div>доля рынка на территориях</div></div>
+<div class="kpi"><div style="font-size:28px;font-weight:800">8% → 26%</div><div>рост конверсии продаж</div></div>
+</div>
+</div></section>
+<section id="why"><div class="container">
+<h2 class="section-title">Почему с нами</h2>
+<div class="cards">
+<div class="card"><b>Прозрачная отчётность</b><br/>Еженедельные отчёты, созвоны и понятные метрики.</div>
+<div class="card"><b>Прирост KPI</b><br/>Считаем экономику и фиксируем целевые показатели.</div>
+<div class="card"><b>Выходим в срок</b><br/>Сроки работ закрепляем в ТЗ и договоре (SLA).</div>
+<div class="card"><b>Команда победителей</b><br/>Найм, обучение, нефинансовая мотивация.</div>
+</div>
+</div></section>
+<section id="services"><div class="container">
+<h2 class="section-title">Services</h2>
+<div class="cards">
+<div class="card"><h3>Audit &amp; Strategy</h3><ul class="tick"><li>Sales, operations, and unit‑economics diagnostics</li><li>Roadmap: 30/60/90 days</li><li>KPI, отчётность, управленческие ритуалы</li></ul></div>
+<div class="card"><h3>Turnkey launches</h3><ul class="tick"><li>Opening business units, warehouses, B2B streams</li><li>Hiring and training the team</li><li>Processes, SOPs, quality control</li></ul></div>
+<div class="card"><h3>Sales &amp; Partnerships</h3><ul class="tick"><li>Segmentation, scripts, funnel, motivation</li><li>Partner networks: selection, launch, SLA</li><li>Onboarding and partner success</li></ul></div>
+</div>
+</div></section>
+<section id="industries"><div class="container">
+<h2 class="section-title">Industries we’ve worked in</h2>
+<div class="cards">
+<div class="industry">Банки и финсервисы</div>
+<div class="industry">DIY/строительные сети</div>
+<div class="industry">Автобизнес</div>
+<div class="industry">Недвижимость</div>
+<div class="industry">Медицина</div>
+<div class="industry">Маркетплейсы (Wildberries)</div>
+</div>
+</div></section>
+<section id="process"><div class="container">
+<h2 class="section-title">Process</h2>
+<div class="process">
+<div class="step"><b>01. Диагностика</b><br/>Интервью, цифры, быстрые победы.</div>
+<div class="step"><b>02. План</b><br/>Дорожная карта и KPI 30/60/90.</div>
+<div class="step"><b>03. Команда</b><br/>Подбор, роли, обучение, мотивация.</div>
+<div class="step"><b>04. Запуск</b><br/>Processы, регламенты, контроль.</div>
+<div class="step"><b>05. Масштаб</b><br/>Аналитика, автоматизация, рост.</div>
+</div>
+</div></section>
+<section id="guarantee"><div class="container">
+<h2 class="section-title">Подход и гарантии</h2>
+<div class="card">
+<ul class="tick">
+<li>Прозрачная отчётность: еженедельные отчёты и созвоны.</li>
+<li>Контрольные точки: 30/60/90 с KPI.</li>
+<li>Сроки: «выходим в срок» — фиксируем в ТЗ и договоре.</li>
+</ul>
+</div>
+</div></section>
+<section id="estimate" style="scroll-margin-top: 96px;"><div class="container">
+<h2 class="section-title">24‑hour estimate</h2>
+<form aria-label="Форма оценки" data-estimate="" data-locale="ru" id="lead-form">
+<input autocomplete="off" name="company_site" style="display:none" tabindex="-1" type="text"/>
+<div class="form-grid">
+<div><label>Name</label><input name="name" required=""/></div>
+<div><label>Company</label><input name="company"/></div>
+<div><label>Tax ID</label><input name="inn"/></div>
+<div><label>Email</label><input name="email" required="" type="email"/></div>
+<div><label>Phone</label><input name="phone"/></div>
+<div style="grid-column:1/-1"><label>Briefly about the task</label><textarea name="desc" rows="4"></textarea></div>
+</div>
+<div class="form-actions">
+<button class="btn btn-primary" type="submit">Send</button>
+<a class="btn btn-secondary" data-slot="open" href="https://mail.google.com/mail/?view=cm&amp;to=C.F.G.consulting%40bk.ru&amp;su=CFG%20Intro%20Call&amp;body=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%0A%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B8%D1%82%D1%8C%2020-%D0%BC%D0%B8%D0%BD%D1%83%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA.%0A%D0%A3%D0%B4%D0%BE%D0%B1%D0%BD%D1%8B%D0%B9%20%D1%81%D0%BB%D0%BE%D1%82%3A%20____%20%28%D0%B4%D0%B0%D1%82%D0%B0/%D0%B2%D1%80%D0%B5%D0%BC%D1%8F%2C%20%D1%87%D0%B0%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D0%BE%D1%8F%D1%81%29.%0A%D0%98%D0%BC%D1%8F/%D0%9A%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%3A%0A%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD/Telegram%3A" rel="noopener" style=";position:relative;z-index:2100;pointer-events:auto" target="_blank">Propose a slot</a>
+</div>
+<p class="small">Соглашаясь, вы принимаете <a href="privacy.html">Политику</a> и <a href="terms.html">Условия</a>.</p>
+</form>
+</div></section>
+<section id="nofit" style="padding:36px 0">
+<div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
+<h2 style="margin:0 0 12px 0">Who we are not for</h2>
+<ul style="margin:0 0 8px 18px"><li style="margin:6px 0">• No access to decision‑makers and data — decisions by hearsay.</li><li style="margin:6px 0">• Unwillingness to change incentives/processes (status quo).</li><li style="margin:6px 0">• Expecting “miracle growth” without team involvement.</li><li style="margin:6px 0">• Request for report/audit only with no implementation.</li></ul>
+<p style="color:#6B7280;font-size:12px">Честность экономит время — наше и ваше.</p>
+</div>
+</section>
+<section class="partner" id="partners" style="padding:48px 0;">
+<div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
+<h2 style="margin:0 0 12px 0">Partner program</h2>
+<p style="margin:0 0 8px 0;color:#374151">Аутсорс‑партнёры (бухгалтерия, HR, юристы, интеграторы): приводите клиента — получайте 10–15% с диагностики/внедрения и 5% ретеншн до 6 мес на Operate.</p>
+<p style="margin:0 0 16px 0;font-weight:600;color:#111827">Стать партнёром — выберите удобный канал связи:</p>
+<div class="buttons" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+<a class="btn btn-primary" data-ev="cta_email" data-mailto="" href="mailto:C.F.G.consulting@bk.ru?subject=%D0%9F%D0%B0%D1%80%D1%82%D0%BD%D1%91%D1%80%D1%81%D1%82%D0%B2%D0%BE%20%D1%81%20CFG%20consulting">Написать на Email</a>
+<a class="btn btn-secondary" data-cta="partner-telegram" href="https://t.me/Evgeniy_Chapurin" rel="noopener" target="_blank">Telegram</a>
+<a class="btn btn-secondary" data-cta="partner-whatsapp" href="https://wa.me/79025683529" rel="noopener" target="_blank">WhatsApp</a>
+<div class="more" style="margin-top:12px"><a class="partner-link" href="/partner.html">Partnership terms →</a></div>
+</div>
+</div></section>
+<section id="contacts"><div class="container">
+<div class="cta">
+<h2 style="margin:0 0 10px">Обсудим вашу задачу</h2>
+<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+<a class="btn btn-primary" data-ev="cta_email" data-mailto="" data-subject="Проект для CFG consulting" href="mailto:C.F.G.consulting@bk.ru?subject=Проект%20для%20CFG%20consulting">Написать на Email</a>
+<a class="btn btn-secondary" href="https://t.me/Evgeniy_Chapurin" rel="noopener" target="_blank">Telegram</a>
+<a class="btn btn-secondary" href="https://wa.me/79025683529" rel="noopener" target="_blank">WhatsApp</a>
+</div>
+</div>
+</div></section>
+<section class="container" id="pricing" style="padding:56px 0;">
+<h2 class="section-title">Products &amp; Pricing</h2>
+<ul class="tick" style="margin:0 0 12px 0">
+<li><strong>10‑day Diagnostic</strong> — from ₽90–150k.</li>
+<li><strong>12‑week Implementation (DPPM‑12)</strong> — from ₽450–900k or ₽250–400k/mo + 5–10% KPI bonus (capped).</li>
+<li><strong>Operate 6–12 mo</strong> — from ₽450–700k/mo + KPI bonus.</li>
+<li><strong>Data‑Block 3 weeks</strong> — from ₽180–350k.</li>
+<li><strong>Sales‑Boost 4 weeks</strong> — from ₽160–280k.</li>
+</ul>
+<p style="margin:8px 0 0 0;opacity:.85"><em>Final quote depends on scale and complexity via transparent coefficients:</em></p>
+<ul class="tick">
+<li><strong>K<sub>scale</sub></strong>, <strong>K<sub>complexity</sub></strong>, <strong>K<sub>urgency</sub></strong>, <strong>K<sub>logistics</sub></strong>. On‑site days ₽25–35k/day; remote −10%.</li>
+<li>Sole proprietor on simplified tax (6%) — no VAT.</li>
+</ul>
+<div style="margin-top:12px;display:flex;gap:12px">
+<a class="btn btn-primary" data-cta="pricing-quote" href="#estimate">Get a quote in 24h</a>
+<a class="btn btn-secondary" data-cta="pricing-partners" href="#partners">Partner program</a>
+</div>
+</section>
+<footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+<div style="display:flex;align-items:center;gap:10px"><strong>C|F|G consulting</strong></div>
+<div style="opacity:.9">Tel./WhatsApp: <a href="tel:+79025683529">+7 902 568‑35‑29</a> • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a> • Build v3.5</div>
+</div>
+<div aria-hidden="true" class="modal" id="mailModal">
+<div class="box">
+<h3 style="margin-top:0">Если почтовая программа не открылась</h3>
+<input class="input subject" placeholder="Тема письма" value=""/>
+<textarea class="input body" placeholder="Текст письма" rows="6"></textarea>
+<div class="row">
+<button class="btn btn-secondary" id="copyEmail" type="button">Скопировать адрес</button>
+<button class="btn btn-primary" id="gmailOpen" type="button">Открыть Gmail</button>
+<button class="btn btn-secondary" data-modal-close="" type="button">Закрыть</button>
+</div>
+<p class="small">C.F.G.consulting@bk.ru</p>
+</div>
+</div>
+<div class="toast"></div><script>
+(function(){
+  'use strict';
+  var EMAIL='C.F.G.consulting@bk.ru', TG='@Evgeniy_Chapurin', WA='79025683529';
+  function track(ev, params){ try{ gtag('event', ev, params||{}); }catch(e){} }
+  function toast(t){ var n=document.querySelector('.toast'); if(!n) return; n.textContent=t; n.classList.add('show'); setTimeout(function(){n.classList.remove('show')},1800); }
+  function openGmail(subject, body){
+    var url='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(EMAIL);
+    if(subject) url += '&su='+encodeURIComponent(subject);
+    if(body) url += '&body='+encodeURIComponent(body);
+    window.open(url,'_blank'); track('open_gmail');
+  }
+  var modal=document.getElementById('mailModal');
+  document.querySelectorAll('[data-mailto]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var href=this.getAttribute('href'); 
+      try{ window.location.href=href; }catch(_){}
+      if(modal){
+        var subj = this.getAttribute('data-subject')||''; 
+        var body = this.getAttribute('data-body')||'';
+        modal.querySelector('.subject').value=subj; 
+        modal.querySelector('.body').value=body;
+        modal.classList.add('open');
+      }
+      e.preventDefault();
+      track(this.getAttribute('data-ev')||'cta_email');
+    });
+  });
+  document.querySelectorAll('[data-modal-close]').forEach(function(btn){
+    btn.addEventListener('click', function(){ modal.classList.remove('open'); });
+  });
+  var btnG=document.getElementById('gmailOpen');
+  var btnCopy=document.getElementById('copyEmail');
+  if(btnG) btnG.addEventListener('click', function(){
+    var subj = modal.querySelector('.subject').value||''; 
+    var body = modal.querySelector('.body').value||'';
+    openGmail(subj, body);
+  });
+  if(btnCopy) btnCopy.addEventListener('click', function(){ navigator.clipboard.writeText(EMAIL).then(function(){toast('Скопировано');}); track('copy_email'); });
+  
+  // Estimate form: async submit via Apps Script (no mailto, no modal)
+  document.querySelectorAll('form[data-estimate]').forEach(function(f){
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      var locale=this.getAttribute('data-locale')||'ru';
+      function val(n){ var x=f.querySelector('[name='+n+']'); return x?x.value.trim():''; }
+      var name=val('name'), company=val('company'), inn=val('inn'), email=val('email'), phone=val('phone'), desc=val('desc');
+      var q=new URLSearchParams(location.search);
+      var utm={}; ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','gclid','yclid','fbclid'].forEach(function(k){ var v=q.get(k); if(v) utm[k]=v; });
+      var payload={ /*secret_removed*/,  notify:'short',  action:'estimate_24h', locale:locale, name:name, company:company, inn:inn, email:email, phone:phone, desc:desc, page_url:location.href, referrer:document.referrer||'', utm:utm };
+      var btn=f.querySelector('button[type=submit]');
+      if(btn){ btn.disabled=true; btn.textContent=(locale==='en'?'Sending...':(locale==='zh'?'正在发送…':'Отправляем…')); }
+      (function(){
+        var compat = new URLSearchParams();
+        Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
+        [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
+        var url='/api/lead?'+compat.toString();
+        var honeypot=(f.querySelector('input[name="company_site"]')||{}).value; if(honeypot){ return Promise.resolve(); } var req = 
+
+        return req;
+      })()
+        .then(function(){ toast(locale==='en'?'Request sent! We\'ll get back within 24 hours.':(locale==='zh'?'已提交！我们会在24小时内联系您。':'Заявка отправлена! Мы свяжемся в течение 24 часов.')); f.reset(); })
+        .catch(function(){ toast(locale==='en'?'Submission failed. Please try again.':(locale==='zh'?'提交失败，请重试。':'Не удалось отправить. Повторите попытку.')); })
+        .finally(function(){ if(btn){ btn.disabled=false; btn.textContent=(locale==='en'?'Submit':(locale==='zh'?'提交':'Send')); } });
+      track('form_submit', {locale: locale});
+      track('estimate_24h', {locale: locale});
+    });
+  });
+document.querySelectorAll('[data-gcal]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var details = 'Intro call with C|F|G consulting%0A%0AAgenda:%0A• Goals%0A• Current state%0A• Next steps%0A%0AContacts:%0AEmail: '+encodeURIComponent(EMAIL)+'%0ATG: '+encodeURIComponent(TG)+'%0AWhatsApp: +'+encodeURIComponent(WA);
+      var url = 'https://calendar.google.com/calendar/u/0/r/eventedit?text=Intro%20call%20%E2%80%94%20CFG%20consulting&details='+details+'&location=Online';
+      window.open(url,'_blank');
+      track('gcal_open');
+    });
+  });
+
+  // Smooth scroll to estimate + focus
+  document.querySelectorAll('[data-scroll]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      var target = btn.getAttribute('data-scroll'); var id = (target||'').replace('#',''); var el = document.getElementById(id);
+      if(el){ el.scrollIntoView({behavior:'smooth'}); }
+      try{ setTimeout(function(){ var i=document.querySelector('#estimate input[name="name"]'); if(i){ i.focus(); } }, 450); }catch(_){}
+    });
+  });
+
+})();</script><script>
+(function(){try{
+var base="\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439\u0442\u0435! \u0425\u043e\u0447\u0443 \u0441\u0442\u0430\u0442\u044c \u043f\u0430\u0440\u0442\u043d\u0451\u0440\u043e\u043c CFG.";
+var q=new URLSearchParams(location.search);
+var keys=["utm_source","utm_medium","utm_campaign","utm_term","utm_content","gclid","yclid","fbclid"];
+var utm=[];
+keys.forEach(function(k){var v=q.get(k); if(v) utm.push(k+"="+v);});
+var ref=document.referrer?new URL(document.referrer).hostname:"";
+var parts=[];
+if(utm.length) parts.push("UTM: "+utm.join("&"));
+if(ref) parts.push("ref="+ref);
+parts.push("url="+location.href);
+var msg=base + (parts.length ? "\n" + parts.join(" | ") : "");
+var href="https://wa.me/79025683529?text="+encodeURIComponent(msg);
+document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a.setAttribute("href",href);});
+}catch(e){} })();
+</script><script>
+(function(){
+  try {
+    var hero = document.querySelector('.hero img');
+    if(!hero) return;
+    function needFix() {
+      return (!hero.complete || !hero.naturalWidth || hero.naturalWidth===0);
+    }
+    var paths = [
+      'assets/hero-1200.jpg',
+      '/assets/hero-1200.jpg',
+      'Лендинг/assets/hero-1200.jpg',
+      '/Лендинг/assets/hero-1200.jpg',
+      'assets/hero.jpg',
+      '/assets/hero.jpg'
+    ];
+    function tryNext(i){
+      if(i>=paths.length) return;
+      var probe = new Image();
+      probe.onload = function(){ hero.src = paths[i]; hero.removeAttribute('srcset'); };
+      probe.onerror = function(){ tryNext(i+1); };
+      probe.src = paths[i];
+    }
+    if(needFix()) tryNext(0);
+  } catch(_) {}
+})();</script><footer class="footer" style="padding:28px 0;background:#0B1020;color:#D1D5DB"><div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px"><p>ИП Чапурин Евгений Александрович • ОГРНИП 324385000032592 • Tax ID 380121912339 • УСН 6%</p><p><a href="/privacy.html">Политика ПДн</a> • <a href="/offer.html">Договор оферты</a></p></div></footer>
+<script>
+(function(){
+  function sendGA(event, params){ try { window.gtag && gtag('event', event, params||{}); } catch(e){} }
+  document.querySelectorAll('[data-cta]').forEach(function(el){
+    el.addEventListener('click', function(){
+      sendGA('cta_click', {label: el.getAttribute('data-cta')});
+    });
+  });
+  // Form status localization hook
+  window.addEventListener('cfg:form-state', function(e){
+    var st = e.detail; var loc = document.documentElement.lang || 'ru';
+    var t = (window.CFG_I18N[loc]||window.CFG_I18N['ru']||{});
+    var el = document.getElementById('form-status'); if(!el) return;
+    el.textContent = (st==='sending'?t.sending:(st==='ok'?t.submitted:(st==='err'?t.error:'')));
+  });
+})();
+</script>
+<script>
+(function(){
+  var form = document.getElementById('lead-form');
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    // Soft‑mode: do not block submission if consent checkboxes are absent or unchecked
+    window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'sending' }));
+  }, true);
+})();
+</script>
+<div aria-live="polite" id="cookie-banner" role="dialog">
+<span>Мы используем аналитические cookie (Google Analytics). Согласны?</span>
+<button class="primary" id="cookie-yes">Да</button>
+<button class="secondary" id="cookie-no">No</button>
+</div>
+<script>
+(function(){
+  var key='ga_consent';
+  function hasConsent(){ return localStorage.getItem(key)==='yes'; }
+  function loadGA(){
+    if(document.getElementById('ga-script')) return;
+    var s=document.createElement('script');
+    s.id='ga-script';
+    s.async=true;
+    s.src='/analytics/analytics.js';
+    document.head.appendChild(s);
+  }
+  function init(){
+    var b=document.getElementById('cookie-banner'); if(!b) return;
+    if(localStorage.getItem(key)==='yes'){ loadGA(); return; }
+    if(localStorage.getItem(key)==='no'){ return; }
+    b.style.display='flex';
+    document.getElementById('cookie-yes').onclick=function(){ localStorage.setItem(key,'yes'); b.remove(); loadGA(); };
+    document.getElementById('cookie-no').onclick=function(){ localStorage.setItem(key,'no'); b.remove(); };
+  }
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+<script>
+// cfg:smooth-scroll
+(function(){
+  function smooth(e){
+    var a = e.target.closest('a[href^="#"]'); if(!a) return;
+    var id = a.getAttribute('href').slice(1);
+    if(!id) return;
+    var el = document.getElementById(id);
+    if(!el) return;
+    e.preventDefault();
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+    if(id==='lead-form'){
+      var first = el.querySelector('input,textarea,select'); if(first) setTimeout(function(){ first.focus(); }, 400);
+      window.dispatchEvent(new CustomEvent('cfg:form-state', { detail: 'open' }));
+    }
+  }
+  document.addEventListener('click', smooth);
+})();
+</script>
+</footer>
+<div class="slot-modal" hidden="" id="slot-modal">
+<div class="slot-modal__backdrop" data-slot="close"></div>
+<div class="slot-modal__dialog">
+<h3 class="slot-modal__title">Как предложить слот?</h3>
+<div class="slot-modal__grid">
+<a class="btn btn-primary" data-slot-open="gmail">Gmail</a>
+<a class="btn btn-secondary" data-slot-open="outlook">Outlook</a>
+<a class="btn btn-secondary" data-slot-open="yandex">Yandex</a>
+<a class="btn btn-secondary" data-slot-open="mailru">Mail.ru</a>
+<a class="btn btn-secondary" data-slot-open="mailto">Почта по умолчанию</a>
+<a class="btn btn-secondary" data-slot-open="whatsapp">WhatsApp</a>
+<a class="btn btn-secondary" data-slot-open="telegram">Telegram</a>
+<button class="btn btn-light" data-slot-copy="email">Скопировать e‑mail</button>
+<button class="btn btn-light" data-slot-copy="body">Скопировать шаблон</button>
+</div>
+<div class="slot-modal__actions">
+<button class="btn btn-light" data-slot="close">Закрыть</button>
+</div>
+</div>
+</div>
+<style>
+
+.slot-modal[hidden]{display:none}
+.slot-modal__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.slot-modal__dialog{position:relative;margin:8vh auto;background:#0b1221;color:#fff;border-radius:16px;max-width:720px;box-shadow:0 10px 30px rgba(0,0,0,.4);padding:24px}
+.slot-modal__title{margin:0 0 12px 0;font-size:18px}
+.slot-modal__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.slot-modal__actions{margin-top:12px;display:flex;justify-content:flex-end}
+</style>
+<script>
+(function() {
+  var locale = "ru";
+  var email = "C.F.G.consulting@bk.ru";
+  var phone = "<a href="tel:+79025683529">+7 902 568‑35‑29</a>";
+  var tg = "@Evgeniy_Chapurin";
+  var subj = {"ru":"CFG Intro Call","en":"CFG Intro Call","zh":"CFG 预约通话"}[locale] || "CFG Intro Call";
+  var bodyMap = {
+    "ru": "Здравствуйте!\nХочу назначить 20-минутный звонок.\nУдобный слот: ____ (дата/время, часовой пояс).\nName/Company:\nPhone/Telegram:",
+    "en": "Hello!\nI’d like to book a 20-min intro call.\nMy preferred slot: ____ (date/time, timezone).\nName/Company:\nPhone/Telegram:",
+    "zh": "您好！\n我想预约一次20分钟的沟通。\n合适时间：____（日期/时间/时区）。\n姓名/公司：\n电话/Telegram："
+  };
+  function enc(s){return encodeURIComponent(s);}
+  var body = bodyMap[locale] || bodyMap["en"];
+  var links = {
+    gmail:   "https://mail.google.com/mail/?view=cm&to="+enc(email)+"&su="+enc(subj)+"&body="+enc(body),
+    outlook: "https://outlook.office.com/mail/deeplink/compose?to="+enc(email)+"&subject="+enc(subj)+"&body="+enc(body),
+    yandex:  "https://mail.yandex.ru/compose?to="+enc(email)+"&subject="+enc(subj)+"&body="+enc(body),
+    mailru:  "https://e.mail.ru/compose/?to="+enc(email)+"&subject="+enc(subj)+"&body="+enc(body),
+    mailto:  "mailto:"+email+"?subject="+enc(subj)+"&body="+enc(body),
+    whatsapp:"https://wa.me/79025683529?text="+enc(body),
+    telegram:"tg://resolve?domain=Evgeniy_Chapurin&text="+enc(body)
+  };
+  function openModal(){ document.getElementById('slot-modal').hidden=false; document.body.style.overflow='hidden'; }
+  function closeModal(){ document.getElementById('slot-modal').hidden=true; document.body.style.overflow=''; }
+  document.querySelectorAll('a.btn, a[data-slot], button.btn').forEach(function(el){
+    var txt=(el.textContent||"").trim();
+    if(/Propose a slot|20-мин|20 min|Propose a slot|20-min|预约通话/.test(txt)){ 
+      el.addEventListener('click', function(e){ e.preventDefault(); openModal(); }, true);
+    }
+  });
+  document.querySelectorAll('[data-slot="close"]').forEach(function(el){ el.addEventListener('click', closeModal); });
+  document.querySelectorAll('[data-slot-open]').forEach(function(el){ 
+    el.addEventListener('click', function(){ var k=this.getAttribute('data-slot-open'); window.open(links[k], '_blank', 'noopener'); });
+  });
+  document.querySelectorAll('[data-slot="open"]').forEach(function(el){ el.addEventListener('click', function(e){ e.preventDefault(); openModal(); }, true); });
+  document.querySelectorAll('[data-slot-copy]').forEach(function(el){ 
+    el.addEventListener('click', function(){ var kind=this.getAttribute('data-slot-copy'); var text=(kind==='email')?email:body; if(navigator.clipboard) navigator.clipboard.writeText(text); });
+  });
+})();
+</script>
+<script>
+(function(){ // Estimate form: async submit via Apps Script (no mailto, no modal)
+  document.querySelectorAll('form[data-estimate]').forEach(function(f){
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      var locale=this.getAttribute('data-locale')||'en';
+      function val(n){ var x=f.querySelector('[name='+n+']'); return x?x.value.trim():''; }
+      var name=val('name'), company=val('company'), inn=val('inn'), email=val('email'), phone=val('phone'), desc=val('desc');
+      var q=new URLSearchParams(location.search);
+      var utm={}; ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','gclid','yclid','fbclid'].forEach(function(k){ var v=q.get(k); if(v) utm[k]=v; });
+      var payload={ /*secret_removed*/,  notify:'short',  action:'estimate_24h', locale:locale, name:name, company:company, inn:inn, email:email, phone:phone, desc:desc, page_url:location.href, referrer:document.referrer||'', utm:utm };
+      var btn=f.querySelector('button[type=submit]');
+      if(btn){ btn.disabled=true; btn.textContent=(locale==='en'?'Sending...':(locale==='zh'?'正在发送…':'Отправляем…')); }
+      (function(){
+        var compat = new URLSearchParams();
+        Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
+        [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
+        var url='/api/lead?'+compat.toString();
+        var req = fetch(url, { method:'POST',  headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+        return req;
+      })()
+        .then(function(){ toast(locale==='en'?'Request sent! We\'ll get back within 24 hours.':(locale==='zh'?'已提交！我们会在24小时内联系您。':'Заявка отправлена! Мы свяжемся в течение 24 часов.')); f.reset(); })
+        .catch(function(){ toast(locale==='en'?'Submission failed. Please try again.':(locale==='zh'?'提交失败，请重试。':'Не удалось отправить. Повторите попытку.')); })
+        .finally(function(){ if(btn){ btn.disabled=false; btn.textContent=(locale==='en'?'Submit':(locale==='zh'?'提交':'Send')); } });
+      track('form_submit', {locale: locale});
+      track('estimate_24h', {locale: locale});
+    });
+  });
+document.querySelectorAll('[data-gcal]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var details = 'Intro call with C|F|G consulting%0A%0AAgenda:%0A• Goals%0A• Current state%0A• Next steps%0A%0AContacts:%0AEmail: '+encodeURIComponent(EMAIL)+'%0ATG: '+encodeURIComponent(TG)+'%0AWhatsApp: +'+encodeURIComponent(WA);
+      var url = 'https://calendar.google.com/calendar/u/0/r/eventedit?text=Intro%20call%20%E2%80%94%20CFG%20consulting&details='+details+'&location=Online';
+      window.open(url,'_blank');
+      track('gcal_open');
+    });
+  });
+
+  
+})();
+</script>
+<div style="text-align:center;margin:24px"><a data-partner-cta="footer_partner" href="/partner.html">Партнёрская программа →</a></div>
+<script>
+// CFG unified lead sender v3 — injected
+(function(){
+  function qs(form, name){ return form.querySelector('[name="'+name+'"]'); }
+  function getVal(form, name){ const el = qs(form, name); return el ? el.value.trim() : ''; }
+  function getLocale(){ try { return document.documentElement.lang || (window.CFG_LOCALE || '').toString() || ''; } catch(e){ return ''; } }
+  function getUTM(){
+    const params = new URLSearchParams(location.search);
+    const keys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+    const out = {};
+    keys.forEach(k => { if (params.get(k)) out[k] = params.get(k); });
+    return out;
+  }
+  async function sendLead(form){
+    const hp = getVal(form, 'company_site'); // honeypot
+    if (hp) return Promise.reject(new Error('honeypot_filled'));
+
+    // Basic payload (common names across pages)
+    const payload = {
+      name: getVal(form, 'name') || getVal(form, 'full_name') || '',
+      company: getVal(form, 'company') || '',
+      inn: getVal(form, 'inn') || '',
+      email: getVal(form, 'email') || '',
+      phone: getVal(form, 'phone') || '',
+      message: getVal(form, 'message') || getVal(form, 'task') || getVal(form, 'comment') || '',
+      // meta
+      locale: getLocale(),
+      page_url: location.href,
+      referrer: document.referrer || '',
+      utm: getUTM()
+    };
+
+    const btn = form.querySelector('button[type="submit"], [type="submit"]');
+    const origText = btn && (btn.textContent || btn.value);
+
+    function setState(t){ if (btn) { if (btn.tagName === 'BUTTON') btn.textContent = t; else btn.value = t; } document.dispatchEvent(new CustomEvent('cfg:form-state', {detail:{state:t}})); }
+
+    try{
+      setState('Отправка…');
+      const res = await fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const ok = res.ok;
+      let data = {};
+      try { data = await res.json(); } catch(e){}
+      if (!ok) throw new Error('bad_status_'+res.status);
+      setState('Готово ✓');
+      document.dispatchEvent(new CustomEvent('cfg:form-success', {detail:{payload, data}}));
+      form.reset();
+      return data;
+    }catch(err){
+      setState('Ошибка');
+      document.dispatchEvent(new CustomEvent('cfg:form-error', {detail:{error: (err && err.message) || 'unknown', payload}}));
+      throw err;
+    }finally{
+      setTimeout(()=> setState(origText || 'Отправить'), 1400);
+    }
+  }
+
+  // Attach to all forms that carry data-cfg-lead or id matches known ids
+  function wireForm(form){
+    if (form.__cfg_wired) return;
+    form.__cfg_wired = true;
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      sendLead(form).catch(()=>{});
+    });
+  }
+
+  document.querySelectorAll('form[data-cfg-lead], form#lead-form, form#partner-form').forEach(wireForm);
+  // If forms injected later
+  const mo = new MutationObserver(() => {
+    document.querySelectorAll('form[data-cfg-lead], form#lead-form, form#partner-form').forEach(wireForm);
+  });
+  mo.observe(document.documentElement, {subtree:true, childList:true});
+})();
+</script>
+<script id="cfg-lang-active">
+// Enforce active language chip based on <html lang>
+document.addEventListener('DOMContentLoaded', function(){
+  // strip conflicting inline styles
+  document.querySelectorAll('.lang-chip').forEach(function(el){ el.style.background=''; el.style.color=''; el.style.border=''; });
+
+  var lang = (document.documentElement.getAttribute('lang')||'').toLowerCase();
+  if (!lang) {"ru"}
+  var map = {'ru':'index.html','en':'en.html','zh':'zh.html','zh-cn':'zh.html','zh-hans':'zh.html','zh-hant':'zh.html'};
+  var lc = lang.split('-')[0];
+  document.querySelectorAll('.lang-chip').forEach(function(el){
+    el.classList.remove('active');
+    var loc = (el.getAttribute('data-locale')||'').toLowerCase();
+    if (loc === lc) { el.classList.add('active'); el.setAttribute('aria-current','true'); el.setAttribute('data-active','1'); } else { el.removeAttribute('aria-current'); el.setAttribute('data-active','0'); }
+  });
+});
+</script>
+<script id="cfg-cookie-banner">
+(function(){
+  function t(lang){
+    var ru = {
+      text: 'Мы используем только аналитические cookie для улучшения работы сайта.',
+      accept: 'Принять',
+      decline: 'Отклонить',
+      policy: 'Политика'
+    };
+    var en = {
+      text: 'We use analytics-only cookies to improve the site experience.',
+      accept: 'Accept',
+      decline: 'Decline',
+      policy: 'Privacy'
+    };
+    var zh = {
+      text: '我们仅使用分析类 cookie 以改进网站体验。',
+      accept: '同意',
+      decline: '拒绝',
+      policy: '隐私政策'
+    };
+    var map = {ru:ru,en:en,zh:zh};
+    var lc = (lang||'ru').split('-')[0];
+    return map[lc] || ru;
+  }
+  function hasConsent(){
+    try {
+      if (localStorage.getItem('cfg_analytics') === '1') return true;
+      return document.cookie.split('; ').some(p => p.trim() === 'cfg_analytics=1');
+    } catch(e){ return false; }
+  }
+  function markDeclined(){
+    try {
+      localStorage.setItem('cfg_analytics','0');
+      var d = new Date(); d.setFullYear(d.getFullYear()+1);
+      document.cookie = 'cfg_analytics=0; path=/; expires='+d.toUTCString();
+    }catch(e){}
+  }
+  function grantConsent(){
+    try {
+      localStorage.setItem('cfg_analytics','1');
+      var d = new Date(); d.setFullYear(d.getFullYear()+1);
+      document.cookie = 'cfg_analytics=1; path=/; expires='+d.toUTCString();
+    }catch(e){}
+    document.dispatchEvent(new CustomEvent('cfg:consent-granted'));
+  }
+  function inject(){
+    if (document.getElementById('cookie-banner')) return;
+    var lang = (document.documentElement.getAttribute('lang')||'').toLowerCase();
+    var i18n = t(lang);
+    var div = document.createElement('div');
+    div.id = 'cookie-banner';
+    div.innerHTML = '<p>'+i18n.text+' <a href="/privacy.html" target="_blank" rel="noopener">'+i18n.policy+'</a>.</p>' +
+      '<div class="row">' +
+      '<button type="button" class="secondary" data-cookie-decline>'+i18n.decline+'</button>' +
+      '<button type="button" class="primary" data-cookie-accept>'+i18n.accept+'</button>' +
+      '</div>';
+    document.body.appendChild(div);
+    div.style.display = 'block';
+    div.querySelector('[data-cookie-accept]').addEventListener('click', function(){
+      grantConsent();
+      div.remove();
+    }, {once:true});
+    div.querySelector('[data-cookie-decline]').addEventListener('click', function(){
+      markDeclined();
+      div.remove();
+    }, {once:true});
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    if (!hasConsent()) inject();
+  });
+})();
+</script>
+<script id="cfg-slot-script">
+(function(){
+  var EMAIL = "C.F.G.consulting@bk.ru";
+  var WA = "79025683529";
+  var TG = "Evgeniy_Chapurin";
+
+  function enc(s){ try { return encodeURIComponent(s); } catch(e){ return s; } }
+
+  function utmString() {
+    try {
+      var p = new URLSearchParams(location.search);
+      var keys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+      var parts = [];
+      keys.forEach(function(k){ if(p.get(k)) parts.push(k+'='+p.get(k)); });
+      return parts.join('&');
+    } catch(e){ return ''; }
+  }
+
+  function template() {
+    var lang = (document.documentElement.getAttribute('lang')||'ru').toLowerCase();
+    var lc = lang.split('-')[0];
+    var subjMap = {
+      ru: 'Запрос консультации — C|F|G (с сайта)',
+      en: 'Consulting request — C|F|G (from site)',
+      zh: '咨询请求 — C|F|G（来自网站）'
+    };
+    var subj = subjMap[lc] || subjMap.en;
+    var lines = [];
+    if(lc==='ru') {
+      lines.push('Здравствуйте! Хочу предложить слот/получить консультацию.');
+      lines.push('Кратко о задаче: ');
+      lines.push('');
+      lines.push('— Страница: ' + location.href);
+      var u = utmString(); if (u) lines.push('— UTM: ' + u);
+      lines.push('— Язык: ' + lang);
+      lines.push('— Время: ' + new Date().toLocaleString());
+    } else if(lc==='zh') {
+      lines.push('您好！我想预约时间/获取咨询。');
+      lines.push('简要说明：');
+      lines.push('');
+      lines.push('— 页面：' + location.href);
+      var u2 = utmString(); if (u2) lines.push('— UTM：' + u2);
+      lines.push('— 语言：' + lang);
+      lines.push('— 时间：' + new Date().toLocaleString());
+    } else {
+      lines.push('Hello! I\'d like to propose a time slot / request a consultation.');
+      lines.push('Short context:');
+      lines.push('');
+      lines.push('— Page: ' + location.href);
+      var u3 = utmString(); if (u3) lines.push('— UTM: ' + u3);
+      lines.push('— Lang: ' + lang);
+      lines.push('— Time: ' + new Date().toLocaleString());
+    }
+    return { subj: subj, body: lines.join('
+') };
+  }
+
+  function show(el){
+    if (!el) return;
+    el.style.display = 'block';
+    el.removeAttribute('hidden');
+  }
+  function hide(el){
+    if (!el) return;
+    el.style.display = 'none';
+    el.setAttribute('hidden','');
+  }
+
+  function openModal() {
+    var md = document.getElementById('slot-modal');
+    if (!md) return;
+    try{ document.body.classList.add('modal-open'); }catch(_e){}
+    md.style.display = 'flex';
+    md.removeAttribute('hidden');
+  }catch(_e){}
+    var md = document.getElementById('slot-modal');
+    if (!md) return;
+    show(md);
+  }
+  function closeModal() {
+    var md = document.getElementById('slot-modal');
+    if (!md) return;
+    md.style.display = 'none';
+    md.setAttribute('hidden', '');
+    try{ document.body.classList.remove('modal-open'); }catch(_e){}
+  }catch(_e){}
+    var md = document.getElementById('slot-modal');
+    if (!md) return;
+    hide(md);
+  }
+
+  function handleChannel(kind, t, el){
+    var url = null;
+    if (kind === 'mailto') {
+      url = 'mailto:' + EMAIL + '?subject=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.location.href = url;
+    } else if (kind === 'gmail') {
+      url = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + enc(EMAIL) + '&su=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'outlook') {
+      url = 'https://outlook.office.com/mail/deeplink/compose?to=' + enc(EMAIL) + '&subject=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'yandex') {
+      url = 'https://mail.yandex.ru/compose?to=' + enc(EMAIL) + '&subject=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'mailru') {
+      url = 'https://e.mail.ru/compose/?to=' + enc(EMAIL) + '&subject=' + enc(t.subj) + '&body=' + enc(t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'wa' || kind === 'whatsapp') {
+      url = 'https://wa.me/' + "79025683529" + '?text=' + enc(t.subj + '
+
+' + t.body);
+      window.open(url, '_blank');
+    } else if (kind === 'tg' || kind === 'telegram') {
+      var deep = 'tg://resolve?domain=' + "Evgeniy_Chapurin" + '&text=' + enc(t.subj + '
+
+' + t.body);
+      var web = 'https://t.me/' + "Evgeniy_Chapurin";
+      try { window.location.href = deep; setTimeout(function(){ window.open(web, '_blank'); }, 600); }
+      catch(_err) { window.open(web, '_blank'); }
+    } else if (kind === 'call' || kind === 'phone') {
+      url = 'tel:+7' + "79025683529"; window.location.href = url;
+    } else if (kind === 'form') {
+      closeModal();
+      var f = document.querySelector('form[data-cfg-lead], form#lead-form');
+      if (f) {
+        f.scrollIntoView({behavior:'smooth', block:'start'});
+        var msg = f.querySelector('[name="message"], textarea, [name="task"], [name="comment"]');
+        var tplt = template();
+        if (msg) msg.value = tplt.body;
+        try { msg && msg.focus(); } catch(_e){}
+      } else {
+        window.location.hash = '#contacts';
+      }
+    } else if (kind === 'copy') {
+      var text = t.subj + '
+
+' + t.body;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function(){ if(el){ el.textContent='Скопировано ✓'; setTimeout(function(){ el.textContent='Скопировать шаблон'; }, 1200);} });
+      }
+    }
+  }
+
+  function wire(){
+    // Delegated open
+    document.addEventListener('click', function(e){
+      var trigger = e.target.closest('[data-slot="open"], [data-slot-open]');
+      if (trigger) {
+        // block default only for our CTA
+        e.preventDefault();
+        openModal();
+        return;
+      }
+      // Close handlers (supports old markup data-slot="close" and backdrop click)
+      var cls = e.target.closest('[data-slot="close"], .slot-modal__backdrop');
+      if (cls) {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+      // Inside modal: channels (support both data-slot and legacy data-slot-open values)
+      var btn = e.target.closest('#slot-modal [data-slot], #slot-modal [data-slot-open], #slot-modal [data-slot-copy]');
+      if (btn) {
+        e.preventDefault();
+        var kind = btn.getAttribute('data-slot') || btn.getAttribute('data-slot-open') || '';
+        var t = template();
+        if (btn.hasAttribute('data-slot-copy')) kind = 'copy';
+        handleChannel(kind, t, btn);
+        return;
+      }
+    }, true);
+
+    // Ensure modal exists: if none, create minimal container
+    if (!document.getElementById('slot-modal')) {
+      var md = document.createElement('div');
+      md.id = 'slot-modal';
+      md.setAttribute('hidden','');
+      md.innerHTML = '<div class="slot-modal__backdrop" data-slot="close"></div><div class="slot-modal__dialog"><h3 class="slot-modal__title">Связаться</h3><div class="slot-modal__grid"><a class="btn" data-slot="mailto">Письмо</a><a class="btn" data-slot="wa">WhatsApp</a><a class="btn" data-slot="tg">Telegram</a><a class="btn" data-slot="form">Форма на сайте</a><a class="btn" data-slot="copy">Скопировать шаблон</a></div><div class="slot-modal__actions"><button class="btn" data-slot="close">Закрыть</button></div></div>';
+      document.body.appendChild(md);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', wire);
+  } else {
+    wire();
+  }
+})();
+</script>
+<script>
+// CFG slot modal — robust event handling
+(function(){
+  var EMAIL = 'C.F.G.consulting@bk.ru';
+  var TG = '@Evgeniy_Chapurin';
+  var WA = '79025683529';
+
+  function track(ev, params){ try{ gtag('event', ev, params||{}); }catch(e){} }
+  function qs(sel, root){ return (root||document).querySelector(sel); }
+  function qsa(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+
+  var state = { subject: 'CFG Intro Call', body: 'Здравствуйте!\\nХочу назначить 20-минутный звонок.\\nУдобный слот: ____ (дата/время, часовой пояс).\\nИмя/Компания:\\nТелефон/Telegram:' };
+
+  function openModal(){
+    var m = qs('#slot-modal'); if(!m) return;
+    m.hidden = false; document.body.style.overflow='hidden';
+    try{ qsa('[data-slot-open]', m)[0]?.focus(); }catch(_){}
+    track('slot_modal_open');
+  }
+  function closeModal(){
+    var m = qs('#slot-modal'); if(!m) return;
+    m.hidden = true; document.body.style.overflow='';
+    track('slot_modal_close');
+  }
+
+  // Map openers
+  var links = {
+    gmail: function(){ 
+      var url='https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(EMAIL)
+        + (state.subject?('&su='+encodeURIComponent(state.subject)):'')
+        + (state.body?('&body='+encodeURIComponent(state.body)):''); 
+      window.open(url,'_blank','noopener'); track('open_gmail');
+    },
+    outlook: function(){ 
+      var url='https://outlook.live.com/owa/?path=/mail/action/compose&to='+encodeURIComponent(EMAIL)
+        + (state.subject?('&subject='+encodeURIComponent(state.subject)):'')
+        + (state.body?('&body='+encodeURIComponent(state.body)):''); 
+      window.open(url,'_blank','noopener'); track('open_outlook');
+    },
+    yandex: function(){
+      var url='https://mail.yandex.ru/compose?to='+encodeURIComponent(EMAIL)
+        + (state.subject?('&subject='+encodeURIComponent(state.subject)):'')
+        + (state.body?('&body='+encodeURIComponent(state.body)):''); 
+      window.open(url,'_blank','noopener'); track('open_yandex');
+    },
+    mailru: function(){
+      var url='https://e.mail.ru/compose?to='+encodeURIComponent(EMAIL)
+        + (state.subject?('&subject='+encodeURIComponent(state.subject)):'')
+        + (state.body?('&body='+encodeURIComponent(state.body)):''); 
+      window.open(url,'_blank','noopener'); track('open_mailru');
+    },
+    mailto: function(){
+      var url='mailto:'+EMAIL
+        + (state.subject?('?subject='+encodeURIComponent(state.subject)):'')
+        + (state.body?((state.subject?'&':'?')+'body='+encodeURIComponent(state.body)):''); 
+      window.location.href=url; track('open_mailto');
+    },
+    whatsapp: function(){
+      var text = (state.subject? (state.subject + '\\n\\n') : '') + state.body;
+      var url='https://wa.me/'+WA+'?text='+encodeURIComponent(text);
+      window.open(url,'_blank','noopener'); track('open_whatsapp');
+    },
+    telegram: function(){
+      var url='https://t.me/'+ (TG.startsWith('@')? TG.substring(1) : TG);
+      window.open(url,'_blank','noopener'); track('open_telegram');
+    }
+  };
+
+  // Open modal triggers
+  qsa('[data-slot=\"open\"]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      var subj = this.getAttribute('data-subject') || this.getAttribute('data-subj') || state.subject;
+      var body = this.getAttribute('data-body') || state.body;
+      state.subject = subj; state.body = body;
+      openModal();
+    }, true);
+  });
+
+  // Close triggers
+  qsa('[data-slot=\"close\"]').forEach(function(el){ el.addEventListener('click', closeModal); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
+  // Action buttons
+  qsa('[data-slot-open]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      var k = this.getAttribute('data-slot-open'); if(!k) return;
+      (links[k]||function(){})();
+    });
+  });
+
+  // Copy buttons
+  qsa('[data-slot-copy]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var kind = this.getAttribute('data-slot-copy');
+      var text = (kind==='email') ? EMAIL : ((state.subject? (state.subject + '\\n\\n') : '') + state.body);
+      try{ navigator.clipboard && navigator.clipboard.writeText(text); }catch(_){}
+      track('slot_copy_'+kind);
+    });
+  });
+})();
+</script>
+<div class="slot-modal" hidden="" id="email-modal">
+<div class="slot-modal__backdrop" data-email="close"></div>
+<div class="slot-modal__dialog">
+<h3 class="slot-modal__title">Choose your email app</h3>
+<div class="slot-modal__grid">
+<a class="btn btn-primary" data-email-open="gmail">Gmail</a>
+<a class="btn btn-secondary" data-email-open="outlook">Outlook</a>
+<a class="btn btn-secondary" data-email-open="yandex">Yandex</a>
+<a class="btn btn-secondary" data-email-open="mailru">Mail.ru</a>
+<a class="btn btn-secondary" data-email-open="mailto">Почта по умолчанию</a>
+<button class="btn btn-light" data-email-copy="email">Скопировать e‑mail</button>
+<button class="btn btn-light" data-email-copy="body">Скопировать шаблон</button>
+</div>
+<div class="slot-modal__actions">
+<button class="btn btn-light" data-email="close">Закрыть</button>
+</div>
+</div>
+</div>
+<script>
+/* CFG Email modal */
+(function(){
+  var EMAIL='C.F.G.consulting@bk.ru';
+  function track(ev, params){ try{ gtag('event', ev, params||{}); }catch(e){} }
+  function qs(sel, root){ return (root||document).querySelector(sel); }
+  function qsa(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+
+  var state = { subject: 'Проект для CFG consulting', body: '' };
+
+  function parseSubjectFromHref(href){
+    try{
+      if(!href) return '';
+      var m = href.match(/subject=([^&#]+)/);
+      return m ? decodeURIComponent(m[1].replace(/\+/g,' ')) : '';
+    }catch(_){ return '' }
+  }
+
+  function openEmailModal(subj, body){
+    state.subject = subj || state.subject;
+    state.body = body || state.body;
+    var m = qs('#email-modal'); if(!m) return;
+    m.hidden = false; document.body.style.overflow='hidden';
+    try{ qsa('[data-email-open]', m)[0]?.focus(); }catch(_){}
+    track('email_modal_open');
+  }
+  function closeEmailModal(){
+    var m = qs('#email-modal'); if(!m) return;
+    m.hidden = true; document.body.style.overflow='';
+    track('email_modal_close');
+  }
+
+  var builders = {
+    gmail: function(){ 
+      var url='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(EMAIL);
+      if(state.subject) url += '&su='+encodeURIComponent(state.subject);
+      if(state.body) url += '&body='+encodeURIComponent(state.body);
+      window.location.href = url; track('open_gmail');
+    },
+    outlook: function(){ 
+      var url='https://outlook.live.com/owa/?path=/mail/action/compose&to='+encodeURIComponent(EMAIL);
+      if(state.subject) url += '&subject='+encodeURIComponent(state.subject);
+      if(state.body) url += '&body='+encodeURIComponent(state.body);
+      window.location.href = url; track('open_outlook');
+    },
+    yandex: function(){
+      var url='https://mail.yandex.ru/compose?to='+encodeURIComponent(EMAIL);
+      if(state.subject) url += '&subject='+encodeURIComponent(state.subject);
+      if(state.body) url += '&body='+encodeURIComponent(state.body);
+      window.location.href = url; track('open_yandex');
+    },
+    mailru: function(){
+      var url='https://e.mail.ru/compose?to='+encodeURIComponent(EMAIL);
+      if(state.subject) url += '&subject='+encodeURIComponent(state.subject);
+      if(state.body) url += '&body='+encodeURIComponent(state.body);
+      window.location.href = url; track('open_mailru');
+    },
+    mailto: function(){
+      var url='mailto:'+EMAIL
+        + (state.subject?('?subject='+encodeURIComponent(state.subject)):'')
+        + (state.body?((state.subject?'&':'?')+'body='+encodeURIComponent(state.body)):''); 
+      window.location.href = url; track('open_mailto');
+    }
+  };
+
+  qsa('[data-ev="cta_email"], [data-mailto]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      var subj = this.getAttribute('data-subject') || this.getAttribute('data-subj') || parseSubjectFromHref(this.getAttribute('href')) || 'Проект для CFG consulting';
+      var body = this.getAttribute('data-body') || '';
+      openEmailModal(subj, body);
+    });
+  });
+
+  qsa('[data-email="close"]').forEach(function(el){ el.addEventListener('click', closeEmailModal); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeEmailModal(); });
+
+  qsa('[data-email-open]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var k = this.getAttribute('data-email-open');
+      if(builders[k]) builders[k]();
+    });
+  });
+
+  qsa('[data-email-copy]').forEach(function(el){
+    el.addEventListener('click', function(){
+      var kind = this.getAttribute('data-email-copy');
+      var text = (kind==='email') ? EMAIL : ((state.subject? (state.subject + '\n\n') : '') + state.body);
+      try{ navigator.clipboard && navigator.clipboard.writeText(text); }catch(_){}
+      track('email_copy_'+kind);
+    });
+  });
+})();
+</script>
+<script src="/assets/js/cfg-env.js"></script><script defer="" src="/assets/js/lead-submit.js"></script></body></html>
