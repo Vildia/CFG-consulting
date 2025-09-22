@@ -7,7 +7,7 @@
 <pre id="log"></pre>
 <script>
 var CFG=(window.__CFG)||{};
-var url = CFG.APPS_SCRIPT_URL || '';
+var url = CFG.APPS_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec';
 function log(o){ var el=document.getElementById('log'); el.textContent += (typeof o==='string'?o:JSON.stringify(o,null,2)) + "\n"; }
 document.getElementById('get').onclick = async ()=>{
   if(!url){ return log('APPS_SCRIPT_URL is empty'); }

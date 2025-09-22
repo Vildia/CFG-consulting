@@ -84,7 +84,7 @@
     form.__sending = true;
 
     disableForm(form, true);
-    var url = (window.__CFG && window.__CFG.APPS_SCRIPT_URL) || '';
+    var url = (window.__CFG && window.__CFG.APPS_SCRIPT_URL) || 'https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec';
     if(!url){ disableForm(form,false); form.__sending=false; return toastErr('Ошибка конфигурации: нет URL обработчика.'); try{ if(window.gtag){ gtag('event','lead_error',{reason:'no_handler'}); } }catch(_){ } }
 
     
