@@ -19,10 +19,10 @@
 <body>
 <div class="card">
   <h1>CFG · Self‑Test</h1>
-  <p class="muted">Проверка API. 1) «Статус /api/health», 2) «Статус /api/lead», 3) «Тест POST». При ошибке — «Тест GET compat».</p>
+  <p class="muted">Проверка API. 1) «Статус /api/health», 2) «Статус https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec», 3) «Тест POST». При ошибке — «Тест GET compat».</p>
   <div class="row">
     <button id="health">Статус /api/health</button>
-    <button id="probe">Статус /api/lead</button>
+    <button id="probe">Статус https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec</button>
     <button id="post">Тест POST</button>
     <button id="get">Тест GET compat</button>
     <button id="clear" class="secondary">Очистить лог</button>
@@ -39,12 +39,12 @@
     try{ const r = await fetch('/api/health'); const j = await r.json(); log(j); }catch(e){ log(String(e)); }
   };
   document.getElementById('probe').onclick = async ()=>{
-    try{ const r = await fetch('/api/lead'); const j = await r.json(); log(j); }catch(e){ log(String(e)); }
+    try{ const r = await fetch('https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec'); const j = await r.json(); log(j); }catch(e){ log(String(e)); }
   };
   document.getElementById('post').onclick = async ()=>{
     try{
       const payload = { action:'selftest', name:'Test', email:'test@example.com', locale:'ru', page_url:location.href, referrer:document.referrer||'', utm:{} };
-      const r = await fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const r = await fetch('https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
       const t = await r.text(); let j; try{ j = JSON.parse(t); }catch(_){}
       log(j || t);
     }catch(e){ log(String(e)); }
@@ -52,7 +52,7 @@
   document.getElementById('get').onclick = async ()=>{
     try{
       const qs = new URLSearchParams({ compat:'1', action:'selftest', name:'Test', locale:'ru', page_url:location.href });
-      const r = await fetch('/api/lead?'+qs.toString());
+      const r = await fetch('https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec?'+qs.toString());
       const t = await r.text(); let j; try{ j = JSON.parse(t); }catch(_){}
       log(j || t);
     }catch(e){ log(String(e)); }

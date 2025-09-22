@@ -94,8 +94,8 @@
     fetch(url, {
 
       method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
+      mode: 'no-cors',
+      headers: { // no headers },
       body: buildPayload(form)
     }).then(function(r){ return r.json().catch(function(){ return { ok: r.ok, status: r.status }; }); })
       .then(function(res){

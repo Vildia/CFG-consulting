@@ -538,7 +538,7 @@ document.addEventListener('DOMContentLoaded', function(){
         var compat = new URLSearchParams();
         Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
         [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
-        var url='/api/lead?'+compat.toString();
+        var url='https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec?'+compat.toString();
         var honeypot=(f.querySelector('input[name="company_site"]')||{}).value; if(honeypot){ return Promise.resolve(); } var req = 
 
         return req;
@@ -773,7 +773,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
         var compat = new URLSearchParams();
         Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
         [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
-        var url='/api/lead?'+compat.toString();
+        var url='https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec?'+compat.toString();
         var req = fetch(url, { method:'POST',  headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
         return req;
       })()
@@ -853,7 +853,7 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
 
     try{
       setState('Отправка…');
-      const res = await fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const res = await fetch('https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
       const ok = res.ok;
       let data = {};
       try { data = await res.json(); } catch(e){}
