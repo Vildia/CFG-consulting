@@ -1,119 +1,116 @@
-// api/lead.js
-// Vercel Node Function — подписывает { action:'lead', data } и шлёт в Apps Script.
-// Ничего на клиенте подписывать не нужно.
-//
-// Требуемые ENV:
-//  - APPS_SCRIPT_URL  : exec-URL Google Apps Script
-//  - CFG_KEY_V2       : 64-символьный hex-ключ (тот же в Script Properties -> CFG_KEY_V2)
-//  - ORIGIN           : ваш домен для CORS, напр. https://cfg-consulting.vercel.app
-//
-// Допуск: если CFG_KEY_V2 не определён, попытаемся взять CFG_KEY (но лучше не полагаться).
+// /api/lead.js — Vercel Node Function (Node.js runtime, not Edge)
+/**
+ * Environment variables expected on Vercel:
+ *  - APPS_SCRIPT_URL (exec URL of your Google Apps Script)
+ *  - CFG_KEY_V2      (64-char hex HMAC key; preferred)
+ *  - CFG_KEY         (optional fallback 64-char hex)
+ *  - ORIGIN          (allowed origin for CORS, e.g. https://cfg-consulting.vercel.app )
+ */
+const crypto = require("crypto");
 
-export const config = {
-  runtime: 'nodejs', // обычная Node-функция
-};
+function getEnv(name, fallback = undefined) {
+  const v = process.env[name];
+  return (v === undefined || v === null || v === "") ? fallback : String(v);
+}
+function isHex64(x) { return typeof x === "string" && /^[0-9a-fA-F]{64}$/.test(x); }
 
-function json(res, code, obj) {
-  res.statusCode = code;
-  res.setHeader('Content-Type', 'application/json; charset=utf-8');
-  res.end(JSON.stringify(obj));
+const APPS_SCRIPT_URL = getEnv("APPS_SCRIPT_URL");
+const ORIGIN = getEnv("ORIGIN", "*");     // if not set, allow all (not recommended for prod)
+const KEY_HEX_V2 = getEnv("CFG_KEY_V2");
+const KEY_HEX = getEnv("CFG_KEY");        // fallback
+
+function hmacHex(keyHex, payloadStr) {
+  const keyBuf = Buffer.from(keyHex, "hex");
+  return crypto.createHmac("sha256", keyBuf).update(payloadStr).digest("hex");
 }
 
-function cors(res, origin) {
-  res.setHeader('Access-Control-Allow-Origin', origin || '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'content-type,x-cfg-sig');
+// Allow both formats: flat body {name,email,...} OR { action:'lead', data:{...} }
+function normalizeBody(reqBody) {
+  let action = "lead";
+  let data = undefined;
+
+  if (reqBody && typeof reqBody === "object" && !Array.isArray(reqBody)) {
+    if (Object.prototype.hasOwnProperty.call(reqBody, "action")) {
+      // { action, data }
+      action = reqBody.action || "lead";
+      data = reqBody.data || {};
+    } else {
+      // flat -> wrap
+      data = reqBody;
+    }
+  } else {
+    data = {};
+  }
+  return { action, data };
 }
 
-function hexToBytes(hex) {
-  const m = (hex || '').match(/[0-9a-f]{2}/gi);
-  if (!m) return new Uint8Array(0);
-  return new Uint8Array(m.map(h => parseInt(h, 16)));
+function json(res, status, obj) {
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.status(status).end(JSON.stringify(obj));
 }
 
-async function hmacSHA256Hex(keyHex, messageString) {
-  const enc = new TextEncoder();
-  const cryptoKey = await crypto.subtle.importKey(
-    'raw',
-    hexToBytes(keyHex),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
-  );
-  const sigBuf = await crypto.subtle.sign('HMAC', cryptoKey, enc.encode(messageString));
-  return Array.from(new Uint8Array(sigBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
+function setCors(res) {
+  res.setHeader("Access-Control-Allow-Origin", ORIGIN || "*");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-cfg-sig");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Vary", "Origin");
 }
 
-export default async function handler(req, res) {
-  const ORIGIN = process.env.ORIGIN || '*';
-  cors(res, ORIGIN);
+module.exports = async (req, res) => {
+  setCors(res);
 
-  if (req.method === 'OPTIONS') {
-    res.statusCode = 204;
-    return res.end();
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+  if (req.method !== "POST") {
+    return json(res, 405, { ok: false, error: "method_not_allowed" });
   }
 
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST, OPTIONS');
-    return json(res, 405, { ok: false, error: 'method_not_allowed' });
+  if (!APPS_SCRIPT_URL) {
+    return json(res, 500, { ok: false, error: "env_missing", missing: ["APPS_SCRIPT_URL"] });
   }
 
-  const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL;
-  const KEY_V2 = process.env.CFG_KEY_V2 || process.env.CFG_KEY;
-
-  if (!APPS_SCRIPT_URL || !KEY_V2) {
-    return json(res, 500, {
-      ok: false,
-      error: 'env_missing',
-      missing: {
-        APPS_SCRIPT_URL: !APPS_SCRIPT_URL,
-        CFG_KEY_V2_or_CFG_KEY: !KEY_V2
-      }
-    });
-  }
-
-  // --- нормализуем вход ---
-  let body = {};
+  // Parse body (Vercel already parsed JSON if correct header, but be safe)
+  let bodyObj;
   try {
-    body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-  } catch (_) { body = {}; }
-
-  const isV2 = body && typeof body === 'object' && Object.prototype.hasOwnProperty.call(body, 'action');
-  const action = (isV2 ? body.action : 'lead') || 'lead';
-  const data   = (isV2 ? body.data   : body) || {};
-
-  const normalized = { action, data };
-  const payloadString = JSON.stringify(normalized);
-
-  // --- считаем подпись ---
-  let signature;
-  try {
-    signature = await hmacSHA256Hex(KEY_V2, payloadString);
-  } catch (e) {
-    return json(res, 500, { ok: false, error: 'sign_failed', detail: String(e) });
+    bodyObj = typeof req.body === "object" ? req.body : JSON.parse(req.body || "{}");
+  } catch {
+    bodyObj = {};
   }
 
-  // --- проксируем на Apps Script ---
+  // Normalize and sign on server
+  const normalized = normalizeBody(bodyObj);
+  const payloadStr = JSON.stringify(normalized);
+
+  let keyToUse = undefined;
+  if (isHex64(KEY_HEX_V2)) keyToUse = KEY_HEX_V2;
+  else if (isHex64(KEY_HEX)) keyToUse = KEY_HEX;
+
+  if (!keyToUse) {
+    return json(res, 500, { ok: false, error: "missing_hmac_key", hint: "Set CFG_KEY_V2 (64-hex) or fallback CFG_KEY in Vercel env." });
+  }
+
+  const sig = hmacHex(keyToUse, payloadStr);
+
+  // Forward to Apps Script
   let upstreamStatus = 0;
   let upstreamBody = null;
   try {
     const r = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'x-cfg-sig': signature
+        "Content-Type": "application/json",
+        "x-cfg-sig": sig,
       },
-      body: payloadString
+      body: payloadStr,
     });
     upstreamStatus = r.status;
-    try {
-      upstreamBody = await r.json();
-    } catch {
-      upstreamBody = { raw: await r.text() };
-    }
+    // Try to parse JSON; if fails, take text
+    const text = await r.text();
+    try { upstreamBody = JSON.parse(text); } catch { upstreamBody = { text }; }
   } catch (e) {
-    return json(res, 502, { ok: false, error: 'upstream_fetch_error', detail: String(e) });
+    return json(res, 502, { ok: false, error: "upstream_failed", detail: String(e) });
   }
 
   return json(res, 200, { ok: true, upstream_status: upstreamStatus, upstream_body: upstreamBody });
-}
+};
