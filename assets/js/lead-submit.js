@@ -104,7 +104,7 @@
     const resp = await fetch(url, {
       method: 'POST',
       mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
       body: payload
     });
     let data = null;
