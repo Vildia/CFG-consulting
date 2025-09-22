@@ -42,7 +42,15 @@
 
   function disableForm(form, yes){
     var btn = form.querySelector('button[type="submit"], .btn-primary');
-    if(btn){ btn.disabled = !!yes; btn.setAttribute('aria-disabled', yes?'true':'false'); }
+    if(btn){
+      btn.disabled = !!yes; btn.setAttribute('aria-disabled', yes?'true':'false');
+      if(yes){
+        if(!btn.__prevText){ btn.__prevText = btn.textContent; }
+        btn.textContent = 'Отправка…';
+      }else{
+        if(btn.__prevText){ btn.textContent = btn.__prevText; }
+      }
+    }
     $all('input,textarea,select', form).forEach(function(el){ el.readOnly = !!yes; });
   }
 
