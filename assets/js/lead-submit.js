@@ -1,5 +1,16 @@
 (function(){
   'use strict';
+  async function trySend(url, payload){
+    try{
+      const r = await fetch(url, { method:'POST', mode:'cors', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: new URLSearchParams({ payload }) });
+      if(!r || r.type==='opaque') return { ok:true, opaque:true };
+      const t = await r.text();
+      try{ return JSON.parse(t); }catch(_){ return { ok: r.ok, status: r.status }; }
+    }catch(_){
+      return { ok:false, error:'network' };
+    }
+  }
+
   async function hmacSHA256Hex(key, msg){
     if(!window.crypto || !window.crypto.subtle) return null;
     try{
@@ -116,7 +127,8 @@
       });
   }
 
-  document.addEventListener('submit', onSubmit);
+  document.removeEventListener('submit', onSubmit);
+document.addEventListener('submit', onSubmit);
 })();
 
   document.addEventListener('DOMContentLoaded', function(){
