@@ -94,10 +94,10 @@
     fetch(url, {
 
       method: 'POST',
-      mode: 'no-cors',
-      headers: { // no headers },
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: buildPayload(form)
-    }).then(function(r){ return r.json().catch(function(){ return { ok: r.ok, status: r.status }; }); })
+    }).then(function(r){ if(!r || r.type==='opaque'){ return { ok:true, opaque:true }; } return r.text().then(function(t){ try{ return JSON.parse(t); }catch(_){ return { ok: r.ok, status: r.status }; } }); })
       .then(function(res){
         if(res && (res.ok===true || res.status==='ok')){
           form.reset();

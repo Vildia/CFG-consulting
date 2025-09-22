@@ -26,14 +26,14 @@
     gtag('event','cta_click',{ event_category:'engagement', event_label:label });
   }, {capture:true});
 
-  // Wrap fetch to record https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec outcomes
+  // Wrap fetch to record /api/lead outcomes
   var origFetch = window.fetch;
   window.fetch = function(input, init){
     var p = origFetch.apply(this, arguments);
     try{
       var url = (typeof input === 'string') ? input : (input && input.url) || '';
       var method = (init && init.method) ? String(init.method).toUpperCase() : 'GET';
-      var isLead = url.indexOf('https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec') !== -1 && method === 'POST';
+      var isLead = url.indexOf('/api/lead') !== -1 && method === 'POST';
       if (!isLead) return p;
       return p.then(function(res){
         if (window.gtag) gtag('event', res.ok ? 'form_submit_ok' : 'form_submit_fail', { status: res.status });
