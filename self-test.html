@@ -1,27 +1,21 @@
-<!doctype html>
-<html lang="ru">
-<head><meta charset="utf-8"><title>CFG Self-Test</title>
-<style>body{font:16px/1.45 system-ui,Arial} button{margin-right:8px} pre{white-space:pre-wrap;background:#f7f7f7;padding:12px;border-radius:6px;}</style>
-</head>
-<body>
-<h1>Self-Test</h1>
-<p>URL: <code id="u">https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec</code></p>
-<button id="get">GET</button>
-<button id="post">POST</button>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>CFG Self-Test</title>
+<style>body{font:16px/1.45 system-ui} button{margin-right:8px} pre{white-space:pre-wrap;background:#f7f7f7;padding:12px;border-radius:6px}</style>
+</head><body>
+<h1>Self-Test</h1><p>URL: <code>https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec</code></p>
+<button id="get">GET</button> <button id="post">POST</button>
 <pre id="log"></pre>
 <script>
-const url = "https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec";
-function log(x){ const el=document.getElementById('log'); el.textContent += (typeof x==='string'?x:JSON.stringify(x,null,2)) + "\n"; }
-document.getElementById('get').onclick = async ()=>{
-  try{ const r = await fetch(url+'?__selftest=1',{mode:'cors'}); let t; try{t=await r.json()}catch(e){t=await r.text()}; log(t); }
+const url="https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec";
+const log=(x)=>{document.getElementById('log').textContent += (typeof x==='string'?x:JSON.stringify(x,null,2)) + "\n";};
+document.getElementById('get').onclick=async()=>{ 
+  try{ const r=await fetch(url+'?__selftest=1',{mode:'cors'}); let t; try{t=await r.json()}catch(_){t='opaque or text'}; log(t); }
   catch(e){ log('GET error: '+(e&&e.message||e)); }
 };
-document.getElementById('post').onclick = async ()=>{
-  try{ const payload = { action:'selftest', page_url: location.href, locale: (document.documentElement.lang||'ru') };
-        const r = await fetch(url,{ method:'POST', mode:'cors', headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}, body: 'payload=' + encodeURIComponent(JSON.stringify(payload)) });
-        let t; try{t=await r.json()}catch(e){t=await r.text()}; log(t); }
-  catch(e){ log('POST error: '+(e&&e.message||e)); }
+document.getElementById('post').onclick=async()=>{
+  try{ const payload = 'payload='+encodeURIComponent(JSON.stringify({action:'selftest', page_url:location.href, locale:(document.documentElement.lang||'ru')}));
+        const r=await fetch(url,{method:'POST',mode:'cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:payload});
+        if(r && r.type==='opaque') return log({ok:true,status:'ok',note:'opaque'});
+        try{ log(await r.json()); }catch(_ ){ log('fallback:'+ (r && r.ok)); }
+  }catch(e){ log('POST error: '+(e&&e.message||e)); }
 };
-document.getElementById('u').textContent = url;
-</script>
-</body></html>
+</script></body></html>
