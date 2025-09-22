@@ -1,99 +1,106 @@
-// api/lead.js
-// Vercel Node.js 20 function. Normalizes input, signs payload (HMAC-SHA256),
-// forwards to Google Apps Script and returns normalized response.
+'use strict';
 
-import crypto from 'node:crypto';
+const crypto = require('crypto');
 
-function bad(res, code, msg) {
-  res.status(code).json({ ok: false, error: msg });
+// Env
+const APPS_SCRIPT_URL = String(process.env.APPS_SCRIPT_URL || '').trim();
+const CFG_KEY_V2      = String(process.env.CFG_KEY_V2 || process.env.CFG_KEY || '').trim();
+const ORIGIN          = String(process.env.ORIGIN || '').trim();
+
+function json(obj){ return JSON.stringify(obj); }
+function hmacHex(key, str){
+  return crypto.createHmac('sha256', Buffer.from(key, 'hex')).update(str, 'utf8').digest('hex');
+}
+function header(res, origin){
+  if (origin) res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Vary', 'Origin');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-cfg-sig');
 }
 
-export default async function handler(req, res) {
-  // CORS for local tests
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+// Extract body helper
+async function readBody(req){
+  const ctype = (req.headers['content-type'] || '').toLowerCase();
+  if (ctype.includes('application/json')) {
+    return req.body && typeof req.body === 'object' ? req.body : JSON.parse(req.body || '{}');
+  }
+  if (ctype.includes('application/x-www-form-urlencoded')) {
+    const raw = typeof req.body === 'string' ? req.body : '';
+    const out = {};
+    new URLSearchParams(raw).forEach((v,k)=>{ out[k]=v; });
+    return out;
+  }
+  // fallback: try json
+  try { return JSON.parse(req.body || '{}'); } catch(_) { return {}; }
+}
 
-  if (req.method === 'OPTIONS') {
-    res.status(204).end();
-    return;
+function sameOrigin(reqOrigin){
+  const o = (reqOrigin||'').replace(/\/$/,'');
+  const allowed = (ORIGIN||'').split(',').map(s=>s.trim().replace(/\/$/,'')).filter(Boolean);
+  if (!allowed.length) return true;
+  return allowed.includes(o);
+}
+
+exports.config = { runtime: 'nodejs' };
+
+module.exports = async function handler(req, res){
+  const reqOrigin = req.headers.origin || '';
+  if (req.method === 'OPTIONS'){
+    header(res, sameOrigin(reqOrigin)? reqOrigin : '*');
+    return res.status(204).end();
   }
 
-  if (req.method !== 'POST') {
-    return bad(res, 405, 'method_not_allowed');
+  if (req.method !== 'POST'){
+    header(res, sameOrigin(reqOrigin)? reqOrigin : '*');
+    return res.status(405).json({ ok:false, error:'method_not_allowed' });
   }
 
-  const APPS_URL = process.env.APPS_SCRIPT_URL;
-  const KEY_HEX  = (process.env.CFG_KEY_V2 || process.env.CFG_KEY || '').trim();
-
-  if (!APPS_URL || !/^https?:\/\//i.test(APPS_URL)) {
-    return bad(res, 500, 'env_missing:APPS_SCRIPT_URL');
-  }
-  if (!/^[0-9a-fA-F]{64}$/.test(KEY_HEX)) {
-    return bad(res, 500, 'env_missing_or_bad:CFG_KEY_V2');
+  if (!APPS_SCRIPT_URL || !CFG_KEY_V2){
+    header(res, sameOrigin(reqOrigin)? reqOrigin : '*');
+    return res.status(500).json({ ok:false, error:'env_missing' });
   }
 
-  // --- read body safely (Vercel may parse json already) ---
-  let raw = req.body;
-  if (raw == null || raw === '') {
-    try {
-      const chunks = [];
-      for await (const c of req) chunks.push(c);
-      raw = Buffer.concat(chunks).toString('utf8');
-    } catch (_) {}
-  }
-  let body;
   try {
-    body = (typeof raw === 'string') ? JSON.parse(raw || '{}') : (raw || {});
-  } catch {
-    // Not JSON? Treat empty
-    body = {};
-  }
+    const incoming = await readBody(req);
 
-  // --- normalize ------------------------------------------------------------
-  // accept: A) flat {name,email,...} OR B) { action, data }
-  let action = 'lead';
-  let data = {};
+    // Normalize input
+    let action = 'lead';
+    let data;
+    if (incoming && typeof incoming === 'object' && 'action' in incoming && 'data' in incoming) {
+      action = String(incoming.action || 'lead');
+      data = incoming.data || {};
+    } else {
+      data = incoming || {};
+    }
+    const normalized = { action, data };
 
-  if (body && typeof body === 'object' && 'action' in body && body.data && typeof body.data === 'object') {
-    action = String(body.action || 'lead');
-    data = body.data || {};
-  } else {
-    data = body || {};
-  }
+    // Prepare server-to-AppsScript signature (regardless of client signature)
+    const payloadStr = json(normalized);
+    const sig = hmacHex(CFG_KEY_V2, payloadStr);
 
-  const normalized = { action, data };
-  const payload = JSON.stringify(normalized);
-
-  // --- HMAC SHA-256 over payload using key hex ------------------------------
-  const signature = crypto.createHmac('sha256', Buffer.from(KEY_HEX, 'hex'))
-                          .update(payload)
-                          .digest('hex');
-
-  // --- forward to Apps Script ----------------------------------------------
-  let upstreamStatus = 0;
-  let upstreamBody = null;
-  try {
-    const resp = await fetch(APPS_URL, {
-      method: 'POST',
+    // Forward to Apps Script
+    const fetch = (typeof globalThis.fetch === 'function') ? globalThis.fetch : (await import('node-fetch')).default;
+    const upstream = await fetch(APPS_SCRIPT_URL, {
+      method:'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-cfg-sig': signature
+        'x-cfg-sig': sig
       },
-      body: payload
+      body: payloadStr,
     });
-    upstreamStatus = resp.status;
 
-    const text = await resp.text();
-    try { upstreamBody = JSON.parse(text); }
-    catch { upstreamBody = { raw: text }; }
-  } catch (err) {
-    return bad(res, 502, 'upstream_error:' + (err?.message || err));
+    const text = await upstream.text();
+    let body;
+    try { body = JSON.parse(text); } catch(_){ body = { raw:text }; }
+
+    header(res, sameOrigin(reqOrigin)? reqOrigin : '*');
+    return res.status(200).json({
+      ok: true,
+      upstream_status: upstream.status,
+      upstream_body: body,
+    });
+  } catch (e){
+    header(res, sameOrigin(req.headers.origin || '')? (req.headers.origin || '*') : '*');
+    return res.status(500).json({ ok:false, error:'server_crash', message: (e && e.message) || String(e) });
   }
-
-  res.status(200).json({
-    ok: true,
-    upstream_status: upstreamStatus,
-    upstream_body: upstreamBody
-  });
-}
+};
