@@ -15,9 +15,3 @@
 
 ## 2025-09-17 (v26)
 - Hero CTA «Обсудить проект» / «Discuss the project» / «讨论项目» теперь **не открывает email-модалку** и только мягко скроллит к секции контактов (#contacts). Исправлено на всех языковых версиях.
-
-
-## v29 - 2025-09-22
-- Fix: lead form POST now sends JSON to Apps Script (was urlencoded mismatch).
-- Update: self-test page points to APPS_SCRIPT_URL (__selftest GET + POST).
-- Ensure: APPS_SCRIPT_URL set to current deploy URL from properties.
