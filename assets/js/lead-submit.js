@@ -91,26 +91,25 @@
         payload = JSON.stringify(obj);
       } catch(_) {}
     }
-    fetch(url, {
-
+    
+    // use JSON and robust response handling
+    const resp = await fetch(url, {
       method: 'POST',
       mode: 'cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: buildPayload(form)
-    }).then(function(r){ if(!r || r.type==='opaque'){ return { ok:true, opaque:true }; } return r.text().then(function(t){ try{ return JSON.parse(t); }catch(_){ return { ok: r.ok, status: r.status }; } }); })
-      .then(function(res){
-        if(res && (res.ok===true || res.status==='ok')){
-          form.reset();
-          
-    try { if(window.gtag) { gtag('event', 'lead_submit', { form_id: form.id || 'lead-form', page_location: location.href }); } } catch(_) {}
-
-          toastOk('Заявка отправлена ✓');
-        }else{
-          toastErr('Не удалось отправить. Попробуйте ещё раз.'); try{ if(window.gtag){ gtag('event','lead_error',{reason:'bad_response'}); } }catch(_){ }
-        }
-      }).catch(function(){
-        toastErr('Сбой сети. Повторите позже.'); try{ if(window.gtag){ gtag('event','lead_error',{reason:'network'}); } }catch(_){ }
-      }).finally(function(){
+      headers: { 'Content-Type': 'application/json' },
+      body: payload
+    });
+    let data = null;
+    try { data = await resp.json(); } catch(_) { /* non-JSON fallback */ }
+    if (!resp.ok) {
+      toastErr('Не удалось отправить. Попробуйте ещё раз.');
+      try{ if(window.gtag){ gtag('event','lead_error',{reason:'bad_status', status: resp.status}); } }catch(_){}
+    } else {
+      try{ if(window.gtag){ gtag('event','lead_success',{form_id: form.id||'lead-form'}); } }catch(_){}
+      toastOk('Заявка отправлена ✓');
+      form.reset();
+    }
+}).finally(function(){
         disableForm(form,false);
         form.__sending=false;
       });

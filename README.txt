@@ -1,3 +1,5 @@
+CFG consulting — canonical build (v29)
+
 CFG consulting – canonical build (v18)
 
 Что внутри
