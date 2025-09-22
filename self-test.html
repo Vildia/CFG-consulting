@@ -1,24 +1,27 @@
-
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>CFG Self-Test</title></head>
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><title>CFG Self-Test</title>
+<style>body{font:16px/1.45 system-ui,Arial} button{margin-right:8px} pre{white-space:pre-wrap;background:#f7f7f7;padding:12px;border-radius:6px;}</style>
+</head>
 <body>
 <h1>Self-Test</h1>
+<p>URL: <code id="u">https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec</code></p>
 <button id="get">GET</button>
 <button id="post">POST</button>
 <pre id="log"></pre>
 <script>
-var CFG=(window.__CFG)||{};
-var url = CFG.APPS_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec';
-function log(o){ var el=document.getElementById('log'); el.textContent += (typeof o==='string'?o:JSON.stringify(o,null,2)) + "\n"; }
+const url = "https://script.google.com/macros/s/AKfycbwFOxaAtkPV4hsk3_gHGdrS4dlISHyVtj2f8TrxjTI_ZQP7j8cd2N8XVUdYpPzUNPv73A/exec";
+function log(x){ const el=document.getElementById('log'); el.textContent += (typeof x==='string'?x:JSON.stringify(x,null,2)) + "\n"; }
 document.getElementById('get').onclick = async ()=>{
-  if(!url){ return log('APPS_SCRIPT_URL is empty'); }
-  const r = await fetch(url+'?__selftest=1',{mode:'cors'});
-  try{ log(await r.json()); }catch(e){ log('not JSON:'+await r.text()); }
+  try{ const r = await fetch(url+'?__selftest=1',{mode:'cors'}); let t; try{t=await r.json()}catch(e){t=await r.text()}; log(t); }
+  catch(e){ log('GET error: '+(e&&e.message||e)); }
 };
 document.getElementById('post').onclick = async ()=>{
-  if(!url){ return log('APPS_SCRIPT_URL is empty'); }
-  const payload = { action:'selftest', name:'Test', locale:document.documentElement.lang||'ru', page_url:location.href };
-  const r = await fetch(url, { method:'POST', mode:'cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-  try{ log(await r.json()); }catch(e){ log('not JSON:'+await r.text()); }
+  try{ const payload = { action:'selftest', page_url: location.href, locale: (document.documentElement.lang||'ru') };
+        const r = await fetch(url,{ method:'POST', mode:'cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        let t; try{t=await r.json()}catch(e){t=await r.text()}; log(t); }
+  catch(e){ log('POST error: '+(e&&e.message||e)); }
 };
+document.getElementById('u').textContent = url;
 </script>
 </body></html>
