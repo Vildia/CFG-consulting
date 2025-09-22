@@ -1,9 +1,8 @@
 {
+  "version": 2,
   "functions": {
-    "api/lead.js": {
-      "runtime": "nodejs20.x",
-      "memory": 128,
-      "maxDuration": 10
+    "api/**/*.js": {
+      "runtime": "nodejs20.x"
     }
   }
 }

@@ -1,116 +1,99 @@
-// /api/lead.js — Vercel Node Function (Node.js runtime, not Edge)
-/**
- * Environment variables expected on Vercel:
- *  - APPS_SCRIPT_URL (exec URL of your Google Apps Script)
- *  - CFG_KEY_V2      (64-char hex HMAC key; preferred)
- *  - CFG_KEY         (optional fallback 64-char hex)
- *  - ORIGIN          (allowed origin for CORS, e.g. https://cfg-consulting.vercel.app )
- */
-const crypto = require("crypto");
+// api/lead.js
+// Vercel Node.js 20 function. Normalizes input, signs payload (HMAC-SHA256),
+// forwards to Google Apps Script and returns normalized response.
 
-function getEnv(name, fallback = undefined) {
-  const v = process.env[name];
-  return (v === undefined || v === null || v === "") ? fallback : String(v);
-}
-function isHex64(x) { return typeof x === "string" && /^[0-9a-fA-F]{64}$/.test(x); }
+import crypto from 'node:crypto';
 
-const APPS_SCRIPT_URL = getEnv("APPS_SCRIPT_URL");
-const ORIGIN = getEnv("ORIGIN", "*");     // if not set, allow all (not recommended for prod)
-const KEY_HEX_V2 = getEnv("CFG_KEY_V2");
-const KEY_HEX = getEnv("CFG_KEY");        // fallback
-
-function hmacHex(keyHex, payloadStr) {
-  const keyBuf = Buffer.from(keyHex, "hex");
-  return crypto.createHmac("sha256", keyBuf).update(payloadStr).digest("hex");
+function bad(res, code, msg) {
+  res.status(code).json({ ok: false, error: msg });
 }
 
-// Allow both formats: flat body {name,email,...} OR { action:'lead', data:{...} }
-function normalizeBody(reqBody) {
-  let action = "lead";
-  let data = undefined;
+export default async function handler(req, res) {
+  // CORS for local tests
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (reqBody && typeof reqBody === "object" && !Array.isArray(reqBody)) {
-    if (Object.prototype.hasOwnProperty.call(reqBody, "action")) {
-      // { action, data }
-      action = reqBody.action || "lead";
-      data = reqBody.data || {};
-    } else {
-      // flat -> wrap
-      data = reqBody;
-    }
-  } else {
-    data = {};
-  }
-  return { action, data };
-}
-
-function json(res, status, obj) {
-  res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.status(status).end(JSON.stringify(obj));
-}
-
-function setCors(res) {
-  res.setHeader("Access-Control-Allow-Origin", ORIGIN || "*");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-cfg-sig");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Vary", "Origin");
-}
-
-module.exports = async (req, res) => {
-  setCors(res);
-
-  if (req.method === "OPTIONS") {
-    return res.status(204).end();
-  }
-  if (req.method !== "POST") {
-    return json(res, 405, { ok: false, error: "method_not_allowed" });
+  if (req.method === 'OPTIONS') {
+    res.status(204).end();
+    return;
   }
 
-  if (!APPS_SCRIPT_URL) {
-    return json(res, 500, { ok: false, error: "env_missing", missing: ["APPS_SCRIPT_URL"] });
+  if (req.method !== 'POST') {
+    return bad(res, 405, 'method_not_allowed');
   }
 
-  // Parse body (Vercel already parsed JSON if correct header, but be safe)
-  let bodyObj;
+  const APPS_URL = process.env.APPS_SCRIPT_URL;
+  const KEY_HEX  = (process.env.CFG_KEY_V2 || process.env.CFG_KEY || '').trim();
+
+  if (!APPS_URL || !/^https?:\/\//i.test(APPS_URL)) {
+    return bad(res, 500, 'env_missing:APPS_SCRIPT_URL');
+  }
+  if (!/^[0-9a-fA-F]{64}$/.test(KEY_HEX)) {
+    return bad(res, 500, 'env_missing_or_bad:CFG_KEY_V2');
+  }
+
+  // --- read body safely (Vercel may parse json already) ---
+  let raw = req.body;
+  if (raw == null || raw === '') {
+    try {
+      const chunks = [];
+      for await (const c of req) chunks.push(c);
+      raw = Buffer.concat(chunks).toString('utf8');
+    } catch (_) {}
+  }
+  let body;
   try {
-    bodyObj = typeof req.body === "object" ? req.body : JSON.parse(req.body || "{}");
+    body = (typeof raw === 'string') ? JSON.parse(raw || '{}') : (raw || {});
   } catch {
-    bodyObj = {};
+    // Not JSON? Treat empty
+    body = {};
   }
 
-  // Normalize and sign on server
-  const normalized = normalizeBody(bodyObj);
-  const payloadStr = JSON.stringify(normalized);
+  // --- normalize ------------------------------------------------------------
+  // accept: A) flat {name,email,...} OR B) { action, data }
+  let action = 'lead';
+  let data = {};
 
-  let keyToUse = undefined;
-  if (isHex64(KEY_HEX_V2)) keyToUse = KEY_HEX_V2;
-  else if (isHex64(KEY_HEX)) keyToUse = KEY_HEX;
-
-  if (!keyToUse) {
-    return json(res, 500, { ok: false, error: "missing_hmac_key", hint: "Set CFG_KEY_V2 (64-hex) or fallback CFG_KEY in Vercel env." });
+  if (body && typeof body === 'object' && 'action' in body && body.data && typeof body.data === 'object') {
+    action = String(body.action || 'lead');
+    data = body.data || {};
+  } else {
+    data = body || {};
   }
 
-  const sig = hmacHex(keyToUse, payloadStr);
+  const normalized = { action, data };
+  const payload = JSON.stringify(normalized);
 
-  // Forward to Apps Script
+  // --- HMAC SHA-256 over payload using key hex ------------------------------
+  const signature = crypto.createHmac('sha256', Buffer.from(KEY_HEX, 'hex'))
+                          .update(payload)
+                          .digest('hex');
+
+  // --- forward to Apps Script ----------------------------------------------
   let upstreamStatus = 0;
   let upstreamBody = null;
   try {
-    const r = await fetch(APPS_SCRIPT_URL, {
-      method: "POST",
+    const resp = await fetch(APPS_URL, {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "x-cfg-sig": sig,
+        'Content-Type': 'application/json',
+        'x-cfg-sig': signature
       },
-      body: payloadStr,
+      body: payload
     });
-    upstreamStatus = r.status;
-    // Try to parse JSON; if fails, take text
-    const text = await r.text();
-    try { upstreamBody = JSON.parse(text); } catch { upstreamBody = { text }; }
-  } catch (e) {
-    return json(res, 502, { ok: false, error: "upstream_failed", detail: String(e) });
+    upstreamStatus = resp.status;
+
+    const text = await resp.text();
+    try { upstreamBody = JSON.parse(text); }
+    catch { upstreamBody = { raw: text }; }
+  } catch (err) {
+    return bad(res, 502, 'upstream_error:' + (err?.message || err));
   }
 
-  return json(res, 200, { ok: true, upstream_status: upstreamStatus, upstream_body: upstreamBody });
-};
+  res.status(200).json({
+    ok: true,
+    upstream_status: upstreamStatus,
+    upstream_body: upstreamBody
+  });
+}
