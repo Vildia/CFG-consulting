@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <section id="estimate" style="scroll-margin-top: 96px;"><div class="container">
 <h2 class="section-title">Оценка за 24 часа</h2>
 <form id="lead-form" data-cfg-lead="1"  aria-label="Форма оценки" data-estimate="" data-locale="ru">
-<input autocomplete="off" name="hp_cfg_a" autocomplete="new-password" inputmode="none" aria-hidden="true" tabindex="-1" style="position:absolute;left:-9999px" style="display:none" tabindex="-1" type="text"/>
+<input autocomplete="off" name="company_site" style="display:none" tabindex="-1" type="text"/>
 <div class="form-grid">
 <div><label>Имя</label><input name="name" required=""/></div>
 <div><label>Компания</label><input name="company"/></div>
@@ -539,7 +539,7 @@ document.addEventListener('DOMContentLoaded', function(){
         Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
         [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
         var url='/api/lead?'+compat.toString();
-        var honeypot=(f.querySelector('input[name="hp_cfg_a" autocomplete="new-password" inputmode="none" aria-hidden="true" tabindex="-1" style="position:absolute;left:-9999px"]')||{}).value; if(honeypot){ return Promise.resolve(); } var req = 
+        var honeypot=(f.querySelector('input[name="company_site"]')||{}).value; if(honeypot){ return Promise.resolve(); } var req = 
 
         return req;
       })()
@@ -823,70 +823,41 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
     return out;
   }
   async function sendLead(form){
-    const hp = getVal(form, 'company_site'); // honeypot
-    if (hp) return Promise.reject(new Error('honeypot_filled'));
-
-    // Basic payload (common names across pages)
-    const payload = {
-      name: getVal(form, 'name') || getVal(form, 'full_name') || '',
-      company: getVal(form, 'company') || '',
-      inn: getVal(form, 'inn') || '',
-      email: getVal(form, 'email') || '',
-      phone: getVal(form, 'phone') || '',
-      message: getVal(form, 'message') || getVal(form, 'task') || getVal(form, 'comment') || '',
-      // meta
+    // Build strict, deterministic payload (whitelist + normalization). Ignore honeypot.
+    function normSpace(s){ return String(s||'').replace(/[\u00A0\u202F\u2007\u2060]/g,' ').replace(/\s+/g,' ').trim(); }
+    function normPhone(s){ s = String(s||''); var t = s.replace(/[^+\d]/g,''); if (t && t[0] != '+'){ if (t.startswith('8') && t.length==11) t = '+7'+t.slice(1); } return t; }
+    const fields = {
+      action: getVal(form,'action') || (form.hasAttribute('data-estimate') ? 'estimate_24h' : (form.hasAttribute('data-partner') ? 'partner_apply' : 'lead')),
       locale: getLocale(),
+      name: normSpace(getVal(form,'name') || getVal(form,'full_name')),
+      company: normSpace(getVal(form,'company')),
+      inn: normSpace(getVal(form,'inn')),
+      email: normSpace(getVal(form,'email')),
+      phone: normPhone(getVal(form,'phone')),
+      desc: normSpace(getVal(form,'message') || getVal(form,'task') || getVal(form,'comment')),
+      industry: normSpace(getVal(form,'industry')),
+      revenue: normSpace(getVal(form,'revenue')),
+      geo: normSpace(getVal(form,'geo')),
+      urgency: normSpace(getVal(form,'urgency')),
       page_url: location.href,
-      referrer: document.referrer || '',
-      utm: getUTM()
+      referrer: document.referrer || ''
     };
-
-    const btn = form.querySelector('button[type="submit"], [type="submit"]');
-    const origText = btn && (btn.textContent || btn.value);
-    // DEMO: simulate success on file:// or ?demo=1
-    const isFile = (location.protocol === 'file:');
-    const demo = isFile || /[?&]demo=1/.test(location.search);
-    if (demo) { if(btn){if(btn.tagName==='BUTTON')btn.textContent='Готово ✓';else btn.value='Готово ✓';}
-      document.dispatchEvent(new CustomEvent('cfg:form-success',{detail:{payload, data:{ok:true,demo:true}}})); form.reset(); return {ok:true,demo:true}; }
-
-    function setState(t){ if (btn) { if (btn.tagName === 'BUTTON') btn.textContent = t; else btn.value = t; } document.dispatchEvent(new CustomEvent('cfg:form-state', {detail:{state:t}})); }
-
-    try{
-      setState('Отправка…');
-      const res = await fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-      const ok = res.ok;
-      let data = {};
-      try { data = await res.json(); } catch(e){}
-      if (!ok) throw new Error('bad_status_'+res.status);
-      setState('Готово ✓');
-      document.dispatchEvent(new CustomEvent('cfg:form-success', {detail:{payload, data}}));
-      form.reset();
-      return data;
-    }catch(err){
-      setState('Ошибка');
-      document.dispatchEvent(new CustomEvent('cfg:form-error', {detail:{error: (err && err.message) || 'unknown', payload}}));
-      throw err;
-    }finally{
-      setTimeout(()=> setState(origText || 'Отправить'), 1400);
-    }
-  }
-
-  // Attach to all forms that carry data-cfg-lead or id matches known ids
-  function wireForm(form){
-    if (form.__cfg_wired) return;
-    form.__cfg_wired = true;
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      sendLead(form).catch(()=>{});
+    fields.consent = !!(form.querySelector('input[name="consent"]')?.checked);
+    // Append UTM if present
+    ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(function(k){
+      var v = getVal(form,k);
+      if (!v){ try{ var u = new URL(location.href); v = u.searchParams.get(k); }catch(_){ v = null; } }
+      if (v) fields[k] = normSpace(v);
     });
-  }
-
-  document.querySelectorAll('form[data-cfg-lead], form#lead-form, form#partner-form').forEach(wireForm);
-  // If forms injected later
-  const mo = new MutationObserver(() => {
-    document.querySelectorAll('form[data-cfg-lead], form#lead-form, form#partner-form').forEach(wireForm);
-  });
-  mo.observe(document.documentElement, {subtree:true, childList:true});
+    // Deterministic key order
+    const ordered = {}; Object.keys(fields).sort().forEach(k => ordered[k] = fields[k]);
+    // Send
+    setState('Отправка…');
+    const res = await fetch('/api/lead', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(ordered) });
+    const ok = res.ok; let data = {}; try{ data = await res.json(); }catch(e){}
+    if (!ok) throw new Error('bad_status_'+res.status);
+    setState('Готово ✓'); document.dispatchEvent(new CustomEvent('cfg:form-success', {detail:{payload:ordered, data}})); form.reset(); return data;
+    
 })();
 </script>
 <script id="cfg-lang-active">
