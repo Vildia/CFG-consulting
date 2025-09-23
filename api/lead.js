@@ -7,22 +7,6 @@ const CFG_KEY = String(process.env.CFG_KEY || '').trim();
 const ORIGIN_PROD = String(process.env.ORIGIN || '').trim();
 const ORIGIN_PREVIEW = String(process.env.ORIGIN_PREVIEW || '').trim();
 
-// Normalize only spaces for signature (keep key order intact)
-function _nb(s){ return String(s||'').replace(/\u00A0|\u202F/g,' '); }
-function normalizeSpaces(obj){
-  if (obj==null) return obj;
-  if (Array.isArray(obj)) return obj.map(normalizeSpaces);
-  if (typeof obj === 'object'){
-    const out = {};
-    for (const k of Object.keys(obj)){
-      const v = obj[k];
-      out[k] = (typeof v === 'string') ? _nb(v).trim() : normalizeSpaces(v);
-    }
-    return out;
-  }
-  return (typeof obj === 'string') ? _nb(obj).trim() : obj;
-}
-
 function norm(u){ try{ return String(u||'').trim().replace(/\/$/, ''); }catch(_){ return String(u||''); } }
 function isAllowedOrigin(origin, allowed){ origin = norm(origin); allowed = (allowed||[]).map(norm); return !origin || allowed.includes(origin); }
 function allow(res, origin){
@@ -33,10 +17,9 @@ function allow(res, origin){
 }
 
 async function proxyToAppsScript(data){
-  const norm = normalizeSpaces(data);
-  const payload = JSON.stringify(norm);
+  const payload = JSON.stringify(data);
   const hmac = crypto.createHmac('sha256', CFG_KEY).update(payload).digest('hex');
-  const body = JSON.stringify({ ...norm, _sig: hmac });
+  const body = JSON.stringify({ ...data, _sig: hmac });
   const r = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body });
   const text = await r.text();
   let j; try{ j = JSON.parse(text); }catch(_){}

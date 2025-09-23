@@ -179,10 +179,10 @@ body.modal-open{overflow:hidden !important;}
       <form id="partner-form" data-lead-form data-locale="ru">
         <input type="hidden" name="type" value="partner">
         <input type="text" name="website" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px" aria-hidden="true">
-        <label>Имя</label><input name="name" required minlength="2" placeholder="Иван Иванов">
+        <label>Имя</label><input name="name" autocomplete="name" required minlength="2" placeholder="Иван Иванов">
         <label>Компания / ИП</label><input name="company" placeholder="ООО «Партнёр»">
-        <label>Телефон</label><input name="phone" required placeholder="+7 999 000-00-00" pattern="^\+?\d[\d\-\s\(\)]{6,}$">
-        <label>E-mail</label><input name="email" type="email" placeholder="name@example.com">
+        <label>Телефон</label><input name="phone" autocomplete="tel" required placeholder="+7 999 000-00-00" pattern="^\+?\d[\d\-\s\(\)]{6,}$">
+        <label>E-mail</label><input name="email" autocomplete="email" type="email" placeholder="name@example.com">
         <label>Комментарий</label><textarea name="message" rows="4" placeholder="Регион, отрасли клиентов, формат сотрудничества"></textarea>
         <label style="display:flex;gap:8px;align-items:center;margin-top:8px">
           <input type="checkbox" id="consent" name="consent" value="1" required> <span>Согласен на обработку персональных данных (152‑ФЗ)</span>
@@ -206,7 +206,7 @@ body.modal-open{overflow:hidden !important;}
   form.addEventListener('submit', async (e)=>{
     e.preventDefault();
     if(!document.getElementById('consent').checked){ status.textContent='Поставьте галочку согласия'; status.className='err'; return; }
-    const fd = new FormData(form); const data = Object.fromEntries(fd.entries()); data.type='partner'; data.locale='ru';
+    await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0))); const fd = new FormData(form); const data = Object.fromEntries(fd.entries()); data.type='partner'; data.locale='ru';
     let btn=form.querySelector('button[type="submit"]'); btn.disabled=true; status.textContent='Отправляем…'; status.className='mut';
     try{
       const res=await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
