@@ -258,7 +258,7 @@ section#vff .muted, section#downloads .muted { color:#CBD5E1; }
 <script>
 (function(){
   window.CFG_SLOT = window.CFG_SLOT || {};
-  window.cfgOpenSlot = function(e){ try{ e && e.preventDefault && e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0))); }catch(_e){}; try{ if(window.CFG_SLOT && typeof window.CFG_SLOT.open==="function"){ window.CFG_SLOT.open(); return false;} }catch(_e){}; try{ var md=document.getElementById("slot-modal"); if(md){ md.style.display="block"; md.removeAttribute("hidden"); return false;} }catch(_e){}; return false; };var h=document.getElementById('site-header'); if(!h) return;
+  window.cfgOpenSlot = function(e){ try{ e && e.preventDefault && e.preventDefault(); }catch(_e){}; try{ if(window.CFG_SLOT && typeof window.CFG_SLOT.open==="function"){ window.CFG_SLOT.open(); return false;} }catch(_e){}; try{ var md=document.getElementById("slot-modal"); if(md){ md.style.display="block"; md.removeAttribute("hidden"); return false;} }catch(_e){}; return false; };var h=document.getElementById('site-header'); if(!h) return;
   function sc(){ var y=window.scrollY||document.documentElement.scrollTop; }
   window.addEventListener('scroll', sc, {passive:true}); sc();
 })();
@@ -286,7 +286,7 @@ section#vff .muted, section#downloads .muted { color:#CBD5E1; }
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('form[data-estimate]').forEach(function(f){
-    f.addEventListener('submit', async function(e){
+    f.addEventListener('submit', function(e){
       var root = document.documentElement.lang || 'ru';
       this.setAttribute('data-locale', this.getAttribute('data-locale') || root);
     });
@@ -369,11 +369,11 @@ document.addEventListener('DOMContentLoaded', function(){
 <form id="lead-form" data-cfg-lead="1"  aria-label="Форма оценки" data-estimate="" data-locale="ru">
 <input autocomplete="off" name="company_site" style="display:none" tabindex="-1" type="text"/>
 <div class="form-grid">
-<div><label>Имя</label><input name="name" autocomplete="name" required=""/></div>
+<div><label>Имя</label><input name="name" required=""/ autocomplete="name"></div>
 <div><label>Компания</label><input name="company"/></div>
 <div><label>ИНН</label><input name="inn"/></div>
-<div><label>Email</label><input name="email" autocomplete="email" required="" type="email"/></div>
-<div><label>Телефон</label><input name="phone" autocomplete="tel"/></div>
+<div><label>Email</label><input name="email" required="" type="email"/ autocomplete="email"></div>
+<div><label>Телефон</label><input name="phone"/ autocomplete="tel"></div>
 <div style="grid-column:1/-1"><label>Кратко о задаче</label><textarea name="desc" rows="4"></textarea></div>
 
 <div style="grid-column:1/-1;margin-top:8px">
@@ -506,7 +506,7 @@ document.addEventListener('DOMContentLoaded', function(){
         modal.querySelector('.body').value=body;
         modal.classList.add('open');
       }
-      e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+      e.preventDefault();
       track(this.getAttribute('data-ev')||'cta_email');
     });
   });
@@ -524,8 +524,8 @@ document.addEventListener('DOMContentLoaded', function(){
   
   // Estimate form: async submit via Apps Script (no mailto, no modal)
   document.querySelectorAll('form[data-estimate]').forEach(function(f){
-    f.addEventListener('submit', async function(e){
-      e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
       var locale=this.getAttribute('data-locale')||'ru';
       function val(n){ var x=f.querySelector('[name='+n+']'); return x?x.value.trim():''; }
       var name=val('name'), company=val('company'), inn=val('inn'), email=val('email'), phone=val('phone'), desc=val('desc');
@@ -562,7 +562,7 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
   // Smooth scroll to estimate + focus
   document.querySelectorAll('[data-scroll]').forEach(function(btn){
     btn.addEventListener('click', function(e){
-      e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+      e.preventDefault();
       var target = btn.getAttribute('data-scroll'); var id = (target||'').replace('#',''); var el = document.getElementById(id);
       if(el){ el.scrollIntoView({behavior:'smooth'}); }
       try{ setTimeout(function(){ var i=document.querySelector('#estimate input[name="name"]'); if(i){ i.focus(); } }, 450); }catch(_){}
@@ -675,7 +675,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
     if(!id) return;
     var el = document.getElementById(id);
     if(!el) return;
-    e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+    e.preventDefault();
     el.scrollIntoView({behavior:'smooth', block:'start'});
     if(id==='lead-form'){
       var first = el.querySelector('input,textarea,select'); if(first) setTimeout(function(){ first.focus(); }, 400);
@@ -743,14 +743,14 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
   document.querySelectorAll('a.btn, a[data-slot], button.btn').forEach(function(el){
     var txt=(el.textContent||"").trim();
     if(/Предложить слот|20-мин|20 min|Propose a slot|20-min|预约通话/.test(txt)){ 
-      el.addEventListener('click', function(e){ e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0))); openModal(); }, true);
+      el.addEventListener('click', function(e){ e.preventDefault(); openModal(); }, true);
     }
   });
   document.querySelectorAll('[data-slot="close"]').forEach(function(el){ el.addEventListener('click', closeModal); });
   document.querySelectorAll('[data-slot-open]').forEach(function(el){ 
     el.addEventListener('click', function(){ var k=this.getAttribute('data-slot-open'); window.open(links[k], '_blank', 'noopener'); });
   });
-  document.querySelectorAll('[data-slot="open"]').forEach(function(el){ el.addEventListener('click', function(e){ e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0))); openModal(); }, true); });
+  document.querySelectorAll('[data-slot="open"]').forEach(function(el){ el.addEventListener('click', function(e){ e.preventDefault(); openModal(); }, true); });
   document.querySelectorAll('[data-slot-copy]').forEach(function(el){ 
     el.addEventListener('click', function(){ var kind=this.getAttribute('data-slot-copy'); var text=(kind==='email')?email:body; if(navigator.clipboard) navigator.clipboard.writeText(text); });
   });
@@ -759,8 +759,8 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
 <script>
 (function(){ // Estimate form: async submit via Apps Script (no mailto, no modal)
   document.querySelectorAll('form[data-estimate]').forEach(function(f){
-    f.addEventListener('submit', async function(e){
-      e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
       var locale=this.getAttribute('data-locale')||'en';
       function val(n){ var x=f.querySelector('[name='+n+']'); return x?x.value.trim():''; }
       var name=val('name'), company=val('company'), inn=val('inn'), email=val('email'), phone=val('phone'), desc=val('desc');
@@ -823,6 +823,7 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
     return out;
   }
   async function sendLead(form){
+    /*AUTOFILL_WAIT*/try{await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));}catch(_){ }
     const hp = getVal(form, 'company_site'); // honeypot
     if (hp) return Promise.reject(new Error('honeypot_filled'));
 
@@ -876,7 +877,7 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
     if (form.__cfg_wired) return;
     form.__cfg_wired = true;
     form.addEventListener('submit', function(e){
-      e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+      e.preventDefault();
       sendLead(form).catch(()=>{});
     });
   }
@@ -1129,21 +1130,21 @@ document.addEventListener('DOMContentLoaded', function(){
       var trigger = e.target.closest('[data-slot="open"], [data-slot-open]');
       if (trigger) {
         // block default only for our CTA
-        e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+        e.preventDefault();
         openModal();
         return;
       }
       // Close handlers (supports old markup data-slot="close" and backdrop click)
       var cls = e.target.closest('[data-slot="close"], .slot-modal__backdrop');
       if (cls) {
-        e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+        e.preventDefault();
         closeModal();
         return;
       }
       // Inside modal: channels (support both data-slot and legacy data-slot-open values)
       var btn = e.target.closest('#slot-modal [data-slot], #slot-modal [data-slot-open], #slot-modal [data-slot-copy]');
       if (btn) {
-        e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+        e.preventDefault();
         var kind = btn.getAttribute('data-slot') || btn.getAttribute('data-slot-open') || '';
         var t = template();
         if (btn.hasAttribute('data-slot-copy')) kind = 'copy';
@@ -1240,7 +1241,7 @@ document.addEventListener('DOMContentLoaded', function(){
   // Open modal triggers
   qsa('[data-slot=\"open\"]').forEach(function(el){
     el.addEventListener('click', function(e){
-      e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+      e.preventDefault();
       var subj = this.getAttribute('data-subject') || this.getAttribute('data-subj') || state.subject;
       var body = this.getAttribute('data-body') || state.body;
       state.subject = subj; state.body = body;
@@ -1359,7 +1360,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   qsa('[data-ev="cta_email"], [data-mailto]').forEach(function(el){
     el.addEventListener('click', function(e){
-      e.preventDefault(); await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+      e.preventDefault();
       var subj = this.getAttribute('data-subject') || this.getAttribute('data-subj') || parseSubjectFromHref(this.getAttribute('href')) || 'Проект для CFG consulting';
       var body = this.getAttribute('data-body') || '';
       openEmailModal(subj, body);
