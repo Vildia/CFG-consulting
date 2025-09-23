@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <section id="estimate" style="scroll-margin-top: 96px;"><div class="container">
 <h2 class="section-title">24小时评估</h2>
 <form aria-label="Форма оценки" data-estimate="" data-locale="ru">
-<input autocomplete="off" name="company_site" style="display:none" tabindex="-1" type="text"/>
+<input autocomplete="off" name="hp_cfg_a" autocomplete="new-password" inputmode="none" aria-hidden="true" tabindex="-1" style="position:absolute;left:-9999px" style="display:none" tabindex="-1" type="text"/>
 <div class="form-grid">
 <div><label>姓名</label><input name="name" required=""/></div>
 <div><label>公司</label><input name="company"/></div>
@@ -502,7 +502,7 @@ document.addEventListener('DOMContentLoaded', function(){
         Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
         [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
         var url='/api/lead?'+compat.toString();
-        var honeypot=(f.querySelector('input[name="company_site"]')||{}).value; if(honeypot){ return Promise.resolve(); } var req = 
+        var honeypot=(f.querySelector('input[name="hp_cfg_a" autocomplete="new-password" inputmode="none" aria-hidden="true" tabindex="-1" style="position:absolute;left:-9999px"]')||{}).value; if(honeypot){ return Promise.resolve(); } var req = 
 
         return req;
       })()
