@@ -13,27 +13,27 @@ function isAllowedOrigin(origin, allowed){ origin = norm(origin); allowed = (all
 function normalizeLeadPayload(data){
   const S = (v)=> String(v==null?'':v).replace(/[\u00A0\u202F\u2007\u2060]/g,' ').replace(/\s+/g,' ').trim();
   const P = (v)=> { v = String(v==null?'':v); v = v.replace(/[^+\d]/g,''); if (v && v[0] !== '+' && /^8\d{10}$/.test(v)) v = '+7'+v.slice(1); return v; };
+  const src = data || {};
   const obj = {
-    action: S(data.action || 'estimate_24h'),
-    locale: S(data.locale || 'ru'),
-    name: S(data.name || data.fullname),
-    company: S(data.company || data.org),
-    inn: S(data.inn || data.tax_id),
-    email: S(data.email),
-    phone: P(data.phone),
-    desc: S(data.message || data.desc || data.comment || data.task),
-    industry: S(data.industry),
-    revenue: S(data.revenue),
-    geo: S(data.geo),
-    urgency: S(data.urgency),
-    page_url: S(data.page_url),
-    referrer: S(data.referrer),
-    consent: (data.consent ? 'yes' : '')
+    action: S(src.action || 'estimate_24h'),
+    locale: S(src.locale || 'ru'),
+    name: S(src.name || src.fullname),
+    company: S(src.company || src.org),
+    inn: S(src.inn || src.tax_id),
+    email: S(src.email),
+    phone: P(src.phone),
+    desc: S(src.message || src.desc || src.comment || src.task),
+    industry: S(src.industry),
+    revenue: S(src.revenue),
+    geo: S(src.geo),
+    urgency: S(src.urgency),
+    page_url: S(src.page_url),
+    referrer: S(src.referrer),
+    consent: (src.consent ? 'yes' : '')
   };
-  // flatten known UTM keys
-  ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(function(k){
-    if (data && typeof data==='object' && data[k]) obj[k] = S(data[k]);
-    else if (data && typeof data.utm==='object' && data.utm[k]) obj[k] = S(data.utm[k]);
+  ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach((k)=>{
+    if (src && typeof src==='object' && src[k]) obj[k] = S(src[k]);
+    else if (src && typeof src.utm==='object' && src.utm[k]) obj[k] = S(src.utm[k]);
   });
   const ordered = {}; Object.keys(obj).sort().forEach(k=>ordered[k]=obj[k]);
   return ordered;
@@ -46,16 +46,13 @@ function allow(res, origin){
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 }
 
-async function proxyToAppsScript(data){
-  const payload = JSON.stringify(data);
-  const hmac = crypto.createHmac('sha256', CFG_KEY).update(payload).digest('hex');
-  const body = JSON.stringify({ ...data, _sig: hmac });
-  const r = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body });
-  const text = await r.text();
-  let j; try{ j = JSON.parse(text); }catch(_){}
-  if (!r.ok) return { status: 502, body: { ok:false, error:'apps_script_http_'+r.status, text }};
-  return { status: 200, body: j || { ok:true, text } };
+
+async function proxyToAppsScript(body){
+  const resp = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body });
+  const text = await resp.text();
+  try { return { status: resp.status, body: JSON.parse(text) }; } catch(_) { return { status: 200, body: { ok:false, error:'parse_fail', raw:text } }; }
 }
+
 
 module.exports = async (req, res) => {
   const origin = String(req.headers.origin || ('https://' + (req.headers.host || '')));
@@ -106,8 +103,22 @@ module.exports = async (req, res) => {
     }
 
     // POST
-    if (req.method === 'POST'){
-      if (!APPS_SCRIPT_URL || !CFG_KEY) { allow(res, origin); return res.status(500).json({ ok:false, error:'env_not_configured' }); }
+    
+if (req.method === 'POST') {
+  if (!APPS_SCRIPT_URL || !CFG_KEY) { allow(res, origin); return res.status(500).json({ ok:false, error:'env_not_configured' }); }
+  if (!isAllowedOrigin(origin, allowed)) { allow(res, origin); return res.status(403).json({ ok:false, error:'forbidden_origin' }); }
+  let data = {};
+  if (typeof req.body === 'string') { try { data = JSON.parse(req.body); } catch(_) { data = {}; } }
+  else { try { data = Object.fromEntries(new URLSearchParams(req.body)); } catch(_) { data = req.body || {}; } }
+  const canonObj = normalizeLeadPayload(data);
+  const canonStr = JSON.stringify(canonObj);
+  const sig = crypto.createHmac('sha256', CFG_KEY).update(canonStr).digest('hex');
+  const body = JSON.stringify(Object.assign({}, canonObj, { _sig: sig }));
+  const out = await proxyToAppsScript(body);
+  allow(res, origin);
+  return res.status(out.status).json(out.body);
+}
+
       if (!isAllowedOrigin(origin, allowed)) { allow(res, origin); return res.status(403).json({ ok:false, error:'forbidden_origin' }); }
       allow(res, origin);
 
