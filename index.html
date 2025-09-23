@@ -369,11 +369,11 @@ document.addEventListener('DOMContentLoaded', function(){
 <form id="lead-form" data-cfg-lead="1"  aria-label="Форма оценки" data-estimate="" data-locale="ru">
 <input autocomplete="off" name="company_site" style="display:none" tabindex="-1" type="text"/>
 <div class="form-grid">
-<div><label>Имя</label><input name="name" required=""/ autocomplete="name"></div>
+<div><label>Имя</label><input name="name" required=""/></div>
 <div><label>Компания</label><input name="company"/></div>
 <div><label>ИНН</label><input name="inn"/></div>
-<div><label>Email</label><input name="email" required="" type="email"/ autocomplete="email"></div>
-<div><label>Телефон</label><input name="phone"/ autocomplete="tel"></div>
+<div><label>Email</label><input name="email" required="" type="email"/></div>
+<div><label>Телефон</label><input name="phone"/></div>
 <div style="grid-column:1/-1"><label>Кратко о задаче</label><textarea name="desc" rows="4"></textarea></div>
 
 <div style="grid-column:1/-1;margin-top:8px">
@@ -823,7 +823,6 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
     return out;
   }
   async function sendLead(form){
-    /*AUTOFILL_WAIT*/try{await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));}catch(_){ }
     const hp = getVal(form, 'company_site'); // honeypot
     if (hp) return Promise.reject(new Error('honeypot_filled'));
 

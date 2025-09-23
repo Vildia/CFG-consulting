@@ -179,10 +179,10 @@ body.modal-open{overflow:hidden !important;}
       <form id="partner-form" data-lead-form data-locale="ru">
         <input type="hidden" name="type" value="partner">
         <input type="text" name="website" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px" aria-hidden="true">
-        <label>Имя</label><input name="name" required minlength="2" placeholder="Иван Иванов" autocomplete="name">
+        <label>Имя</label><input name="name" required minlength="2" placeholder="Иван Иванов">
         <label>Компания / ИП</label><input name="company" placeholder="ООО «Партнёр»">
-        <label>Телефон</label><input name="phone" required placeholder="+7 999 000-00-00" pattern="^\+?\d[\d\-\s\(\)]{6,}$" autocomplete="tel">
-        <label>E-mail</label><input name="email" type="email" placeholder="name@example.com" autocomplete="email">
+        <label>Телефон</label><input name="phone" required placeholder="+7 999 000-00-00" pattern="^\+?\d[\d\-\s\(\)]{6,}$">
+        <label>E-mail</label><input name="email" type="email" placeholder="name@example.com">
         <label>Комментарий</label><textarea name="message" rows="4" placeholder="Регион, отрасли клиентов, формат сотрудничества"></textarea>
         <label style="display:flex;gap:8px;align-items:center;margin-top:8px">
           <input type="checkbox" id="consent" name="consent" value="1" required> <span>Согласен на обработку персональных данных (152‑ФЗ)</span>
@@ -204,7 +204,6 @@ body.modal-open{overflow:hidden !important;}
 (function(){
   const form=document.getElementById('partner-form'); const status=document.getElementById('status'); if(!form) return;
   form.addEventListener('submit', async (e)=>{
-            try { await new Promise(r => requestAnimationFrame(() => setTimeout(r, 0))); } catch(_){}
     e.preventDefault();
     if(!document.getElementById('consent').checked){ status.textContent='Поставьте галочку согласия'; status.className='err'; return; }
     const fd = new FormData(form); const data = Object.fromEntries(fd.entries()); data.type='partner'; data.locale='ru';
@@ -243,7 +242,6 @@ body.modal-open{overflow:hidden !important;}
     return out;
   }
   async function sendLead(form){
-    /*AUTOFILL_WAIT*/try{await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));}catch(_){ }
     const hp = getVal(form, 'company_site'); // honeypot
     if (hp) return Promise.reject(new Error('honeypot_filled'));
 
