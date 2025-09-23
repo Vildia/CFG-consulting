@@ -7,6 +7,42 @@ const CFG_KEY = String(process.env.CFG_KEY || '').trim();
 const ORIGIN_PROD = String(process.env.ORIGIN || '').trim();
 const ORIGIN_PREVIEW = String(process.env.ORIGIN_PREVIEW || '').trim();
 
+// --- Canonicalization helpers (stable stringify + normalization) ---
+function replaceNbsp(str){ return String(str||'').replace(/\u00A0|\u202F/g, ' '); }
+function normalizeString(str){
+  return replaceNbsp(str).trim().replace(/\s+/g,' ');
+}
+function normalizePhone(str){
+  const cleaned = replaceNbsp(str).replace(/[^\d+]/g,'');
+  // keep leading + and digits
+  return cleaned;
+}
+function normalizeData(obj){
+  if (obj==null) return obj;
+  if (Array.isArray(obj)) return obj.map(normalizeData);
+  if (typeof obj === 'object'){
+    const out = {};
+    Object.keys(obj).forEach(k=>{
+      const v = obj[k];
+      if (typeof v === 'string'){
+        out[k] = (k==='phone') ? normalizePhone(v) : normalizeString(v);
+      }else{
+        out[k] = normalizeData(v);
+      }
+    });
+    return out;
+  }
+  if (typeof obj === 'string') return normalizeString(obj);
+  return obj;
+}
+function stableStringify(obj){
+  if (obj===null || typeof obj!=='object') return JSON.stringify(obj);
+  if (Array.isArray(obj)) return '[' + obj.map(stableStringify).join(',') + ']';
+  const keys = Object.keys(obj).sort();
+  return '{' + keys.map(k=>JSON.stringify(k)+':'+stableStringify(obj[k])).join(',') + '}';
+}
+// -------------------------------------------------------------------
+
 function norm(u){ try{ return String(u||'').trim().replace(/\/$/, ''); }catch(_){ return String(u||''); } }
 function isAllowedOrigin(origin, allowed){ origin = norm(origin); allowed = (allowed||[]).map(norm); return !origin || allowed.includes(origin); }
 function allow(res, origin){
@@ -17,9 +53,10 @@ function allow(res, origin){
 }
 
 async function proxyToAppsScript(data){
-  const payload = JSON.stringify(data);
+  const norm = normalizeData(data);
+  const payload = stableStringify(norm);
   const hmac = crypto.createHmac('sha256', CFG_KEY).update(payload).digest('hex');
-  const body = JSON.stringify({ ...data, _sig: hmac });
+  const body = JSON.stringify({ ...norm, _sig: hmac });
   const r = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body });
   const text = await r.text();
   let j; try{ j = JSON.parse(text); }catch(_){}
