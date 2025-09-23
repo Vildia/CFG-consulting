@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <section id="estimate" style="scroll-margin-top: 96px;"><div class="container">
 <h2 class="section-title">Оценка за 24 часа</h2>
 <form id="lead-form" data-cfg-lead="1"  aria-label="Форма оценки" data-estimate="" data-locale="ru">
-<input autocomplete="off" name="company_site" style="display:none" tabindex="-1" type="text"/>
+<input autocomplete="off" name="hp_cfg" autocomplete="off" inputmode="none" aria-hidden="true" style="display:none" tabindex="-1" type="text"/>
 <div class="form-grid">
 <div><label>Имя</label><input name="name" required=""/></div>
 <div><label>Компания</label><input name="company"/></div>
@@ -539,7 +539,7 @@ document.addEventListener('DOMContentLoaded', function(){
         Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
         [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
         var url='/api/lead?'+compat.toString();
-        var honeypot=(f.querySelector('input[name="company_site"]')||{}).value; if(honeypot){ return Promise.resolve(); } var req = 
+        var honeypot=(f.querySelector('input[name="hp_cfg" autocomplete="off" inputmode="none" aria-hidden="true"]')||{}).value; if(honeypot){ return Promise.resolve(); } var req = 
 
         return req;
       })()
@@ -823,10 +823,7 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
     return out;
   }
   async function sendLead(form){
-    const hp = getVal(form, 'company_site'); // honeypot
-    if (hp) return Promise.reject(new Error('honeypot_filled'));
-
-    // Basic payload (common names across pages)
+        // Basic payload (common names across pages)
     const payload = {
       name: getVal(form, 'name') || getVal(form, 'full_name') || '',
       company: getVal(form, 'company') || '',
