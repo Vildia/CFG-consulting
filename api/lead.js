@@ -14,8 +14,8 @@ function normalizeLeadPayload(data){
   const S = (v)=> String(v==null?'':v).replace(/[\u00A0\u202F\u2007\u2060]/g,' ').replace(/\s+/g,' ').trim();
   const P = (v)=> { v = String(v==null?'':v); v = v.replace(/[^+\d]/g,''); if (v && v[0] !== '+' && /^8\d{10}$/.test(v)) v = '+7'+v.slice(1); return v; };
   const obj = {
-    action: data.action || 'estimate_24h',
-    locale: data.locale || 'ru',
+    action: S(data.action || 'estimate_24h'),
+    locale: S(data.locale || 'ru'),
     name: S(data.name || data.fullname),
     company: S(data.company || data.org),
     inn: S(data.inn || data.tax_id),
@@ -28,13 +28,13 @@ function normalizeLeadPayload(data){
     urgency: S(data.urgency),
     page_url: S(data.page_url),
     referrer: S(data.referrer),
-    consent: !!data.consent ? 'yes' : '',
-    utm: data.utm && typeof data.utm==='object' ? Object.assign({}, data.utm) : {}
+    consent: (data.consent ? 'yes' : '')
   };
-  // keep only known UTM keys
-  const known = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
-  obj.utm = known.reduce((acc,k)=>{ if (obj.utm && obj.utm[k]) acc[k]=S(obj.utm[k]); return acc; }, {});
-  // stable key order
+  // flatten known UTM keys
+  ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(function(k){
+    if (data && typeof data==='object' && data[k]) obj[k] = S(data[k]);
+    else if (data && typeof data.utm==='object' && data.utm[k]) obj[k] = S(data.utm[k]);
+  });
   const ordered = {}; Object.keys(obj).sort().forEach(k=>ordered[k]=obj[k]);
   return ordered;
 }
@@ -117,7 +117,23 @@ module.exports = async (req, res) => {
         else { try{ data = Object.fromEntries(new URLSearchParams(data)); }catch(_){ data = {}; } }
       }
 
-      const payload = normalizeLeadPayload(data);
+      const payload = {
+        action: data.action || 'estimate_24h',
+        locale: data.locale || 'ru',
+        name: data.name || '',
+        company: data.company || '',
+        inn: data.inn || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        message: data.message || data.desc || data.task || '',
+        industry: data.industry || '',
+        revenue: data.revenue || '',
+        geo: data.geo || '',
+        urgency: data.urgency || '',
+        page_url: data.page_url || '',
+        referrer: data.referrer || '',
+        utm: data.utm || {}
+      };
 
       const out = await proxyToAppsScript(payload);
       return res.status(out.status).json(out.body);
