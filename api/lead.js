@@ -9,6 +9,36 @@ const ORIGIN_PREVIEW = String(process.env.ORIGIN_PREVIEW || '').trim();
 
 function norm(u){ try{ return String(u||'').trim().replace(/\/$/, ''); }catch(_){ return String(u||''); } }
 function isAllowedOrigin(origin, allowed){ origin = norm(origin); allowed = (allowed||[]).map(norm); return !origin || allowed.includes(origin); }
+
+function normalizeLeadPayload(data){
+  const S = (v)=> String(v==null?'':v).replace(/[\u00A0\u202F\u2007\u2060]/g,' ').replace(/\s+/g,' ').trim();
+  const P = (v)=> { v = String(v==null?'':v); v = v.replace(/[^+\d]/g,''); if (v && v[0] !== '+' && /^8\d{10}$/.test(v)) v = '+7'+v.slice(1); return v; };
+  const obj = {
+    action: data.action || 'estimate_24h',
+    locale: data.locale || 'ru',
+    name: S(data.name || data.fullname),
+    company: S(data.company || data.org),
+    inn: S(data.inn || data.tax_id),
+    email: S(data.email),
+    phone: P(data.phone),
+    desc: S(data.message || data.desc || data.comment || data.task),
+    industry: S(data.industry),
+    revenue: S(data.revenue),
+    geo: S(data.geo),
+    urgency: S(data.urgency),
+    page_url: S(data.page_url),
+    referrer: S(data.referrer),
+    consent: !!data.consent ? 'yes' : '',
+    utm: data.utm && typeof data.utm==='object' ? Object.assign({}, data.utm) : {}
+  };
+  // keep only known UTM keys
+  const known = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+  obj.utm = known.reduce((acc,k)=>{ if (obj.utm && obj.utm[k]) acc[k]=S(obj.utm[k]); return acc; }, {});
+  // stable key order
+  const ordered = {}; Object.keys(obj).sort().forEach(k=>ordered[k]=obj[k]);
+  return ordered;
+}
+
 function allow(res, origin){
   res.setHeader('Access-Control-Allow-Origin', origin || '*');
   res.setHeader('Vary', 'Origin');
@@ -87,23 +117,7 @@ module.exports = async (req, res) => {
         else { try{ data = Object.fromEntries(new URLSearchParams(data)); }catch(_){ data = {}; } }
       }
 
-      const payload = {
-        action: data.action || 'estimate_24h',
-        locale: data.locale || 'ru',
-        name: data.name || '',
-        company: data.company || '',
-        inn: data.inn || '',
-        email: data.email || '',
-        phone: data.phone || '',
-        message: data.message || data.desc || data.task || '',
-        industry: data.industry || '',
-        revenue: data.revenue || '',
-        geo: data.geo || '',
-        urgency: data.urgency || '',
-        page_url: data.page_url || '',
-        referrer: data.referrer || '',
-        utm: data.utm || {}
-      };
+      const payload = normalizeLeadPayload(data);
 
       const out = await proxyToAppsScript(payload);
       return res.status(out.status).json(out.body);
