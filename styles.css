@@ -1,0 +1,5 @@
+/* CFG minimal styles (post subheader removal)
+   This file is intentionally tiny and safe to include on all pages.
+   It smooths spacing between sticky header and hero section.
+*/
+.hero, header.hero { padding-top: 16px; }
