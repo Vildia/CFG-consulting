@@ -1,189 +1,161 @@
-// api/lead.js
-// Serverless-функция Vercel для пересылки лидов в Google Apps Script.
-// Требует переменные окружения: APPS_SCRIPT_URL, CFG_KEY, ORIGIN, ORIGIN_PREVIEW (опц.)
 
 const crypto = require('crypto');
 
-// ---- Vercel runtime (важно: без версии) ----
-module.exports.config = { runtime: 'nodejs' };
-
-// ---- Env ----
+// Env (trim extra spaces/newlines)
 const APPS_SCRIPT_URL = String(process.env.APPS_SCRIPT_URL || '').trim();
 const CFG_KEY = String(process.env.CFG_KEY || '').trim();
 const ORIGIN_PROD = String(process.env.ORIGIN || '').trim();
 const ORIGIN_PREVIEW = String(process.env.ORIGIN_PREVIEW || '').trim();
 
-// ---- утилиты ----
-const tryString = (v) => { try { return String(v || '').trim(); } catch { return String(v); } };
+function norm(u){ try{ return String(u||'').trim().replace(/\/$/, ''); }catch(_){ return String(u||''); } }
+function isAllowedOrigin(origin, allowed){ origin = norm(origin); allowed = (allowed||[]).map(norm); return !origin || allowed.includes(origin); }
 
-function isAllowedOrigin(origin) {
-  const norm = (x) => tryString(x).toLowerCase();
-  const o = norm(origin);
-  return [ORIGIN_PROD, ORIGIN_PREVIEW].map(norm).filter(Boolean).includes(o);
+function normalizeLeadPayload(data){
+  const S = (v)=> String(v==null?'':v).replace(/[\u00A0\u202F\u2007\u2060]/g,' ').replace(/\s+/g,' ').trim();
+  const P = (v)=> { v = String(v==null?'':v); v = v.replace(/[^+\d]/g,''); if (v && v[0] !== '+' && /^8\d{10}$/.test(v)) v = '+7'+v.slice(1); return v; };
+  const src = data || {};
+  const obj = {
+    action: S(src.action || src.type || 'estimate_24h'),
+    locale: S(src.locale || 'ru'),
+    name: S(src.name || src.fullname),
+    company: S(src.company || src.org),
+    inn: S(src.inn || src.tax_id),
+    email: S(src.email),
+    phone: P(src.phone),
+    desc: S(src.message || src.desc || src.comment || src.task),
+    industry: S(src.industry),
+    revenue: S(src.revenue),
+    geo: S(src.geo),
+    urgency: S(src.urgency),
+    page_url: S(src.page_url),
+    referrer: S(src.referrer),
+    consent: (src.consent ? 'yes' : '')
+  };
+  ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach((k)=>{
+    if (src && typeof src==='object' && src[k]) obj[k] = S(src[k]);
+    else if (src && typeof src.utm==='object' && src.utm[k]) obj[k] = S(src.utm[k]);
+  });
+  const ordered = {}; Object.keys(obj).sort().forEach(k=>ordered[k]=obj[k]);
+  return ordered;
 }
 
-function allowCORS(res, origin) {
-  if (origin && isAllowedOrigin(origin)) res.setHeader('Access-Control-Allow-Origin', origin);
+function allow(res, origin){
+  res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Max-Age', '86400');
 }
 
-// Стабильная канонизация объекта (сортировка ключей, рекурсивно)
-function stablePayload(input) {
-  if (Array.isArray(input)) return input.map(stablePayload);
-  if (input && typeof input === 'object') {
-    const ordered = {};
-    Object.keys(input).sort().forEach((k) => { ordered[k] = stablePayload(input[k]); });
-    return ordered;
-  }
-  return input;
+
+async function proxyToAppsScript(body){
+  const resp = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body });
+  const text = await resp.text();
+  try { return { status: resp.status, body: JSON.parse(text) }; } catch(_) { return { status: 200, body: { ok:false, error:'parse_fail', raw:text } }; }
 }
 
-// Нормализация «сыра» из формы к единому виду
-function normalizePayload(raw) {
-  const qs = (k) => tryString(raw[k]);
 
-  // Приводим к единому набору полей (пустые строки допустимы — GAS сам отфильтрует)
-  const data = {
-    action: qs('action') || 'estimate_24h',
-    locale: qs('locale') || 'ru',
-    name: qs('name') || qs('fio') || '',
-    company: qs('company') || qs('org') || '',
-    inn: qs('inn') || '',
-    email: qs('email') || '',
-    phone: qs('phone') || qs('tel') || '',
-    desc: qs('comment') || qs('message') || qs('task') || '',
-    industry: qs('industry') || '',
-    revenue: qs('revenue') || '',
-    geo: qs('geo') || '',
-    urgency: qs('urgency') || '',
-    page_url: qs('page_url') || qs('page') || '',
-    referrer: qs('referrer') || qs('ref') || '',
-  };
-
-  // UTM / источник
-  const knownUTM = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
-  data.utm = {};
-  knownUTM.forEach((k) => {
-    const v = qs(k);
-    if (v) data.utm[k] = v;
-  });
-
-  return data;
-}
-
-// Подпись HMAC (канонизированные данные)
-function signCanon(dataObj) {
-  const canon = stablePayload(dataObj);
-  const payload = JSON.stringify(canon);
-  const hex = crypto.createHmac('sha256', CFG_KEY).update(payload).digest('hex');
-  return { canon, payload, hex };
-}
-
-// Отправка в Apps Script
-async function proxyToAppsScript(data, origin) {
-  const { canon, payload, hex } = signCanon(data);
-  const body = JSON.stringify({ ...canon, _sig: hex });
-
-  const resp = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body,
-  });
-
-  // Всегда возвращаем JSON
-  let text = await resp.text();
-  try { return { status: resp.status, body: JSON.parse(text) }; }
-  catch { return { status: resp.status, body: { ok: false, error: 'invalid_json', raw: text } }; }
-}
-
-// ---- Handler ----
 module.exports = async (req, res) => {
-  const origin = tryString(req.headers.origin || `https://${req.headers.host || ''}`);
-  allowCORS(res, origin);
+  const origin = String(req.headers.origin || ('https://' + (req.headers.host || '')));
+  const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean);
 
-  // Предварительная проверка env
-  const envOK = Boolean(APPS_SCRIPT_URL) && Boolean(CFG_KEY);
-
-  // Префлайт
-  if (req.method === 'OPTIONS') {
-    return res.status(204).end();
-  }
-
-  // /api/health
-  if (req.url.includes('/api/health')) {
-    return res.status(200).json({
-      ok: true,
-      env: {
-        has_APPS_SCRIPT_URL: Boolean(APPS_SCRIPT_URL),
-        has_CFG_KEY: Boolean(CFG_KEY),
-      },
-      origin: ORIGIN_PROD || '',
-      ORIGIN: ORIGIN_PROD || '',
-      ORIGIN_PREVIEW: ORIGIN_PREVIEW || '',
-    });
-  }
-
-  // GET /api/lead
-  if (req.method === 'GET') {
-    const compat = tryString((req.query && req.query.compat) || '');
-    if (compat) {
-      if (!envOK) return res.status(500).json({ ok: false, error: 'env_not_configured' });
-
-      // минимальный тест — отправляем sample-пакет
-      const sample = {
-        action: 'test_lead',
-        locale: 'ru',
-        name: 'Тестовый пользователь',
-        company: 'ООО «Автопарк»',
-        inn: '0000000000',
-        email: 'test@example.com',
-        phone: '+7 (900) 000-00-00',
-        desc: 'Автотест / compat GET',
-        page_url: `${ORIGIN_PROD || origin}/self-test.html`,
-        referrer: '',
-      };
-      const out = await proxyToAppsScript(sample, origin);
-      return res.status(out.status || 200).json(out.body);
+  try{
+    if (req.method === 'OPTIONS'){
+      allow(res, origin); res.statusCode = 204; return res.end();
     }
 
-    // статус эндпоинта
-    const allowed = [ORIGIN_PROD, ORIGIN_PREVIEW].filter(Boolean);
-    return res.status(200).json({
-      ok: true,
-      mode: 'status',
-      env: { has_APPS_SCRIPT_URL: Boolean(APPS_SCRIPT_URL), has_CFG_KEY: Boolean(CFG_KEY) },
-      origin,
-      allowed,
-    });
-  }
-
-  // POST /api/lead
-  if (req.method === 'POST') {
-    if (!envOK) return res.status(500).json({ ok: false, error: 'env_not_configured' });
-
-    let data = {};
-    try {
-      if (req.headers['content-type'] && req.headers['content-type'].includes('application/json')) {
-        data = req.body || {};
-      } else if (req.headers['content-type'] && req.headers['content-type'].includes('application/x-www-form-urlencoded')) {
-        // Vercel сам парсит urlencoded → req.body объектом, но на всякий случай:
-        data = req.body || {};
-      } else {
-        // fallback — пытаемся распарсить как JSON
-        const txt = req.body && typeof req.body === 'string' ? req.body : '';
-        data = txt ? JSON.parse(txt) : {};
+    // Status endpoint or compat GET
+    if (req.method === 'GET'){
+      const q = req.query || {};
+      if (q && (q.compat || q.action)){
+        if (!APPS_SCRIPT_URL || !CFG_KEY) { allow(res, origin); return res.status(500).json({ ok:false, error:'env_not_configured' }); }
+        if (!isAllowedOrigin(origin, allowed)) { allow(res, origin); return res.status(403).json({ ok:false, error:'forbidden_origin' }); }
+        allow(res, origin);
+        const data = {
+          action: q.action || 'estimate_24h',
+          locale: q.locale || 'ru',
+          name: q.name || '',
+          company: q.company || '',
+          inn: q.inn || '',
+          email: q.email || '',
+          phone: q.phone || '',
+          message: q.message || q.desc || q.task || '',
+          industry: q.industry || '',
+          revenue: q.revenue || '',
+          geo: q.geo || '',
+          urgency: q.urgency || '',
+          page_url: q.page_url || '',
+          referrer: q.referrer || '',
+          utm: {}
+        };
+        const out = await proxyToAppsScript(data);
+        allow(res, origin);
+        return res.status(out.status).json(out.body);
       }
-    } catch {
-      data = {};
+      // Just status
+      allow(res, origin);
+      return res.status(200).json({
+        ok: true,
+        mode: 'status',
+        env: { has_APPS_SCRIPT_URL: !!APPS_SCRIPT_URL, has_CFG_KEY: !!CFG_KEY },
+        origin,
+        allowed
+      });
     }
 
-    const normalized = normalizePayload(data);
-    const out = await proxyToAppsScript(normalized, origin);
-    return res.status(out.status || 200).json(out.body);
-  }
+    // POST
+    
+if (req.method === 'POST') {
+  if (!APPS_SCRIPT_URL || !CFG_KEY) { allow(res, origin); return res.status(500).json({ ok:false, error:'env_not_configured' }); }
+  if (!isAllowedOrigin(origin, allowed)) { allow(res, origin); return res.status(403).json({ ok:false, error:'forbidden_origin' }); }
+  let data = {};
+  if (typeof req.body === 'string') { try { data = JSON.parse(req.body); } catch(_) { data = {}; } }
+  else { try { data = Object.fromEntries(new URLSearchParams(req.body)); } catch(_) { data = req.body || {}; } }
+  const canonObj = normalizeLeadPayload(data);
+  const canonStr = JSON.stringify(canonObj);
+  const sig = crypto.createHmac('sha256', CFG_KEY).update(canonStr).digest('hex');
+  const body = JSON.stringify(Object.assign({}, canonObj, { _sig: sig }));
+  const out = await proxyToAppsScript(body);
+  allow(res, origin);
+  return res.status(out.status).json(out.body);
+}
 
-  // Fallback
-  return res.status(405).json({ ok: false, error: 'method_not_allowed' });
+      if (!isAllowedOrigin(origin, allowed)) { allow(res, origin); return res.status(403).json({ ok:false, error:'forbidden_origin' }); }
+      allow(res, origin);
+
+      let data = req.body || {};
+      if (typeof data === 'string'){
+        if (data.trim().startsWith('{')) { try{ data = JSON.parse(data); }catch(_){ data = {}; } }
+        else { try{ data = Object.fromEntries(new URLSearchParams(data)); }catch(_){ data = {}; } }
+      }
+
+      const payload = {
+        action: data.action || 'estimate_24h',
+        locale: data.locale || 'ru',
+        name: data.name || '',
+        company: data.company || '',
+        inn: data.inn || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        message: data.message || data.desc || data.task || '',
+        industry: data.industry || '',
+        revenue: data.revenue || '',
+        geo: data.geo || '',
+        urgency: data.urgency || '',
+        page_url: data.page_url || '',
+        referrer: data.referrer || '',
+        utm: data.utm || {}
+      };
+
+      const out = await proxyToAppsScript(payload);
+      return res.status(out.status).json(out.body);
+    }
+
+    // Fallback
+    allow(res, origin);
+    return res.status(405).json({ ok:false, error:'method_not_allowed' });
+  }catch(e){
+    // Never crash silently — always JSON
+    try{ allow(res, origin); }catch(_){}
+    return res.status(500).json({ ok:false, error:'server_crash', message: String(e && e.message || e) });
+  }
 };
