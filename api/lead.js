@@ -8,7 +8,19 @@ const ORIGIN_PROD = String(process.env.ORIGIN || '').trim();
 const ORIGIN_PREVIEW = String(process.env.ORIGIN_PREVIEW || '').trim();
 
 function norm(u){ try{ return String(u||'').trim().replace(/\/$/, ''); }catch(_){ return String(u||''); } }
-function isAllowedOrigin(origin, allowed){ origin = norm(origin); allowed = (allowed||[]).map(norm); return !origin || allowed.includes(origin); }
+function isAllowedOrigin(origin, allowed){
+  function norm(u){ try{ return String(u||'').trim().replace(/\/$/, ''); }catch(_){ return String(u||''); } }
+  origin = norm(origin);
+  const allowList = (allowed||[]).map(norm).filter(Boolean);
+  if (!origin) return true;
+  if (allowList.includes(origin)) return true;
+  // Allow Vercel preview deployments (*.vercel.app)
+  try{
+    const u = new URL(origin);
+    if (u.hostname.endsWith('.vercel.app')) return true;
+  }catch(_){}
+  return false;
+}
 
 function normalizeLeadPayload(data){
   const S = (v)=> String(v==null?'':v).replace(/[\u00A0\u202F\u2007\u2060]/g,' ').replace(/\s+/g,' ').trim();
@@ -50,7 +62,14 @@ async function proxyToAppsScript(data){
   const payload = JSON.stringify(data);
   const hmac = crypto.createHmac('sha256', CFG_KEY).update(payload).digest('hex');
   const body = JSON.stringify({ ...data, _sig: hmac });
-  const r = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body });
+  const controller = new AbortController();
+  const t = setTimeout(()=>controller.abort(new Error('timeout_10s')), 10000);
+  let r;
+  try{
+    r = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body, signal: controller.signal });
+  } finally {
+    clearTimeout(t);
+  }
   const text = await r.text();
   let j; try{ j = JSON.parse(text); }catch(_){}
   if (!r.ok) return { status: 502, body: { ok:false, error:'apps_script_http_'+r.status, text }};
