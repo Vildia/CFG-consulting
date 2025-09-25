@@ -783,10 +783,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
     return out;
   }
   async function sendLead(form){
-    const hp = getVal(form, 'company_site'); // honeypot
-    if (hp) return Promise.reject(new Error('honeypot_filled'));
-
-    // Basic payload (common names across pages)
+        // Basic payload (common names across pages)
     const payload = {
       name: getVal(form, 'name') || getVal(form, 'full_name') || '',
       company: getVal(form, 'company') || '',
@@ -837,6 +834,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
     form.__cfg_wired = true;
     form.addEventListener('submit', function(e){
       e.preventDefault();
+      try{ const btn=form.querySelector('button[type="submit"], [type="submit"]'); if(btn){ const t=(btn.textContent||btn.value); if(btn.tagName==='BUTTON') btn.textContent='Отправка…'; else btn.value='Отправка…'; btn.dataset._orig=t; } }catch(_){}
       sendLead(form).catch(()=>{});
     });
   }
