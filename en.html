@@ -8,7 +8,7 @@
 *{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a;scroll-behavior:smooth}
 :focus-visible{outline:3px solid var(--ring);outline-offset:2px;border-radius:10px}
 .container{max-width:1160px;margin:0 auto;padding:0 20px}
-.btn{display:inline-block;padding:14px 20px;border-radius:12px;font-weight:600;text-decoration:none;cursor:pointer;border:none}
+.btn{display:inline-flex;padding:14px 20px;border-radius:12px;font-weight:600;text-decoration:none;cursor:pointer;border:none;align-items:center;justify-content:center;line-height:1 white-space:nowrap;}
 .btn-primary{background:linear-gradient(90deg,var(--slate),var(--indigo));color:#fff}
 .btn-secondary{border:2px solid #e2e8f0;color:var(--slate);background:#fff}
 nav{position:sticky;top:0;background:#ffffffd6;z-index:10}
@@ -67,6 +67,12 @@ label{font-weight:600;display:block;margin:8px 0 6px}
 #downloads .card h2{ color: var(--navy); }
 #downloads .card a{ color:#1f2937; text-decoration: underline; font-weight:600; }
 #downloads .card li{ color:#0f172a; }
+
+.btn.cta{white-space:normal;text-align:center;line-height:1.15;padding-top:10px;padding-bottom:10px}
+
+#site-footer strong{line-height:1}
+
+#site-header{position:sticky;top:0;z-index:2000}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"C|F|G consulting","url":"https://cfg-consulting.vercel.app","logo":"https://cfg-consulting.vercel.app/assets/favicon-512.png","email":"C.F.G.consulting@bk.ru","telephone":"<a href="tel:+79025683529">+7 902 568‑35‑29</a>","sameAs":["https://t.me/Evgeniy_Chapurin"]}
@@ -144,7 +150,9 @@ section[id]{ scroll-margin-top: var(--header-offset); }
 <style>
 #site-header .container{display:flex;align-items:center;justify-content:space-between;gap:24px}
 #site-header nav{display:flex;align-items:center;gap:20px;flex:1;justify-content:flex-end;flex-wrap:wrap;row-gap:10px}
+@media (min-width: 1100px){#site-header nav{flex-wrap:nowrap}}
 #site-header .nav-links{display:flex;gap:16px;margin-right:auto}
+#site-header .nav-links a{display:inline-flex;align-items:center;line-height:1;padding:8px 0}
 #site-header .header-tools{display:flex;align-items:center;gap:12px}
 #site-header .lang{display:flex;gap:8px}
 </style>
@@ -153,12 +161,12 @@ section[id]{ scroll-margin-top: var(--header-offset); }
 <style id="cfg-lang-style">
 /* CFG v5 language chips (force override) */
 .lang-chip{ 
-  display:inline-block; padding:6px 10px; border-radius:999px;
+  display:inline-flex; align-items:center; justify-content:center; padding:0 10px; height: 40px; border-radius:999px; line-height:1;
   border:1px solid #93C5FD !important; 
   background:transparent !important;
   color:#E5E7EB !important; 
   text-decoration:none !important; 
-}
+ min-width:44px; white-space:nowrap; box-sizing:border-box;}
 .lang-chip.active, .lang-chip[aria-current="true"], .lang-chip[data-active="1"]{
   border-color:transparent !important;
   background:linear-gradient(135deg, #4F46E5, #06B6D4) !important;
@@ -247,12 +255,12 @@ section#vff .muted, section#downloads .muted { color:#CBD5E1; }
 <header id="site-header" style="position:sticky;top:0;left:0;right:0;z-index:2000;background:#0B1020;">
 <div class="container" style="max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;justify-content:space-between">
 <div style="font-weight:700;color:#E5E7EB">C|F|G consulting</div>
-<nav style="position:relative;z-index:2050;background:transparent;"><div class="nav-links"><a href="#services">Services</a><a href="#industries">Industries</a><a href="#process">Process</a><a href="#cases">Case studies</a><a href="#partners">For partners</a><a href="#contacts">Contacts</a></div>
-<div class="header-tools"><div class="lang" style="display:flex;gap:8px;margin-left:12px"><a class="lang-chip" data-locale="ru" href="/index.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;background:linear-gradient(135deg,#6D28D9,#3B82F6);color:#fff;">RU</a><a class="lang-chip active" data-locale="en" href="/en.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">EN</a><a class="lang-chip" data-locale="zh" href="/zh.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">中文</a></div><a class="btn btn-secondary" data-body="Здравствуйте!
+<nav style="position:relative;z-index:2050;background:transparent;"><div class="nav-links"><a href="#services">Services</a><a href="#industries">Industries</a><a href="#process">Process</a><a href="#cases">Case studies</a><a href="#partners">For partners</a><a href="#contacts">Contacts</a><a href="#pricing">Pricing</a></div>
+<div class="header-tools"><div class="lang" style="display:flex;gap:8px;margin-left:12px"><a class="lang-chip" data-locale="ru" href="/index.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;background:linear-gradient(135deg,#6D28D9,#3B82F6);color:#fff;">RU</a><a class="lang-chip active" data-locale="en" href="/en.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">EN</a><a class="lang-chip" data-locale="zh" href="/zh.html" style="display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #93C5FD;text-decoration:none;color:#E5E7EB;">中文</a></div><a class="btn btn-secondary cta" data-body="Здравствуйте!
 Хочу назначить 20-минутный звонок.
 Удобный слот: ____ (дата/время, часовой пояс).
 Name/Company:
-Phone/Telegram:" data-ev="cta_slot" data-slot="open" data-subject="CFG Intro Call" href="https://mail.google.com/mail/?view=cm&amp;to=C.F.G.consulting%40bk.ru&amp;su=CFG%20Intro%20Call&amp;body=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%0A%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B8%D1%82%D1%8C%2020-%D0%BC%D0%B8%D0%BD%D1%83%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA.%0A%D0%A3%D0%B4%D0%BE%D0%B1%D0%BD%D1%8B%D0%B9%20%D1%81%D0%BB%D0%BE%D1%82%3A%20____%20%28%D0%B4%D0%B0%D1%82%D0%B0/%D0%B2%D1%80%D0%B5%D0%BC%D1%8F%2C%20%D1%87%D0%B0%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D0%BE%D1%8F%D1%81%29.%0A%D0%98%D0%BC%D1%8F/%D0%9A%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%3A%0A%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD/Telegram%3A" rel="noopener" style="margin-left:10px;position:relative;z-index:2100;pointer-events:auto" target="_blank">Propose a slot</a></div><a href="#pricing" class="nav-link" style="margin-left:10px">Pricing</a></nav>
+Phone/Telegram:" data-ev="cta_slot" data-slot="open" data-subject="CFG Intro Call" href="https://mail.google.com/mail/?view=cm&amp;to=C.F.G.consulting%40bk.ru&amp;su=CFG%20Intro%20Call&amp;body=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%0A%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B8%D1%82%D1%8C%2020-%D0%BC%D0%B8%D0%BD%D1%83%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA.%0A%D0%A3%D0%B4%D0%BE%D0%B1%D0%BD%D1%8B%D0%B9%20%D1%81%D0%BB%D0%BE%D1%82%3A%20____%20%28%D0%B4%D0%B0%D1%82%D0%B0/%D0%B2%D1%80%D0%B5%D0%BC%D1%8F%2C%20%D1%87%D0%B0%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D0%BE%D1%8F%D1%81%29.%0A%D0%98%D0%BC%D1%8F/%D0%9A%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%3A%0A%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD/Telegram%3A" rel="noopener" style="margin-left:10px;pointer-events:auto" target="_blank">Propose<br>a slot</a></div></nav>
 </div>
 </header>
 <script>
@@ -275,7 +283,7 @@ Phone/Telegram:" data-ev="cta_slot" data-slot="open" data-subject="CFG Intro Cal
 <div class="hero__img" style="max-width:420px"><img alt="Evgeniy Chapurin" loading="eager" src="/assets/portrait.png"/></div>
 </section>
 <section class="trustbar" id="logos" style="padding:20px 0;">
-<div class="container">
+<div class="container" style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:flex-start">
 <h2 style="margin:0 0 8px 0">Companies & projects</h2>
 <ul style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap"><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">ADEO / Leroy Merlin</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Альфа-Банк</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">ВТБ</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Росбанк</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Траст Банк</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Этажи</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Маяк Отель</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Tachki.pro</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Моё дело</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Wildberries</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Банк Союз</li><li style="display:inline-block;margin:6px 8px;padding:6px 10px;border:1px solid #E5E7EB;border-radius:999px;font-size:14px;color:#111827;background:#fff">Laboramed</li></ul>
 <p style="color:#6B7280;font-size:12px;margin-top:6px">*Names are used for illustration. All trademarks belong to their owners.</p>
@@ -300,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px">
 <a class="btn btn-primary" data-scroll="#contacts" href="#contacts">Discuss the project</a>
 <a class="btn btn-secondary" data-scroll="#estimate" href="#estimate">Get an estimate in 24 hours</a>
-<a class="btn btn-secondary" data-slot="open" href="https://mail.google.com/mail/?view=cm&amp;to=C.F.G.consulting%40bk.ru&amp;su=CFG%20Intro%20Call&amp;body=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%0A%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B8%D1%82%D1%8C%2020-%D0%BC%D0%B8%D0%BD%D1%83%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA.%0A%D0%A3%D0%B4%D0%BE%D0%B1%D0%BD%D1%8B%D0%B9%20%D1%81%D0%BB%D0%BE%D1%82%3A%20____%20%28%D0%B4%D0%B0%D1%82%D0%B0/%D0%B2%D1%80%D0%B5%D0%BC%D1%8F%2C%20%D1%87%D0%B0%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D0%BE%D1%8F%D1%81%29.%0A%D0%98%D0%BC%D1%8F/%D0%9A%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%3A%0A%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD/Telegram%3A" rel="noopener" style=";position:relative;z-index:2100;pointer-events:auto" target="_blank">Propose a slot</a>
+<a class="btn cta btn-secondary" data-slot="open" href="https://mail.google.com/mail/?view=cm&amp;to=C.F.G.consulting%40bk.ru&amp;su=CFG%20Intro%20Call&amp;body=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%0A%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B8%D1%82%D1%8C%2020-%D0%BC%D0%B8%D0%BD%D1%83%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA.%0A%D0%A3%D0%B4%D0%BE%D0%B1%D0%BD%D1%8B%D0%B9%20%D1%81%D0%BB%D0%BE%D1%82%3A%20____%20%28%D0%B4%D0%B0%D1%82%D0%B0/%D0%B2%D1%80%D0%B5%D0%BC%D1%8F%2C%20%D1%87%D0%B0%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D0%BE%D1%8F%D1%81%29.%0A%D0%98%D0%BC%D1%8F/%D0%9A%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%3A%0A%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD/Telegram%3A" rel="noopener" style="pointer-events:auto" target="_blank">Propose<br>a slot</a>
 </div>
 <div class="pills-row"><a class="pill pill-outline pill-lg" data-scroll="#partner" href="#partners">Partner program</a></div>
 <div class="pills-row"><span class="pill">Основано в Иркутске</span><span class="pill">Работаем по РФ и СНГ</span><span class="pill">Сеть экспертов</span></div>
@@ -377,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </div>
 <div class="form-actions">
 <button class="btn btn-primary" type="submit">Send</button>
-<a class="btn btn-secondary" data-slot="open" href="https://mail.google.com/mail/?view=cm&amp;to=C.F.G.consulting%40bk.ru&amp;su=CFG%20Intro%20Call&amp;body=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%0A%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B8%D1%82%D1%8C%2020-%D0%BC%D0%B8%D0%BD%D1%83%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA.%0A%D0%A3%D0%B4%D0%BE%D0%B1%D0%BD%D1%8B%D0%B9%20%D1%81%D0%BB%D0%BE%D1%82%3A%20____%20%28%D0%B4%D0%B0%D1%82%D0%B0/%D0%B2%D1%80%D0%B5%D0%BC%D1%8F%2C%20%D1%87%D0%B0%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D0%BE%D1%8F%D1%81%29.%0A%D0%98%D0%BC%D1%8F/%D0%9A%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%3A%0A%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD/Telegram%3A" rel="noopener" style=";position:relative;z-index:2100;pointer-events:auto" target="_blank">Propose a slot</a>
+<a class="btn cta btn-secondary" data-slot="open" href="https://mail.google.com/mail/?view=cm&amp;to=C.F.G.consulting%40bk.ru&amp;su=CFG%20Intro%20Call&amp;body=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%0A%D0%A5%D0%BE%D1%87%D1%83%20%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B8%D1%82%D1%8C%2020-%D0%BC%D0%B8%D0%BD%D1%83%D1%82%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA.%0A%D0%A3%D0%B4%D0%BE%D0%B1%D0%BD%D1%8B%D0%B9%20%D1%81%D0%BB%D0%BE%D1%82%3A%20____%20%28%D0%B4%D0%B0%D1%82%D0%B0/%D0%B2%D1%80%D0%B5%D0%BC%D1%8F%2C%20%D1%87%D0%B0%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D0%BE%D1%8F%D1%81%29.%0A%D0%98%D0%BC%D1%8F/%D0%9A%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%3A%0A%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD/Telegram%3A" rel="noopener" style="pointer-events:auto" target="_blank">Propose<br>a slot</a>
 </div>
 <p class="small">Соглашаясь, вы принимаете <a href="privacy.html">Политику</a> и <a href="terms.html">Условия</a>.</p>
 </form>
@@ -431,7 +439,7 @@ document.addEventListener('DOMContentLoaded', function(){
     <a data-cta="pricing-partners" href="#partners" class="btn btn-secondary">Partner program</a>
   </div>
 </section>
-<footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+<footer><div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px">
 <div style="display:flex;align-items:center;gap:10px"><strong>C|F|G consulting</strong></div>
 <div style="opacity:.9">Tel./WhatsApp: <a href="tel:+79025683529">+7 902 568‑35‑29</a> • Telegram: @Evgeniy_Chapurin • Email: C.F.G.consulting@bk.ru • <a href="privacy.html">Privacy</a> • <a href="terms.html">Terms</a></div>
 </div>
@@ -576,7 +584,7 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
     }
     if(needFix()) tryNext(0);
   } catch(_) {}
-})();</script><footer class="footer" style="padding:28px 0;background:#0B1020;color:#D1D5DB"><div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px"><p>ИП Чапурин Евгений Александрович • ОГРНИП 324385000032592 • Tax ID 380121912339 • УСН 6%</p><p><a href="/privacy.html">Политика ПДн</a> • <a href="/offer.html">Договор оферты</a></p></div></footer>
+})();</script><footer id="site-footer" class="footer" style="padding:28px 0;background:#0B1020;color:#D1D5DB"><div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px" style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:flex-start"><p>ИП Чапурин Евгений Александрович • ОГРНИП 324385000032592 • Tax ID 380121912339 • УСН 6%</p><p><a href="/privacy.html">Политика ПДн</a> • <a href="/offer.html">Договор оферты</a></p></div></footer>
 <script>
 (function(){
   function sendGA(event, params){ try { window.gtag && gtag('event', event, params||{}); } catch(e){} }
@@ -793,6 +801,11 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
       email: getVal(form, 'email') || '',
       phone: getVal(form, 'phone') || '',
       message: getVal(form, 'message') || getVal(form, 'task') || getVal(form, 'comment') || getVal(form, 'desc') || '',
+      desc: getVal(form, 'desc') || getVal(form, 'message') || '',
+      industry: getVal(form, 'industry') || '',
+      revenue: getVal(form, 'revenue') || '',
+      geo: getVal(form, 'geo') || '',
+      urgency: getVal(form, 'urgency') || '',
       // meta
       locale: getLocale(),
       page_url: location.href,
