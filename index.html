@@ -286,7 +286,7 @@ section#vff .muted, section#downloads .muted { color:#CBD5E1; }
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('form[data-estimate]').forEach(function(f){
-    f.__cfg_wired = true; f.addEventListener('submit', function(e){
+    f.addEventListener('submit', function(e){
       var root = document.documentElement.lang || 'ru';
       this.setAttribute('data-locale', this.getAttribute('data-locale') || root);
     });
@@ -823,7 +823,7 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
     return out;
   }
   async function sendLead(form){
-    const hp = (getVal(form, 'company_site') || getVal(form, 'website')); // honeypot (supports 'website' alias)
+    const hp = getVal(form, 'company_site'); // honeypot
     if (hp) return Promise.reject(new Error('honeypot_filled'));
 
     // Basic payload (common names across pages)
@@ -841,15 +841,7 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
       utm: getUTM()
     };
 
-    
-    // Optional consent checkbox (RU 152‑FZ)
-    const consentEl = form.querySelector('#consent,[name="consent"]');
-    if (consentEl && !consentEl.checked) {
-      const statusEl = form.querySelector('[data-status], #status');
-      if (statusEl) { statusEl.textContent = 'Поставьте галочку согласия'; statusEl.className = 'err'; }
-      return Promise.reject(new Error('consent_required'));
-    }
-const btn = form.querySelector('button[type="submit"], [type="submit"]');
+    const btn = form.querySelector('button[type="submit"], [type="submit"]');
     const origText = btn && (btn.textContent || btn.value);
     // DEMO: simulate success on file:// or ?demo=1
     const isFile = (location.protocol === 'file:');

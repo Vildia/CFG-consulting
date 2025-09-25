@@ -15,7 +15,7 @@ function normalizeLeadPayload(data){
   const P = (v)=> { v = String(v==null?'':v); v = v.replace(/[^+\d]/g,''); if (v && v[0] !== '+' && /^8\d{10}$/.test(v)) v = '+7'+v.slice(1); return v; };
   const src = data || {};
   const obj = {
-    action: S(src.action || src.type || 'estimate_24h'),
+    action: S(src.action || 'estimate_24h'),
     locale: S(src.locale || 'ru'),
     name: S(src.name || src.fullname),
     company: S(src.company || src.org),
