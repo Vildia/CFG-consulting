@@ -176,9 +176,8 @@ body.modal-open{overflow:hidden !important;}
     </div>
     <div class="card">
       <h2 id="apply">Стать партнёром</h2>
-      <form id="partner-form" data-lead-form data-locale="ru">
+      <form id="partner-form" data-lead-form data-locale="ru" data-cfg-lead="1">
         <input type="hidden" name="type" value="partner">
-        <input type="text" name="website" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px" aria-hidden="true">
         <input type="text" name="company_site" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px" aria-hidden="true">
         <label>Имя</label><input name="name" required minlength="2" placeholder="Иван Иванов">
         <label>Компания / ИП</label><input name="company" placeholder="ООО «Партнёр»">
@@ -217,7 +216,7 @@ body.modal-open{overflow:hidden !important;}
     return out;
   }
   async function sendLead(form){
-    const hp = (getVal(form, 'company_site') || getVal(form, 'website')); // honeypot
+    const hp = getVal(form, 'company_site'); // honeypot
     if (hp) return Promise.reject(new Error('honeypot_filled'));
 
     // Basic payload (common names across pages)
