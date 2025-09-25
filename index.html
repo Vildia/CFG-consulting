@@ -756,46 +756,6 @@ document.querySelectorAll('a[data-ev="partner_whatsapp"]').forEach(function(a){a
   });
 })();
 </script>
-<script>
-(function(){ // Estimate form: async submit via Apps Script (no mailto, no modal)
-  document.querySelectorAll('form[data-estimate]').forEach(function(f){
-    f.addEventListener('submit', function(e){
-      e.preventDefault();
-      var locale=this.getAttribute('data-locale')||'en';
-      function val(n){ var x=f.querySelector('[name='+n+']'); return x?x.value.trim():''; }
-      var name=val('name'), company=val('company'), inn=val('inn'), email=val('email'), phone=val('phone'), desc=val('desc');
-      var q=new URLSearchParams(location.search);
-      var utm={}; ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','gclid','yclid','fbclid'].forEach(function(k){ var v=q.get(k); if(v) utm[k]=v; });
-      var payload={ /*secret_removed*/,  notify:'short',  action:'estimate_24h', locale:locale, name:name, company:company, inn:inn, email:email, phone:phone, desc:desc, page_url:location.href, referrer:document.referrer||'', utm:utm };
-      var btn=f.querySelector('button[type=submit]');
-      if(btn){ btn.disabled=true; btn.textContent=(locale==='en'?'Sending...':(locale==='zh'?'正在发送…':'Отправляем…')); }
-      (function(){
-        var compat = new URLSearchParams();
-        Object.keys(utm||{}).forEach(function(k){ compat.append(k, utm[k]); });
-        [['action','estimate_24h'],['locale',locale],['name',name],['company',company],['inn',inn],['email',email],['phone',phone],['desc',desc],['page_url',location.href],['referrer',document.referrer||''],['notify','short']].forEach(function(p){ compat.append(p[0], p[1]); });
-        var url='/api/lead?'+compat.toString();
-        var req = fetch(url, { method:'POST',  headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
-        return req;
-      })()
-        .then(async function(res){ try{ var t=await res.text(); var j=JSON.parse(t); if(!(res.ok&&j&&j.ok)){ throw new Error(j && (j.error||j.text) || 'api_error'); } }catch(e){ throw e; } }).then(function(){ toast(locale==='en'?'Request sent! We\'ll get back within 24 hours.':(locale==='zh'?'已提交！我们会在24小时内联系您。':'Заявка отправлена! Мы свяжемся в течение 24 часов.')); f.reset(); })
-        .catch(function(err){ var msg=(err&&err.message)||''; toast((locale==='en'?'Submission failed.':'Не удалось отправить: ')+msg Please try again.':(locale==='zh'?'提交失败，请重试。':'Не удалось отправить. Повторите попытку.')); })
-        .finally(function(){ if(btn){ btn.disabled=false; btn.textContent=(locale==='en'?'Submit':(locale==='zh'?'提交':'Отправить')); } });
-      track('form_submit', {locale: locale});
-      track('estimate_24h', {locale: locale});
-    });
-  });
-document.querySelectorAll('[data-gcal]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var details = 'Intro call with C|F|G consulting%0A%0AAgenda:%0A• Goals%0A• Current state%0A• Next steps%0A%0AContacts:%0AEmail: '+encodeURIComponent(EMAIL)+'%0ATG: '+encodeURIComponent(TG)+'%0AWhatsApp: +'+encodeURIComponent(WA);
-      var url = 'https://calendar.google.com/calendar/u/0/r/eventedit?text=Intro%20call%20%E2%80%94%20CFG%20consulting&details='+details+'&location=Online';
-      window.open(url,'_blank');
-      track('gcal_open');
-    });
-  });
-
-  
-})();
-</script>
 <div style="text-align:center;margin:24px"><a class="partner-link" href="/partner.html">Условия партнёрства →</a></div>
 <section data-section="vff" id="vff" style="margin:24px auto;max-width:960px;padding:16px;border:1px solid #273057;border-radius:16px;background:#121833">
 <h2>Как ранжируем проекты (VFF)</h2>
@@ -823,7 +783,7 @@ document.querySelectorAll('[data-gcal]').forEach(function(btn){
     return out;
   }
   async function sendLead(form){
-    const hp = getVal(form, 'company_site'); // honeypot
+    const hp = (getVal(form, 'company_site') || getVal(form, 'website')); // honeypot
     if (hp) return Promise.reject(new Error('honeypot_filled'));
 
     // Basic payload (common names across pages)
